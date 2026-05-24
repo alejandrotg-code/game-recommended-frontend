@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #030712;       /* Slate-950 */
+  --color-brand-card: #0f172a;     /* Slate-900 */
+  --color-brand-border: #1e293b;   /* Slate-800 */
+  --color-brand-accent: #2563eb;   /* Blue-600 */
+  --color-brand-glow: rgba(59, 130, 246, 0.3);
+}
+
+/* Forzamos a que toda la aplicación sea oscura por defecto */
+html, body {
+  background-color: var(--color-brand-bg);
+  color: #f8fafc; /* text-slate-50 */
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
