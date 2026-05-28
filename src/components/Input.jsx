@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
 // CONFIGURACIÓN DE LA API:
-// Puedes cambiar esta URL según dónde esté ejecutándose tu backend de Python.
-// - Producción: 'https://api-game-recommended.alejandrotg.es'
 // - Local: 'http://localhost:8000' (si ejecutas "uvicorn app:app --reload")
 const API_BASE_URL = import.meta.env.VITE_API_URL_DEV;
 
@@ -134,40 +132,42 @@ export default function GameSearch({ onGameSelect, isLoading }) {
       {/* FORMULARIO DEL BUSCADOR */}
       <form
         onSubmit={handleSubmit}
-        className="w-full bg-brand-card/60 border border-brand-border p-2 rounded-full flex items-center gap-2 shadow-[0_0_50px_-12px_rgba(59,130,246,0.25)] focus-within:border-blue-500/50 transition-all"
+        className="w-full bg-brand-card/60 border border-brand-border p-2 rounded-2xl sm:rounded-full flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shadow-[0_0_50px_-12px_rgba(59,130,246,0.25)] focus-within:border-blue-500/50 transition-all"
       >
 
-        {/* Icono de Lupa */}
-        <div className="pl-4 text-slate-500">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+        <div className="flex items-center flex-1 min-w-0 gap-2">
+          {/* Icono de Lupa */}
+          <div className="pl-2 sm:pl-4 text-slate-500 shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+
+          {/* Input de búsqueda */}
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setShowDropdown(true);
+            }}
+            onFocus={() => setShowDropdown(true)}
+            placeholder="Escribe el nombre de un juego, pega su ID o la URL de Steam..."
+            disabled={isLoading}
+            className="flex-1 bg-transparent px-2 py-2.5 sm:py-3 text-sm text-slate-100 placeholder-slate-500 outline-none w-full disabled:opacity-50 min-w-0"
+          />
+
+          {/* Indicador de búsqueda en progreso para feedback visual del usuario */}
+          {isSearching && (
+            <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />
+          )}
         </div>
-
-        {/* Input de búsqueda */}
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setShowDropdown(true);
-          }}
-          onFocus={() => setShowDropdown(true)}
-          placeholder="Escribe el nombre de un juego, pega su ID o la URL de Steam..."
-          disabled={isLoading}
-          className="flex-1 bg-transparent px-2 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none w-full disabled:opacity-50"
-        />
-
-        {/* Indicador de búsqueda en progreso para feedback visual del usuario */}
-        {isSearching && (
-          <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />
-        )}
 
         {/* Botón de Analizar */}
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="bg-brand-accent hover:bg-blue-700 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-3 rounded-full transition-all cursor-pointer shadow-md active:scale-98 shrink-0"
+          className="bg-brand-accent hover:bg-blue-700 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-3 rounded-xl sm:rounded-full transition-all cursor-pointer shadow-md active:scale-98 shrink-0 text-center w-full sm:w-auto"
         >
           {isLoading ? 'Analizando...' : 'Analizar Juego'}
         </button>
