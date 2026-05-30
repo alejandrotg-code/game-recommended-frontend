@@ -5,7 +5,7 @@ import GameSearch from './components/Input';
 import RecommendationCard from './components/RecommendationCard';
 import HowItWorks from './components/HowItWorks';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL_DEV;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   // Estado 1: Para guardar los datos del juego seleccionado en la lista (ID, Nombre, Imagen, etc.)
