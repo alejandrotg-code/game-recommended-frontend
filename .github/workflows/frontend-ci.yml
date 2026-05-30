@@ -40,8 +40,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
+            export PATH="$HOME/.local/share/pnpm:$PATH"
             cd /home/alejandrotg/apps/game-recommended
             git pull origin main
             
-            pnpm install
+            pnpm install --frozen-lockfile
             pnpm run build
