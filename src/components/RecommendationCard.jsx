@@ -3,7 +3,7 @@ import { useState } from 'react';
 // CONFIGURACIÓN DE AFILIADOS:
 // Si tienes códigos de afiliado de estas tiendas, ponlos aquí entre las comillas.
 // Si los dejas vacíos '', se buscarán los juegos de forma normal sin ID de afiliación.
-const INSTANT_GAMING_IGR_ID = 'alejandrotg'; // Ejemplo: 'mi_codigo_igr'
+const INSTANT_GAMING_IGR_ID = 'game-recommended'; // Ejemplo: 'mi_codigo_igr'
 
 // MAPEO DE ENLACES DIRECTOS A JUEGOS POPULARES:
 // Como las tiendas de keys usan IDs y rutas propias para sus fichas de producto (ej: /2198-comprar-hollow-knight-pc/),
@@ -116,14 +116,14 @@ export default function RecommendationCard({ result, gameInfo }) {
   const styles = getVerdictStyles(recommendation_level);
 
   return (
-    <div className="w-full space-y-8 animate-fade-in mt-10">
+    <div className="w-full space-y-6 sm:space-y-8 animate-fade-in mt-6 sm:mt-10">
 
       {/* 1. CARD PRINCIPAL DEL VEREDICTO */}
-      <div className={`w-full bg-brand-card/80 border p-6 rounded-2xl ${styles.bg} ${styles.glow} transition-all duration-300`}>
+      <div className={`w-full bg-brand-card/80 border p-4 sm:p-6 rounded-xl sm:rounded-2xl ${styles.bg} ${styles.glow} transition-all duration-300`}>
 
         {/* Encabezado con imagen del juego y título */}
-        <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between border-b border-brand-border/60 pb-6">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-stretch md:items-center justify-between border-b border-brand-border/60 pb-4 sm:pb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
             {gameInfo?.image && (
               <img
                 src={gameInfo.image}
@@ -132,7 +132,7 @@ export default function RecommendationCard({ result, gameInfo }) {
               />
             )}
             <div>
-              <h2 className="text-2xl font-bold text-slate-50">{gameInfo?.name || "Juego Analizado"}</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-50">{gameInfo?.name || "Juego Analizado"}</h2>
               <div className="flex flex-wrap gap-2 mt-1">
                 {gameInfo?.price && (
                   <span className="text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
@@ -152,16 +152,16 @@ export default function RecommendationCard({ result, gameInfo }) {
           </div>
 
           {/* Gran indicador de nivel de recomendación */}
-          <div className="text-right flex flex-col items-end">
+          <div className="text-left md:text-right flex flex-col items-start md:items-end w-full md:w-auto mt-2 md:mt-0">
             <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Veredicto IA</span>
-            <span className={`text-xl md:text-2xl font-extrabold ${styles.text} mt-1`}>
+            <span className={`text-xl md:text-2xl font-extrabold ${styles.text} mt-0.5 md:mt-1`}>
               {recommendation_level}
             </span>
           </div>
         </div>
 
         {/* 2. ANÁLISIS DE SENTIMIENTO CON PORCENTAJES */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-4 sm:pt-6">
 
           {/* Columna Izquierda: Gráfico de barras de aprobación */}
           <div className="space-y-4">
@@ -189,8 +189,8 @@ export default function RecommendationCard({ result, gameInfo }) {
 
             {/* Comparación con votos nativos de Steam */}
             <div className="space-y-2 pt-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-400 font-medium">Recomendación Directa en Steam (Votado útil):</span>
+              <div className="flex justify-between text-xs sm:text-sm">
+                <span className="text-slate-400 font-medium">Recomendación en Steam (Votos):</span>
                 <span className="font-bold text-blue-400">{steam_voted_up_pct}% Sí</span>
               </div>
               <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-brand-border">
@@ -203,25 +203,25 @@ export default function RecommendationCard({ result, gameInfo }) {
           </div>
 
           {/* Columna Derecha: Estadísticas rápidas */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-slate-950/40 p-4 rounded-xl border border-brand-border flex flex-col justify-center items-center text-center">
-              <span className="text-2xl md:text-3xl font-extrabold text-slate-200">{total_reviews_analyzed}</span>
-              <span className="text-[10px] md:text-xs text-slate-400 font-medium mt-1">Reseñas Analizadas</span>
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            <div className="bg-slate-950/40 p-2.5 sm:p-4 rounded-xl border border-brand-border flex flex-col justify-center items-center text-center">
+              <span className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-200">{total_reviews_analyzed}</span>
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium mt-1 leading-tight">Analizadas</span>
             </div>
-            <div className="bg-slate-950/40 p-4 rounded-xl border border-brand-border flex flex-col justify-center items-center text-center">
-              <span className="text-2xl md:text-3xl font-extrabold text-emerald-400">{positiveCount}</span>
-              <span className="text-[10px] md:text-xs text-slate-400 font-medium mt-1">Clasificadas Positivas</span>
+            <div className="bg-slate-950/40 p-2.5 sm:p-4 rounded-xl border border-brand-border flex flex-col justify-center items-center text-center">
+              <span className="text-xl sm:text-2xl md:text-3xl font-extrabold text-emerald-400">{positiveCount}</span>
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium mt-1 leading-tight">Positivas</span>
             </div>
-            <div className="bg-slate-950/40 p-4 rounded-xl border border-brand-border flex flex-col justify-center items-center text-center">
-              <span className="text-2xl md:text-3xl font-extrabold text-rose-400">{negativeCount}</span>
-              <span className="text-[10px] md:text-xs text-slate-400 font-medium mt-1">Clasificadas Negativas</span>
+            <div className="bg-slate-950/40 p-2.5 sm:p-4 rounded-xl border border-brand-border flex flex-col justify-center items-center text-center">
+              <span className="text-xl sm:text-2xl md:text-3xl font-extrabold text-rose-400">{negativeCount}</span>
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium mt-1 leading-tight">Negativas</span>
             </div>
           </div>
 
         </div>
 
         {/* Resumen explicativo según los porcentajes */}
-        <div className="bg-slate-950/30 border border-brand-border/40 p-4 rounded-xl mt-6 text-sm text-slate-300">
+        <div className="bg-slate-950/30 border border-brand-border/40 p-4 rounded-xl mt-4 sm:mt-6 text-sm text-slate-300">
           <p className="leading-relaxed">
             <strong className="text-slate-100">Resumen del Análisis de Sentimiento:</strong> Nuestro modelo de inteligencia artificial ha leído y procesado individualmente las últimas reseñas escritas por usuarios hispanohablantes. Tras evaluar la semántica del texto de cada opinión (ignorando si marcaron el botón de 'Recomendar' nativo), determinamos que las opiniones son mayoritariamente <span className={styles.text}>{sentiment_stats.positives_pct >= 50 ? 'favorables' : 'críticas'}</span>, resultando en una recomendación de nivel <span className={`font-semibold ${styles.text}`}>{recommendation_level}</span>.
           </p>
@@ -233,29 +233,29 @@ export default function RecommendationCard({ result, gameInfo }) {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-            <span>Reseñas clasificadas por la IA</span>
+            <span>Reseñas clasificadas</span>
             <span className="text-xs font-semibold px-2 py-0.5 bg-slate-800 text-slate-400 rounded-full">
-              {filteredReviews.length} mostradas
+              {filteredReviews.length}
             </span>
           </h3>
 
           {/* Pestañas de filtrado (All, Positivas, Negativas) */}
-          <div className="flex bg-slate-900/80 p-1 rounded-lg border border-brand-border text-xs">
+          <div className="flex w-full sm:w-auto bg-slate-900/80 p-1 rounded-lg border border-brand-border text-[11px] sm:text-xs">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${activeTab === 'all' ? 'bg-brand-accent text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'}`}
+              className={`px-2 py-1.5 sm:px-3 rounded-md font-semibold transition-all cursor-pointer flex-1 sm:flex-initial text-center ${activeTab === 'all' ? 'bg-brand-accent text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'}`}
             >
               Todas ({reviews_classified.length})
             </button>
             <button
               onClick={() => setActiveTab('positives')}
-              className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${activeTab === 'positives' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:text-slate-200 border border-transparent'}`}
+              className={`px-2 py-1.5 sm:px-3 rounded-md font-semibold transition-all cursor-pointer flex-1 sm:flex-initial text-center ${activeTab === 'positives' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold' : 'text-slate-400 hover:text-slate-200 border border-transparent'}`}
             >
               Positivas ({positiveCount})
             </button>
             <button
               onClick={() => setActiveTab('negatives')}
-              className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${activeTab === 'negatives' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'text-slate-400 hover:text-slate-200 border border-transparent'}`}
+              className={`px-2 py-1.5 sm:px-3 rounded-md font-semibold transition-all cursor-pointer flex-1 sm:flex-initial text-center ${activeTab === 'negatives' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold' : 'text-slate-400 hover:text-slate-200 border border-transparent'}`}
             >
               Negativas ({negativeCount})
             </button>
@@ -263,7 +263,7 @@ export default function RecommendationCard({ result, gameInfo }) {
         </div>
 
         {/* Contenedor con scroll para las reseñas */}
-        <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-3 sm:space-y-4 max-h-[500px] sm:max-h-[600px] overflow-y-auto pr-1 sm:pr-2 custom-scrollbar">
           {filteredReviews.length === 0 ? (
             <div className="text-center py-12 bg-slate-900/20 rounded-xl border border-brand-border/60 text-slate-500">
               No hay reseñas que coincidan con esta categoría en la muestra analizada.
@@ -276,31 +276,31 @@ export default function RecommendationCard({ result, gameInfo }) {
               return (
                 <div
                   key={review.recommendation_id || index}
-                  className="bg-brand-card/40 border border-brand-border/60 p-5 rounded-xl hover:border-brand-border transition-all space-y-3 relative overflow-hidden"
+                  className="bg-brand-card/40 border border-brand-border/60 p-4 sm:p-5 rounded-lg sm:rounded-xl hover:border-brand-border transition-all space-y-2 sm:space-y-3 relative overflow-hidden"
                 >
                   {/* Pequeña línea decorativa lateral según clasificación */}
                   <div className={`absolute left-0 top-0 bottom-0 w-1 ${isPositive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
 
                   {/* Fila del autor e información */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-300">{review.author}</span>
                       <span className="text-slate-500">•</span>
-                      <span className="text-slate-400">{hoursPlayed} hrs de juego</span>
+                      <span className="text-slate-400">{hoursPlayed} hrs</span>
                     </div>
 
                     {/* Insignias de clasificación */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                       {/* Voto nativo de Steam */}
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold border ${review.voted_up_steam
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-semibold border ${review.voted_up_steam
                         ? 'bg-blue-950/40 text-blue-400 border-blue-500/20'
                         : 'bg-slate-900/60 text-slate-500 border-slate-800'
                         }`}>
-                        Steam: {review.voted_up_steam ? '👍 Recomienda' : '👎 No Recomienda'}
+                        Steam: {review.voted_up_steam ? '👍 Sí' : '👎 No'}
                       </span>
 
                       {/* Clasificación de nuestra IA */}
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${isPositive
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border ${isPositive
                         ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/20'
                         : 'bg-rose-950/40 text-rose-400 border-rose-500/20'
                         }`}>
@@ -310,7 +310,7 @@ export default function RecommendationCard({ result, gameInfo }) {
                   </div>
 
                   {/* Contenido de la reseña */}
-                  <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line italic font-sans font-light">
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line italic font-sans font-light">
                     "{review.review_text}"
                   </p>
                 </div>
@@ -321,21 +321,21 @@ export default function RecommendationCard({ result, gameInfo }) {
       </div>
 
       {/* 4. COMPARADOR DE PRECIOS Y ENLACES (Monetización / Utilidad real) */}
-      <div className="bg-brand-card/50 border border-brand-border/80 p-6 rounded-2xl space-y-4">
-        <h4 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <span>🛒 ¿Interesado en jugarlo? Encuentra el mejor precio</span>
-          <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-normal normal-case">
-            Enlaces de búsqueda dinámicos
+      <div className="bg-brand-card/50 border border-brand-border/80 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-4">
+        <h4 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex flex-col sm:flex-row sm:items-center gap-2">
+          <span>🛒 ¿Interesado? Encuentra el mejor precio</span>
+          <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-normal normal-case w-fit">
+            Enlaces dinámicos
           </span>
         </h4>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-1 sm:pt-2">
           {/* Botón Instant Gaming */}
           <a
             href={instantGamingUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-3.5 bg-[#ff5400]/10 hover:bg-[#ff5400]/20 text-[#ff8340] border border-[#ff5400]/20 hover:border-[#ff5400]/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
+            className="flex items-center justify-between p-3 sm:p-3.5 bg-[#ff5400]/10 hover:bg-[#ff5400]/20 text-[#ff8340] border border-[#ff5400]/20 hover:border-[#ff5400]/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
           >
             <div className="flex items-center gap-2">
               <span className="text-base group-hover:scale-110 transition-transform">🔥</span>
@@ -351,7 +351,7 @@ export default function RecommendationCard({ result, gameInfo }) {
             href="https://www.g2a.com/n/gamerecommended"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-3.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 hover:border-amber-500/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
+            className="flex items-center justify-between p-3 sm:p-3.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 hover:border-amber-500/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
           >
             <div className="flex items-center gap-2">
               <span className="text-base group-hover:scale-110 transition-transform">🎮</span>
@@ -367,7 +367,7 @@ export default function RecommendationCard({ result, gameInfo }) {
             href={`https://store.steampowered.com/app/${result.app_id}`}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-3.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 hover:border-blue-500/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
+            className="flex items-center justify-between p-3 sm:p-3.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 hover:border-blue-500/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
           >
             <div className="flex items-center gap-2">
               <span className="text-base group-hover:scale-110 transition-transform">⚓</span>

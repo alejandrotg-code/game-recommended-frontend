@@ -97,7 +97,7 @@ function App() {
       <Header activePage={activePage} setActivePage={setActivePage} />
 
       {/* 2. Área principal de contenido */}
-      <main className="w-full max-w-4xl mx-auto px-6 py-12 flex-1 flex flex-col justify-start">
+      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-1 flex flex-col justify-start">
 
         {/* RENDERIZADO CONDICIONAL DE PÁGINAS */}
 
@@ -110,8 +110,8 @@ function App() {
         {activePage === 'home' && (
           <>
             {/* Título de bienvenida con degradado premium */}
-            <div className="text-center mb-10 space-y-4">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-200 to-teal-400 bg-clip-text text-transparent">
+            <div className="text-center mb-6 sm:mb-10 space-y-2 sm:space-y-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-200 to-teal-400 bg-clip-text text-transparent">
                 Comprueba las reseñas con IA
               </h1>
               <p className="text-base md:text-lg text-slate-400 max-w-xl mx-auto">
@@ -126,7 +126,7 @@ function App() {
 
             {/* 4. Estado de error (Si algo sale mal) */}
             {error && (
-              <div className="w-full bg-rose-500/10 border border-rose-500/30 p-5 rounded-2xl text-rose-400 text-sm flex gap-3 items-center animate-fade-in">
+              <div className="w-full bg-rose-500/10 border border-rose-500/30 p-4 sm:p-5 rounded-xl sm:rounded-2xl text-rose-400 text-sm flex gap-3 items-center animate-fade-in">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
@@ -174,7 +174,7 @@ function App() {
 
             {/* 7. Mensaje informativo inicial (Si no hay búsqueda ni carga) */}
             {!isLoading && !analysisResult && !error && (
-              <div className="text-center py-16 border border-dashed border-brand-border/40 rounded-2xl bg-brand-card/10 max-w-2xl mx-auto w-full mt-6">
+              <div className="text-center py-10 sm:py-16 px-4 border border-dashed border-brand-border/40 rounded-2xl bg-brand-card/10 max-w-2xl mx-auto w-full mt-6">
                 <span className="text-4xl">🤖</span>
                 <h3 className="text-base font-bold text-slate-300 mt-4">Listo para analizar</h3>
                 <p className="text-sm text-slate-500 mt-2 max-w-sm mx-auto">
