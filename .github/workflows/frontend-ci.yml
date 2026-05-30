@@ -27,6 +27,8 @@ jobs:
 
       - name: 🏗️ Compilar
         run: pnpm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: 🚀 Subir dist al VPS
         uses: appleboy/scp-action@v0.1.7
