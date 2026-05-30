@@ -1,11 +1,11 @@
-name: Frontend React CI/CD
+name: Frontend CI/CD
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Clonar repositorio
@@ -25,24 +25,16 @@ jobs:
       - name: 📦 Instalar dependencias
         run: pnpm install --frozen-lockfile
 
-      - name: 🏗️ Validar compilación local
+      - name: 🏗️ Compilar
         run: pnpm run build
 
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🚀 Desplegar en VPS vía SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: 🚀 Subir dist al VPS
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          script: |
-            export PATH="$HOME/.local/share/pnpm:$PATH"
-            cd /home/alejandrotg/apps/game-recommended
-            git pull origin main
-            
-            pnpm install --frozen-lockfile
-            pnpm run build
+          source: "dist/"
+          target: "/home/alejandrotg/apps/game-recommended"
+          overwrite: true
