@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 // CONFIGURACIÓN DE LA API:
 // - Local: 'http://localhost:8000' (si ejecutas "uvicorn app:app --reload")
-const API_BASE_URL = import.meta.env.VITE_API_URL_DEV;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function GameSearch({ onGameSelect, isLoading }) {
   // Estado para controlar el texto escrito en el input
