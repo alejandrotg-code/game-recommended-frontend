@@ -4,8 +4,7 @@ import Header from './components/Header';
 import GameSearch from './components/Input';
 import RecommendationCard from './components/RecommendationCard';
 import HowItWorks from './components/HowItWorks';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import { analyzeGame } from './services/steamService';
 
 function App() {
   // Estado 1: Para guardar los datos del juego seleccionado en la lista (ID, Nombre, Imagen, etc.)
@@ -42,13 +41,12 @@ function App() {
   useEffect(() => {
     let interval;
     if (isLoading) {
-      setLoadingStep(0);
       interval = setInterval(() => {
         setLoadingStep((prev) => (prev + 1) % loadingTexts.length);
       }, 2000);
     }
     return () => clearInterval(interval);
-  }, [isLoading]);
+  }, [isLoading, loadingTexts.length]);
 
   // Función principal: Se ejecuta cuando el usuario selecciona un juego o pulsa "Analizar"
   const handleGameSelect = async (game) => {
@@ -59,22 +57,14 @@ function App() {
     // 2. Guardamos la información básica del juego que nos llega del buscador
     setSelectedGameInfo(game);
 
-    // 3. Activamos el estado de carga
+    // 3. Activamos el estado de carga y reseteamos el contador del texto
+    setLoadingStep(0);
     setIsLoading(true);
 
     try {
-      // Realizamos la petición HTTP GET al endpoint de análisis del backend
+      // Realizamos la petición de análisis al servicio de Steam
       // Le pedimos por defecto que analice un límite de 30 reseñas recientes
-      const response = await fetch(`${API_BASE_URL}/api/analyze/${game.id}?limit=30`);
-
-      // Si la respuesta no es correcta (código HTTP != 200)
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Error del servidor (código ${response.status})`);
-      }
-
-      // Convertimos la respuesta a un objeto JSON
-      const data = await response.json();
+      const data = await analyzeGame(game.id, 30);
 
       // Guardamos el resultado del análisis de la IA en su estado
       setAnalysisResult(data);
