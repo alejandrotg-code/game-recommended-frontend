@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-
-// CONFIGURACIÓN DE LA API:
-// - Local: 'http://localhost:8000' (si ejecutas "uvicorn app:app --reload")
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import { searchGames } from '../services/steamService';
 
 export default function GameSearch({ onGameSelect, isLoading }) {
   // Estado para controlar el texto escrito en el input
@@ -39,40 +36,23 @@ export default function GameSearch({ onGameSelect, isLoading }) {
   // Esto evita enviar peticiones al backend en cada letra que escribe el usuario.
   // Espera a que el usuario deje de escribir por 350 milisegundos antes de buscar.
   useEffect(() => {
-    // Si la búsqueda es muy corta o está vacía, no buscamos nada y limpiamos
-    if (query.trim().length < 2) {
-      setSuggestions([]);
-      setIsSearching(false);
+    const trimmed = query.trim();
+    if (trimmed.length < 2) {
       return;
     }
 
-    // Si el usuario escribe directamente un número largo (potencialmente un ID de Steam) o una URL,
-    // no hace falta buscar sugerencias de texto, ya que probablemente quiera analizarlo directamente.
-    const isNumeric = /^\d+$/.test(query.trim());
-    const isUrl = query.includes('store.steampowered.com') || query.includes('app/');
+    const isNumeric = /^\d+$/.test(trimmed);
+    const isUrl = trimmed.includes('store.steampowered.com') || trimmed.includes('app/');
     if (isNumeric || isUrl) {
-      setSuggestions([]);
-      setIsSearching(false);
       return;
     }
-
-    // Iniciamos estado de búsqueda
-    setIsSearching(true);
-    setShowDropdown(true);
 
     // Creamos un temporizador (timer)
     const delayDebounceFn = setTimeout(async () => {
       try {
-        // Hacemos la llamada al backend para buscar juegos por texto
-        const response = await fetch(`${API_BASE_URL}/api/search?term=${encodeURIComponent(query)}`);
-
-        if (response.ok) {
-          const data = await response.json();
-          // Guardamos los juegos devueltos en nuestro estado de sugerencias
-          setSuggestions(data.games || []);
-        } else {
-          console.error("Error al buscar juegos sugeridos");
-        }
+        // Hacemos la llamada al servicio para buscar juegos por texto
+        const games = await searchGames(query);
+        setSuggestions(games);
       } catch (error) {
         console.error("Error de conexión al buscar sugerencias:", error);
       } finally {
@@ -148,8 +128,20 @@ export default function GameSearch({ onGameSelect, isLoading }) {
             type="text"
             value={query}
             onChange={(e) => {
-              setQuery(e.target.value);
-              setShowDropdown(true);
+              const val = e.target.value;
+              setQuery(val);
+
+              const trimmed = val.trim();
+              const isNumeric = /^\d+$/.test(trimmed);
+              const isUrl = trimmed.includes('store.steampowered.com') || trimmed.includes('app/');
+
+              if (trimmed.length < 2 || isNumeric || isUrl) {
+                setSuggestions([]);
+                setIsSearching(false);
+              } else {
+                setIsSearching(true);
+                setShowDropdown(true);
+              }
             }}
             onFocus={() => setShowDropdown(true)}
             placeholder="Escribe el nombre de un juego, pega su ID o la URL de Steam..."

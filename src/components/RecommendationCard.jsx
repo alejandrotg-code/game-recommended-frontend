@@ -58,14 +58,9 @@ export default function RecommendationCard({ result, gameInfo }) {
   const popularLinks = POPULAR_GAMES_LINKS[appIdStr];
 
   // Generación de URL para Instant Gaming
-  let instantGamingUrl = '';
-  if (popularLinks?.ig) {
-    // Si tenemos la ficha directa, usamos "?" para concatenar el afiliado
-    instantGamingUrl = `${popularLinks.ig}${INSTANT_GAMING_IGR_ID ? `?igr=${INSTANT_GAMING_IGR_ID}` : ''}`;
-  } else {
-    // Si no, usamos el buscador por nombre de juego (usando "&" porque ya tiene parámetros)
-    instantGamingUrl = `https://www.instant-gaming.com/es/busquedas/?query=${encodeURIComponent(gameInfo?.name || '')}${INSTANT_GAMING_IGR_ID ? `&igr=${INSTANT_GAMING_IGR_ID}` : ''}`;
-  }
+  const instantGamingUrl = popularLinks?.ig
+    ? `${popularLinks.ig}${INSTANT_GAMING_IGR_ID ? `?igr=${INSTANT_GAMING_IGR_ID}` : ''}`
+    : `https://www.instant-gaming.com/es/busquedas/?query=${encodeURIComponent(gameInfo?.name || '')}${INSTANT_GAMING_IGR_ID ? `&igr=${INSTANT_GAMING_IGR_ID}` : ''}`;
 
   // Filtrar reseñas según la pestaña seleccionada
   const filteredReviews = reviews_classified.filter((review) => {

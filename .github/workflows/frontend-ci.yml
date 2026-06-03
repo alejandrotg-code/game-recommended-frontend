@@ -3,6 +3,8 @@ name: Frontend CI/CD
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -25,12 +27,19 @@ jobs:
       - name: 📦 Instalar dependencias
         run: pnpm install --frozen-lockfile
 
+      - name: 🚨 Ejecutar linter
+        run: pnpm run lint
+
+      - name: 🧪 Ejecutar pruebas unitarias
+        run: pnpm run test:run
+
       - name: 🏗️ Compilar
         run: pnpm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: 🚀 Subir dist al VPS
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
