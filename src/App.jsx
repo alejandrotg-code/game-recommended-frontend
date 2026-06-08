@@ -65,7 +65,9 @@ function App() {
     const gameId = params.get('game');
     const gameName = params.get('name');
     if (gameId) {
-      handleGameSelect({ id: gameId, name: gameName ? decodeURIComponent(gameName) : `Juego (ID: ${gameId})` });
+      Promise.resolve().then(() => {
+        handleGameSelect({ id: gameId, name: gameName ? decodeURIComponent(gameName) : `Juego (ID: ${gameId})` });
+      });
     }
   }, []);
 
