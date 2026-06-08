@@ -22,7 +22,10 @@ describe('steamService', () => {
       const result = await searchGames('Half-Life');
 
       expect(result).toEqual(mockGames);
-      expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/search?term=Half-Life'));
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('/api/search?term=Half-Life'),
+        expect.anything()
+      );
     });
 
     it('debería lanzar un error si la petición falla', async () => {
@@ -55,12 +58,15 @@ describe('steamService', () => {
       const result = await analyzeGame('123', 30);
 
       expect(result).toEqual(mockResult);
-      expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/analyze/123?limit=30'));
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('/api/analyze/123?limit=30'),
+        expect.anything()
+      );
     });
 
     it('debería lanzar un error con el mensaje detallado si la API retorna un error estructurado', async () => {
       const errorDetail = 'El ID de juego proporcionado es inválido o no existe.';
-      
+
       const fetchMock = vi.fn().mockResolvedValue({
         ok: false,
         status: 400,
