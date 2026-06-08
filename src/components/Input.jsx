@@ -2,139 +2,179 @@ import { useState, useEffect, useRef } from 'react';
 import { searchGames } from '../services/steamService';
 
 export default function GameSearch({ onGameSelect, isLoading }) {
-  // Estado para controlar el texto escrito en el input
   const [query, setQuery] = useState('');
-
-  // Estado para guardar la lista de sugerencias que devuelve el backend
   const [suggestions, setSuggestions] = useState([]);
-
-  // Estado para saber si estamos buscando sugerencias (cargando el dropdown)
   const [isSearching, setIsSearching] = useState(false);
-
-  // Estado para controlar si el dropdown de sugerencias debe estar visible
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputError, setInputError] = useState('');
+  // Índice de la sugerencia resaltada con teclado (-1 = ninguna)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
-  // Referencia al contenedor principal para detectar clics fuera y cerrar el menú
   const containerRef = useRef(null);
+  const inputRef = useRef(null);
+  // Ref para cancelar la búsqueda de sugerencias anterior
+  const searchAbortRef = useRef(null);
 
-  // EFECTO 1: Cerrar el menú de sugerencias si el usuario hace clic fuera del buscador
+  // Exponer función para resetear el query desde el padre
+  // (no es necesario aquí pero lo dejamos limpio)
+
+  // ── Cerrar dropdown al hacer clic fuera ──────────────────────────────────
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Si el elemento clickeado no está dentro de nuestro contenedor, cerramos la lista
       if (containerRef.current && !containerRef.current.contains(event.target)) {
         setShowDropdown(false);
+        setIsFocused(false);
+        setHighlightedIndex(-1);
       }
     };
-
-    // Añadimos el evento de escucha al hacer clic
     document.addEventListener('mousedown', handleClickOutside);
-    // Limpieza del evento cuando el componente se desmonte
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // EFECTO 2: Controlar la escritura con Debounce (retardo)
-  // Esto evita enviar peticiones al backend en cada letra que escribe el usuario.
-  // Espera a que el usuario deje de escribir por 350 milisegundos antes de buscar.
+  // ── Debounce 350ms para buscar sugerencias ───────────────────────────────
   useEffect(() => {
     const trimmed = query.trim();
-    if (trimmed.length < 2) {
-      return;
-    }
+    if (trimmed.length < 2) return;
 
     const isNumeric = /^\d+$/.test(trimmed);
     const isUrl = trimmed.includes('store.steampowered.com') || trimmed.includes('app/');
-    if (isNumeric || isUrl) {
-      return;
-    }
+    if (isNumeric || isUrl) return;
 
-    // Creamos un temporizador (timer)
-    const delayDebounceFn = setTimeout(async () => {
+    // Cancelar la búsqueda anterior si existe
+    if (searchAbortRef.current) searchAbortRef.current.abort();
+    const controller = new AbortController();
+    searchAbortRef.current = controller;
+
+    const timer = setTimeout(async () => {
       try {
-        // Hacemos la llamada al servicio para buscar juegos por texto
-        const games = await searchGames(query);
+        const games = await searchGames(query, controller.signal);
         setSuggestions(games);
-      } catch (error) {
-        console.error("Error de conexión al buscar sugerencias:", error);
+        setHighlightedIndex(-1);
+      } catch (err) {
+        // Ignoramos el error si fue cancelación intencional
+        if (err.name !== 'AbortError') {
+          console.error('Error buscando sugerencias:', err);
+        }
       } finally {
-        // Indicamos que terminó la búsqueda de sugerencias
         setIsSearching(false);
       }
-    }, 350); // 350ms de espera
+    }, 350);
 
-    // Si el usuario vuelve a escribir antes de los 350ms, este retorno cancela el temporizador anterior
-    return () => clearTimeout(delayDebounceFn);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [query]);
 
-  // Función que maneja el envío del formulario (cuando pulsan Enter o el botón "Analizar")
+  // ── Envío del formulario ─────────────────────────────────────────────────
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!query.trim() || isLoading) return;
 
-    // Intentamos extraer el ID de Steam si lo que pegaron fue una URL
-    // Ejemplo: https://store.steampowered.com/app/1245620/ELDEN_RING/ -> 1245620
     const urlPattern = /store\.steampowered\.com\/app\/(\d+)/;
     const match = query.match(urlPattern);
 
     if (match && match[1]) {
-      // Si era una URL válida, enviamos el ID extraído
-      const gameId = match[1];
-      onGameSelect({ id: gameId, name: `Juego de Steam (ID: ${gameId})` });
+      onGameSelect({ id: match[1], name: `Juego de Steam (ID: ${match[1]})` });
       setShowDropdown(false);
     } else if (/^\d+$/.test(query.trim())) {
-      // Si era directamente un ID numérico escrito a mano
-      const gameId = query.trim();
-      onGameSelect({ id: gameId, name: `Juego de Steam (ID: ${gameId})` });
+      onGameSelect({ id: query.trim(), name: `Juego de Steam (ID: ${query.trim()})` });
       setShowDropdown(false);
     } else {
-      // Si escribieron texto normal:
-      // Si hay sugerencias cargadas, seleccionamos la primera de la lista por comodidad
       if (suggestions.length > 0) {
-        handleSelectSuggestion(suggestions[0]);
+        handleSelectSuggestion(suggestions[highlightedIndex >= 0 ? highlightedIndex : 0]);
       } else {
-        alert("Por favor, introduce un ID de juego de Steam válido, una URL oficial de la tienda, o selecciona un juego de las sugerencias mientras escribes.");
+        // Error inline, no alert()
+        setInputError('Selecciona un juego de las sugerencias, o introduce un ID o URL de Steam directamente.');
+        setTimeout(() => setInputError(''), 4000);
       }
     }
   };
 
-  // Función al hacer clic en un juego de la lista flotante
+  // ── Seleccionar sugerencia ───────────────────────────────────────────────
   const handleSelectSuggestion = (game) => {
-    // 1. Rellenamos el campo de texto con el nombre del juego seleccionado
     setQuery(game.name);
-    // 2. Cerramos la lista de sugerencias
     setShowDropdown(false);
-    // 3. Notificamos al componente principal (App.jsx) que se ha seleccionado este juego para analizar
+    setIsFocused(false);
+    setHighlightedIndex(-1);
+    setInputError('');
     onGameSelect(game);
   };
+
+  // ── Limpiar el campo ─────────────────────────────────────────────────────
+  const handleClear = () => {
+    setQuery('');
+    setSuggestions([]);
+    setShowDropdown(false);
+    setInputError('');
+    setHighlightedIndex(-1);
+    if (searchAbortRef.current) searchAbortRef.current.abort();
+    inputRef.current?.focus();
+  };
+
+  // ── Navegación por teclado en el dropdown ────────────────────────────────
+  const handleKeyDown = (e) => {
+    if (!showDropdown || suggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev + 1) % suggestions.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIndex((prev) => (prev <= 0 ? suggestions.length - 1 : prev - 1));
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault();
+      handleSelectSuggestion(suggestions[highlightedIndex]);
+    } else if (e.key === 'Escape') {
+      setShowDropdown(false);
+      setHighlightedIndex(-1);
+    }
+  };
+
+  const showResults = showDropdown && (suggestions.length > 0 || (query.trim().length >= 2 && isSearching));
 
   return (
     <div ref={containerRef} className="w-full relative">
 
-      {/* FORMULARIO DEL BUSCADOR */}
+      {/* Borde aurora animado al enfocar */}
+      {isFocused && (
+        <div
+          className="absolute -inset-[2px] rounded-[22px] sm:rounded-full z-0 opacity-70 blur-[2px]"
+          style={{
+            background: 'linear-gradient(90deg, #2563eb, #7c3aed, #0ea5e9, #2563eb)',
+            backgroundSize: '300% 100%',
+            animation: 'gradientShift 3s linear infinite',
+          }}
+        />
+      )}
+
+      {/* Formulario */}
       <form
         onSubmit={handleSubmit}
-        className="w-full bg-brand-card/60 border border-brand-border p-2 rounded-2xl sm:rounded-full flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shadow-[0_0_50px_-12px_rgba(59,130,246,0.25)] focus-within:border-blue-500/50 transition-all"
+        className={`relative z-10 w-full bg-[#0a1628]/90 border p-1.5 rounded-[20px] sm:rounded-full flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all duration-300 ${
+          isFocused ? 'border-transparent' : 'border-[#1e293b] shadow-[0_0_40px_-12px_rgba(37,99,235,0.2)]'
+        }`}
       >
-
         <div className="flex items-center flex-1 min-w-0 gap-2">
-          {/* Icono de Lupa */}
-          <div className="pl-2 sm:pl-4 text-slate-500 shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          {/* Icono lupa */}
+          <div className={`pl-3 sm:pl-4 shrink-0 transition-colors duration-200 ${isFocused ? 'text-blue-400' : 'text-slate-500'}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="size-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
 
-          {/* Input de búsqueda */}
+          {/* Input de texto */}
           <input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => {
               const val = e.target.value;
               setQuery(val);
-
+              setInputError('');
               const trimmed = val.trim();
               const isNumeric = /^\d+$/.test(trimmed);
               const isUrl = trimmed.includes('store.steampowered.com') || trimmed.includes('app/');
-
               if (trimmed.length < 2 || isNumeric || isUrl) {
                 setSuggestions([]);
                 setIsSearching(false);
@@ -143,105 +183,139 @@ export default function GameSearch({ onGameSelect, isLoading }) {
                 setShowDropdown(true);
               }
             }}
-            onFocus={() => setShowDropdown(true)}
-            placeholder="Escribe el nombre de un juego, pega su ID o la URL de Steam..."
-            disabled={isLoading}
-            className="flex-1 bg-transparent px-2 py-2.5 sm:py-3 text-sm text-slate-100 placeholder-slate-500 outline-none w-full disabled:opacity-50 min-w-0"
+            onFocus={() => { setShowDropdown(true); setIsFocused(true); }}
+            onKeyDown={handleKeyDown}
+            placeholder="Busca un juego, pega su ID o URL de Steam..."
+            className="flex-1 bg-transparent px-2 py-2.5 sm:py-3 text-sm text-slate-100 placeholder-slate-600 outline-none w-full min-w-0 font-medium"
+            aria-autocomplete="list"
+            aria-haspopup="listbox"
+            aria-expanded={showDropdown}
           />
 
-          {/* Indicador de búsqueda en progreso para feedback visual del usuario */}
+          {/* Indicador de búsqueda (puntos animados) */}
           {isSearching && (
-            <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin shrink-0 mr-2" />
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="loading-dot" />
+              <span className="loading-dot" />
+              <span className="loading-dot" />
+            </div>
+          )}
+
+          {/* Botón limpiar ✕ */}
+          {query && !isSearching && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="text-slate-600 hover:text-slate-300 transition-colors shrink-0 p-1 rounded-full hover:bg-white/5 mr-1"
+              aria-label="Limpiar búsqueda"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           )}
         </div>
 
-        {/* Botón de Analizar */}
+        {/* Botón analizar */}
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="bg-brand-accent hover:bg-blue-700 disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-3 rounded-xl sm:rounded-full transition-all cursor-pointer shadow-md active:scale-98 shrink-0 text-center w-full sm:w-auto"
+          className="relative overflow-hidden bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white text-sm font-bold px-5 sm:px-7 py-3 rounded-[14px] sm:rounded-full transition-all duration-200 cursor-pointer shrink-0 w-full sm:w-auto group"
         >
-          {isLoading ? 'Analizando...' : 'Analizar Juego'}
+          <span className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          <span className="relative">
+            {isLoading ? 'Analizando...' : 'Analizar Juego'}
+          </span>
         </button>
-
       </form>
 
-      {/* DROPDOWN DE SUGERENCIAS FLOTANTE */}
-      {showDropdown && (suggestions.length > 0 || (query.trim().length >= 2 && isSearching)) && (
-        <div className="absolute left-0 right-0 mt-3 bg-brand-card/95 border border-brand-border rounded-2xl overflow-hidden shadow-2xl z-50 backdrop-blur-xl animate-fade-in">
+      {/* Error inline (reemplaza el alert del navegador) */}
+      {inputError && (
+        <div className="mt-2 flex items-center gap-2 text-xs text-amber-400 bg-amber-500/8 border border-amber-500/20 px-3 py-2 rounded-xl animate-fade-up">
+          <svg xmlns="http://www.w3.org/2000/svg" className="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          {inputError}
+        </div>
+      )}
 
-          {/* Cabecera del listado */}
-          <div className="px-4 py-2 border-b border-brand-border bg-slate-950/40 text-[10px] uppercase font-bold tracking-wider text-slate-500">
-            Juegos encontrados en Steam
+      {/* Dropdown de sugerencias */}
+      {showResults && (
+        <div
+          role="listbox"
+          className="absolute left-0 right-0 mt-3 bg-[#0a1628]/98 border border-[#1e293b] rounded-2xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8)] z-[200] backdrop-blur-xl animate-fade-up overflow-hidden"
+        >
+          {/* Cabecera */}
+          <div className="px-4 py-2.5 border-b border-[#1e293b]/60 flex items-center justify-between">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Juegos en Steam</span>
+            {suggestions.length > 0 && (
+              <span className="text-[10px] text-slate-600">{suggestions.length} resultados · ↑↓ para navegar</span>
+            )}
           </div>
 
-          <ul className="max-h-80 overflow-y-auto divide-y divide-brand-border/40 custom-scrollbar">
+          <ul className="max-h-72 overflow-y-auto divide-y divide-[#1e293b]/40 custom-scrollbar">
 
-            {/* Si está cargando y no hay sugerencias previas */}
+            {/* Skeleton mientras carga */}
             {isSearching && suggestions.length === 0 && (
-              <li className="px-5 py-4 text-sm text-slate-400 text-center">
-                Buscando juegos en la base de datos de Steam...
+              <li className="px-4 py-4 flex items-center gap-3">
+                <div className="w-16 h-9 rounded-lg animate-shimmer shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 w-2/3 rounded-full animate-shimmer" />
+                  <div className="h-2.5 w-1/3 rounded-full animate-shimmer" />
+                </div>
               </li>
             )}
 
-            {/* Renderizar cada juego sugerido */}
-            {suggestions.map((game) => (
-              <li key={game.id}>
+            {/* Lista de juegos */}
+            {suggestions.map((game, i) => (
+              <li key={game.id} role="option" aria-selected={highlightedIndex === i}>
                 <button
                   type="button"
                   onClick={() => handleSelectSuggestion(game)}
-                  className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-slate-800/50 transition-colors cursor-pointer group"
+                  className={`w-full px-4 py-3 flex items-center justify-between text-left transition-colors cursor-pointer group ${
+                    highlightedIndex === i
+                      ? 'bg-blue-600/15 border-l-2 border-blue-500'
+                      : 'hover:bg-blue-600/8'
+                  }`}
                 >
-                  <div className="flex items-center gap-3 pr-4">
-                    {/* Imagen pequeña del juego */}
+                  <div className="flex items-center gap-3 min-w-0">
                     {game.image ? (
                       <img
                         src={game.image}
                         alt={game.name}
-                        className="w-12 h-6 object-cover rounded border border-brand-border/80 group-hover:border-slate-600 transition-all shrink-0"
+                        className="w-16 h-9 object-cover rounded-lg border border-[#1e293b] group-hover:border-slate-600 transition-all shrink-0"
                       />
                     ) : (
-                      <div className="w-12 h-6 bg-slate-800 rounded flex items-center justify-center shrink-0">
-                        🎮
-                      </div>
+                      <div className="w-16 h-9 bg-slate-800 rounded-lg flex items-center justify-center shrink-0 text-base">🎮</div>
                     )}
-
-                    {/* Nombre e ID */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors line-clamp-1">
-                        {game.name}
-                      </h4>
-                      <span className="text-[10px] text-slate-500">ID: {game.id}</span>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors truncate">{game.name}</h4>
+                      <span className="text-[10px] text-slate-600 font-mono">ID: {game.id}</span>
                     </div>
                   </div>
 
-                  {/* Precio e indicación visual */}
-                  <div className="text-right flex items-center gap-3 shrink-0">
-                    <div className="flex flex-col items-end">
-                      <span className="text-xs font-semibold text-slate-300">{game.price}</span>
-                      {game.metascore && game.metascore !== "N/A" && (
-                        <span className="text-[9px] bg-yellow-950 text-yellow-400 px-1 rounded">
-                          Meta: {game.metascore}
+                  <div className="flex items-center gap-3 shrink-0 pl-3">
+                    <div className="text-right hidden sm:block">
+                      {game.price && (
+                        <span className="text-xs font-bold text-slate-300 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded-md">
+                          {game.price}
                         </span>
                       )}
+                      {game.metascore && game.metascore !== 'N/A' && (
+                        <div className="mt-1">
+                          <span className="text-[9px] bg-yellow-900/50 text-yellow-400 border border-yellow-500/20 px-1.5 py-0.5 rounded font-semibold">
+                            Meta {game.metascore}
+                          </span>
+                        </div>
+                      )}
                     </div>
-
-                    {/* Icono de flecha que aparece al hacer hover */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4 text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition-all"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
-
                 </button>
               </li>
             ))}
-
           </ul>
         </div>
       )}

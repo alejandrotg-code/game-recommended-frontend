@@ -1,146 +1,155 @@
-/**
- * Componente que explica el funcionamiento técnico y lógico de la aplicación.
- * Muestra el flujo de datos desde que el usuario busca un juego hasta que la IA predice el veredicto.
- */
+const steps = [
+  {
+    num: '01',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    ),
+    color: 'blue',
+    title: 'El usuario busca un juego',
+    description:
+      'El usuario escribe el nombre del juego, pega su ID de Steam o la URL de la tienda. El frontend llama al backend de FastAPI con ese identificador.',
+    tech: 'React + Vite',
+  },
+  {
+    num: '02',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+      </svg>
+    ),
+    color: 'cyan',
+    title: 'Extracción de reseñas en Steam',
+    description:
+      'FastAPI hace una petición a la API pública de Steam para obtener las reseñas más recientes escritas en español. Se filtra por idioma para analizar opiniones hispanohablantes.',
+    tech: 'FastAPI · Steam API',
+  },
+  {
+    num: '03',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    ),
+    color: 'purple',
+    title: 'Limpieza de texto (NLP)',
+    description:
+      'Antes de clasificar, se aplican expresiones regulares en Python para eliminar ruido: emojis, hashtags, menciones y números. El texto se normaliza en minúsculas para mejorar la precisión del modelo.',
+    tech: 'Python · Regex · NLP',
+  },
+  {
+    num: '04',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2" />
+      </svg>
+    ),
+    color: 'emerald',
+    title: 'Clasificación con Naive Bayes',
+    description:
+      'El vectorizador TF-IDF convierte las palabras en frecuencias matemáticas. El modelo <strong className="text-slate-300">Multinomial Naive Bayes</strong> (entrenado previamente e importado con Joblib) predice si cada reseña es Positiva o Negativa analizando la semántica real del texto.',
+    tech: 'Naive Bayes · TF-IDF · Sklearn',
+  },
+  {
+    num: '05',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+    ),
+    color: 'amber',
+    title: 'Veredicto final',
+    description:
+      'Una vez clasificadas todas las reseñas individuales de la muestra, el backend calcula el ratio de opiniones positivas. Según el porcentaje de éxito, se determina el veredicto final: <strong className="text-slate-300">Extremadamente Recomendado</strong> (≥ 80%), <strong className="text-slate-300">Recomendado</strong> (≥ 60%), <strong className="text-slate-300">Mixto</strong> (≥ 40%) o <strong className="text-slate-300">No Recomendado</strong> (< 40%).',
+    tech: 'Python · FastAPI · JSON',
+  },
+];
+
+const colorMap = {
+  blue:    { bg: 'bg-blue-500/10',    border: 'border-blue-500/20',    text: 'text-blue-400',    line: 'bg-blue-500/30' },
+  cyan:    { bg: 'bg-cyan-500/10',    border: 'border-cyan-500/20',    text: 'text-cyan-400',    line: 'bg-cyan-500/30' },
+  purple:  { bg: 'bg-purple-500/10',  border: 'border-purple-500/20',  text: 'text-purple-400',  line: 'bg-purple-500/30' },
+  emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400', line: 'bg-emerald-500/30' },
+  amber:   { bg: 'bg-amber-500/10',   border: 'border-amber-500/20',   text: 'text-amber-400',   line: 'bg-amber-500/30' },
+};
+
 export default function HowItWorks() {
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8 sm:space-y-12 animate-fade-in">
+    <div className="w-full max-w-3xl mx-auto space-y-10 sm:space-y-14 animate-fade-up">
 
-      {/* 1. Encabezado principal */}
-      <div className="text-center space-y-2 sm:space-y-4">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-50 tracking-tight">
-          ¿Cómo funciona Game Recommended <span className="text-blue-400">AI</span>?
+      {/* Encabezado */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 text-blue-400 text-[11px] font-semibold px-3 py-1.5 rounded-full mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Pipeline técnico
+        </div>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-50 tracking-tight">
+          ¿Cómo funciona{' '}
+          <span className="gradient-text">Game Recommended AI</span>?
         </h2>
-        <p className="text-slate-400 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-          Descubre el proceso técnico, desde el procesamiento de texto hasta el modelo de inteligencia artificial que analiza las reseñas de Steam en español.
+        <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+          Desde que buscas un juego hasta que obtienes el veredicto, esto es lo que ocurre por dentro.
         </p>
       </div>
 
-      {/* 2. Diagrama del pipeline visual (Diseño premium interactivo) */}
-      <div className="bg-brand-card/40 border border-brand-border p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl space-y-4 sm:space-y-6">
-        <h3 className="text-xs sm:text-sm font-bold text-slate-300 uppercase tracking-wider text-center">
-          Flujo de datos de la aplicación
-        </h3>
+      {/* Timeline vertical */}
+      <div className="relative">
+        {/* Línea conectora vertical (solo decorativa, oculta en móvil) */}
+        <div className="absolute left-6 top-8 bottom-8 w-px bg-gradient-to-b from-blue-500/30 via-purple-500/20 to-amber-500/20 hidden sm:block" />
 
-        {/* Fila del diagrama en pantallas grandes, columnas en móvil */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 sm:gap-4 items-center pt-2 sm:pt-4">
+        <div className="space-y-4 sm:space-y-6">
+          {steps.map((step, i) => {
+            const c = colorMap[step.color];
+            return (
+              <div
+                key={step.num}
+                className="relative flex gap-4 sm:gap-6 animate-fade-up"
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                {/* Icono del nodo */}
+                <div className="shrink-0 relative z-10">
+                  <div className={`w-12 h-12 rounded-2xl ${c.bg} border ${c.border} flex items-center justify-center ${c.text}`}>
+                    {step.icon}
+                  </div>
+                </div>
 
-          {/* Nodo 1 */}
-          <div className="bg-slate-950/60 border border-brand-border p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center space-y-1 sm:space-y-2">
-            <span className="text-xl sm:text-2xl">🔍</span>
-            <h4 className="text-xs font-bold text-slate-200">1. Búsqueda</h4>
-            <p className="text-[9px] sm:text-[10px] text-slate-500">Usuario busca un juego en el buscador</p>
-          </div>
-
-          {/* Flecha 1 */}
-          <div className="hidden md:flex justify-center text-blue-500/40 text-xl animate-pulse">➡️</div>
-          <div className="flex md:hidden justify-center text-blue-500/40 text-xl">⬇️</div>
-
-          {/* Nodo 2 */}
-          <div className="bg-slate-950/60 border border-brand-border p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center space-y-1 sm:space-y-2">
-            <span className="text-xl sm:text-2xl">☁️</span>
-            <h4 className="text-xs font-bold text-slate-200">2. Extracción</h4>
-            <p className="text-[9px] sm:text-[10px] text-slate-500">FastAPI solicita reseñas a la API de Steam</p>
-          </div>
-
-          {/* Flecha 2 */}
-          <div className="hidden md:flex justify-center text-blue-500/40 text-xl animate-pulse">➡️</div>
-          <div className="flex md:hidden justify-center text-blue-500/40 text-xl">⬇️</div>
-
-          {/* Nodo 3 */}
-          <div className="bg-slate-950/60 border border-brand-border p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center space-y-1 sm:space-y-2">
-            <span className="text-xl sm:text-2xl">🧹</span>
-            <h4 className="text-xs font-bold text-slate-200">3. Limpieza</h4>
-            <p className="text-[9px] sm:text-[10px] text-slate-500">NLP limpia menciones, números y puntuación</p>
-          </div>
-
-          {/* Flecha 3 */}
-          <div className="hidden md:flex justify-center text-blue-500/40 text-xl animate-pulse">➡️</div>
-          <div className="flex md:hidden justify-center text-blue-500/40 text-xl">⬇️</div>
-
-          {/* Nodo 4 */}
-          <div className="bg-slate-950/60 border border-brand-border p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center space-y-1 sm:space-y-2">
-            <span className="text-xl sm:text-2xl">🧠</span>
-            <h4 className="text-xs font-bold text-slate-200">4. Clasificación</h4>
-            <p className="text-[9px] sm:text-[10px] text-slate-500">Modelo Naive Bayes predice el sentimiento</p>
-          </div>
-
-          {/* Flecha 4 */}
-          <div className="hidden md:flex justify-center text-blue-500/40 text-xl animate-pulse">➡️</div>
-          <div className="flex md:hidden justify-center text-blue-500/40 text-xl">⬇️</div>
-
-          {/* Nodo 5 */}
-          <div className="bg-slate-950/60 border border-brand-border p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center space-y-1 sm:space-y-2">
-            <span className="text-xl sm:text-2xl">📊</span>
-            <h4 className="text-xs font-bold text-slate-200">5. Reporte</h4>
-            <p className="text-[9px] sm:text-[10px] text-slate-500">Se calcula la aprobación y el veredicto</p>
-          </div>
-
+                {/* Contenido */}
+                <div className={`flex-1 bg-[#0a1628]/60 border border-[#1e293b]/80 rounded-2xl p-4 sm:p-5 hover:border-[#2d3f55] transition-all duration-200 group`}>
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest ${c.text} mb-1 block`}>
+                        Paso {step.num}
+                      </span>
+                      <h3 className="text-sm sm:text-base font-bold text-slate-100 group-hover:text-white transition-colors">
+                        {step.title}
+                      </h3>
+                    </div>
+                    <span className={`text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0 ${c.bg} ${c.border} border ${c.text}`}>
+                      {step.tech}
+                    </span>
+                  </div>
+                  <p
+                    className="text-xs sm:text-sm text-slate-400 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: step.description }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* 3. Cuadrícula con explicaciones paso a paso */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-
-        {/* Tarjeta Paso 1 */}
-        <div className="bg-brand-card/30 border border-brand-border/80 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-2 sm:space-y-3">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center font-bold text-sm shrink-0">
-              01
-            </span>
-            <h3 className="text-sm sm:text-base font-bold text-slate-100">Extracción de datos</h3>
-          </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Cuando seleccionas un juego, nuestro backend se comunica de forma asíncrona con el servicio público de opiniones de Steam. Descargamos un bloque de las opiniones más recientes escritas únicamente por jugadores hispanohablantes para analizar opiniones locales y culturales.
-          </p>
-        </div>
-
-        {/* Tarjeta Paso 2 */}
-        <div className="bg-brand-card/30 border border-brand-border/80 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-2 sm:space-y-3">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-sm shrink-0">
-              02
-            </span>
-            <h3 className="text-sm sm:text-base font-bold text-slate-100">Procesamiento de Lenguaje Natural (NLP)</h3>
-          </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Las reseñas escritas por usuarios suelen contener ruido: hashtags, emojis, menciones o números. Antes de clasificar, aplicamos expresiones regulares en Python para normalizar el texto: convertimos todo a minúsculas y limpiamos los caracteres innecesarios para facilitar la lectura matemática del modelo.
-          </p>
-        </div>
-
-        {/* Tarjeta Paso 3 */}
-        <div className="bg-brand-card/30 border border-brand-border/80 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-2 sm:space-y-3">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center font-bold text-sm shrink-0">
-              03
-            </span>
-            <h3 className="text-sm sm:text-base font-bold text-slate-100">El modelo Naive Bayes</h3>
-          </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Utilizamos un clasificador de Machine Learning llamado **Multinomial Naive Bayes** (entrenado previamente e importado con Joblib). El vectorizador transforma las palabras de la reseña en frecuencias matemáticas y la IA calcula las probabilidades para predecir si el tono del mensaje es positivo o negativo.
-          </p>
-        </div>
-
-        {/* Tarjeta Paso 4 */}
-        <div className="bg-brand-card/30 border border-brand-border/80 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-2 sm:space-y-3">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center font-bold text-sm shrink-0">
-              04
-            </span>
-            <h3 className="text-sm sm:text-base font-bold text-slate-100">Cálculo de Veredicto</h3>
-          </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Una vez clasificadas todas las reseñas individuales de la muestra, el backend calcula el ratio de opiniones positivas. Según el porcentaje de éxito, se determina el veredicto final: **Extremadamente Recomendado** (≥ 80%), **Recomendado** (≥ 60%), **Mixto** (≥ 40%) o **No Recomendado** (&lt; 40%).
-          </p>
-        </div>
-
-      </div>
-
-      {/* 4. Pie informativo */}
-      <div className="bg-blue-600/5 border border-blue-500/10 rounded-2xl p-5 text-center text-xs text-slate-400 leading-relaxed max-w-2xl mx-auto">
-        <span className="text-base">💡</span>
-        <p className="mt-1">
-          La principal ventaja de este sistema es que analiza la <strong>semántica de lo que escribe el jugador</strong>, no solo si hizo clic en el botón de recomendar de Steam. Esto ayuda a detectar si un juego tiene reseñas negativas por "bombardeo de quejas" (review bombing) o si de verdad falla en su jugabilidad.
+      {/* Nota final */}
+      <div className="bg-blue-600/5 border border-blue-500/15 rounded-2xl p-5 sm:p-6 text-center space-y-2">
+        <span className="text-2xl">💡</span>
+        <h4 className="text-sm font-bold text-slate-200">La ventaja clave</h4>
+        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
+          A diferencia de la valoración oficial de Steam (basada en si el jugador clickó "Recomendar"), nuestro sistema analiza{' '}
+          <strong className="text-slate-200">la semántica real de lo que escribe el jugador</strong>.
+          Esto permite detectar review bombing o juegos con muchos "Me gusta" a pesar de tener opiniones negativas en el texto.
         </p>
       </div>
 
