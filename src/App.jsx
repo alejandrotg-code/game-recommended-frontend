@@ -15,9 +15,7 @@ function App() {
   const [loadingStep, setLoadingStep] = useState(0);
   const [activePage, setActivePage] = useState('home');
 
-  // Ref para cancelar el análisis anterior si el usuario selecciona otro juego
   const analyzeAbortRef = useRef(null);
-  // Ref para hacer scroll al resultado
   const resultsRef = useRef(null);
 
   const loadingTexts = [
@@ -31,38 +29,7 @@ function App() {
     "Generando informe interactivo...",
   ];
 
-  // ── Leer ?game=ID de la URL al cargar para compartir resultados ──────────
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const gameId = params.get('game');
-    const gameName = params.get('name');
-    if (gameId) {
-      handleGameSelect({ id: gameId, name: gameName ? decodeURIComponent(gameName) : `Juego (ID: ${gameId})` });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // ── Ciclo de texto de carga ──────────────────────────────────────────────
-  useEffect(() => {
-    let interval;
-    if (isLoading) {
-      interval = setInterval(() => {
-        setLoadingStep((prev) => (prev + 1) % loadingTexts.length);
-      }, 2000);
-    }
-    return () => clearInterval(interval);
-  }, [isLoading, loadingTexts.length]);
-
-  // ── Auto-scroll al resultado cuando termina el análisis ─────────────────
-  useEffect(() => {
-    if (!isLoading && analysisResult && resultsRef.current) {
-      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [isLoading, analysisResult]);
-
-  // ── Análisis principal con AbortController ───────────────────────────────
   const handleGameSelect = async (game) => {
-    // Cancelar análisis previo si sigue en vuelo
     if (analyzeAbortRef.current) analyzeAbortRef.current.abort();
     const controller = new AbortController();
     analyzeAbortRef.current = controller;
@@ -73,7 +40,6 @@ function App() {
     setLoadingStep(0);
     setIsLoading(true);
 
-    // Actualizar la URL para que sea compartible
     const params = new URLSearchParams();
     params.set('game', game.id);
     if (game.name) params.set('name', encodeURIComponent(game.name));
@@ -83,7 +49,6 @@ function App() {
       const data = await analyzeGame(game.id, 30, controller.signal);
       setAnalysisResult(data);
     } catch (err) {
-      // Si el error es una cancelación intencional, no mostramos nada
       if (err.name === 'AbortError') return;
       console.error('Error al analizar el juego:', err);
       setError(
@@ -94,6 +59,31 @@ function App() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const gameId = params.get('game');
+    const gameName = params.get('name');
+    if (gameId) {
+      handleGameSelect({ id: gameId, name: gameName ? decodeURIComponent(gameName) : `Juego (ID: ${gameId})` });
+    }
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setLoadingStep((prev) => (prev + 1) % loadingTexts.length);
+      }, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading, loadingTexts.length]);
+
+  useEffect(() => {
+    if (!isLoading && analysisResult && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [isLoading, analysisResult]);
 
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden">
