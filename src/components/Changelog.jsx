@@ -9,6 +9,17 @@ const BADGE = {
 
 const ENTRIES = [
   {
+    version: '1.0.3',
+    date: '10 de junio de 2026',
+    type: 'improve',
+    title: 'Mejora del modelo de clasificación',
+    items: [
+      'Reentrenamiento del clasificador de sentimiento mediante un ensemble de Complement Naive Bayes, Linear SVC y Logistic Regression con soft voting.',
+      'Vectorización actualizada a TF-IDF con bigramas para mejorar la captura de contexto negativo.',
+      'Optimización del preprocesamiento de texto y limpieza de reseñas en español.',
+    ],
+  },
+  {
     version: '1.0.2',
     date: '8 de junio de 2026',
     type: 'new',
