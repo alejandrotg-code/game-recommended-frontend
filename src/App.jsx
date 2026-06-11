@@ -41,6 +41,8 @@ function AppContent() {
     const controller = new AbortController();
     analyzeAbortRef.current = controller;
 
+    lastAnalyzedLimitRef.current = customLimit;
+
     setError(null);
     setAnalysisResult(null);
     setSelectedGameInfo(game);
@@ -85,7 +87,7 @@ function AppContent() {
         Promise.resolve().then(() => {
           handleGameSelect({
             id: gameId,
-            name: gameName ? decodeURIComponent(gameName) : `Juego (ID: ${gameId})`
+            name: gameName || `Juego (ID: ${gameId})`
           }, activeLimit);
         });
       }
