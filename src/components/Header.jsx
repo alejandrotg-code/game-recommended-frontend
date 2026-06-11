@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { checkBackendHealth } from '../services/healthService';
 
-export default function Header({ activePage, setActivePage }) {
-  const [scrolled, setScrolled] = useState(false);
-  // Estado del backend: 'checking' | 'online' | 'offline'
+export default function Header() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [scrolled, scrolledSet] = useState(false);
   const [backendStatus, setBackendStatus] = useState('checking');
 
   // Detectar scroll para el glassmorphism
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => scrolledSet(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -17,17 +19,25 @@ export default function Header({ activePage, setActivePage }) {
   useEffect(() => {
     const runCheck = async () => {
       const result = await checkBackendHealth();
-      setBackendStatus(result.status); // 'online' | 'offline'
+      setBackendStatus(result.status);
     };
     runCheck();
     const interval = setInterval(runCheck, 60_000);
     return () => clearInterval(interval);
   }, []);
 
+  // Determinar la página activa según la ruta
+  let activePage = 'home';
+  if (location.pathname === '/como-funciona') {
+    activePage = 'how-it-works';
+  } else if (location.pathname === '/changelog') {
+    activePage = 'changelog';
+  }
+
   const navItems = [
-    { key: 'home', label: 'Analizar Juego', shortLabel: 'Analizar' },
-    { key: 'how-it-works', label: '¿Cómo funciona?', shortLabel: 'Cómo Funciona' },
-    { key: 'changelog', label: 'Changelog', shortLabel: 'Changelog' },
+    { key: 'home', label: 'Analizar Juego', shortLabel: 'Analizar', path: '/' },
+    { key: 'how-it-works', label: '¿Cómo funciona?', shortLabel: 'Cómo Funciona', path: '/como-funciona' },
+    { key: 'changelog', label: 'Changelog', shortLabel: 'Changelog', path: '/changelog' },
   ];
 
   const statusConfig = {
@@ -48,7 +58,7 @@ export default function Header({ activePage, setActivePage }) {
 
         {/* ── LOGO ── */}
         <button
-          onClick={() => setActivePage('home')}
+          onClick={() => navigate('/')}
           className="flex items-center gap-2.5 cursor-pointer bg-transparent border-0 p-0 text-left outline-none group"
           aria-label="Ir al inicio"
         >
@@ -75,10 +85,10 @@ export default function Header({ activePage, setActivePage }) {
 
         {/* ── NAVEGACIÓN ── */}
         <nav className="flex items-center gap-1 bg-white/[0.04] border border-white/[0.07] rounded-full p-1" aria-label="Navegación principal">
-          {navItems.map(({ key, label, shortLabel }) => (
+          {navItems.map(({ key, label, shortLabel, path }) => (
             <button
               key={key}
-              onClick={() => setActivePage(key)}
+              onClick={() => navigate(path)}
               className={`relative px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer outline-none ${activePage === key
                 ? 'bg-blue-600 text-white shadow-[0_0_12px_-2px_rgba(37,99,235,0.6)]'
                 : 'text-slate-400 hover:text-slate-100 bg-transparent'

@@ -9,6 +9,18 @@ const BADGE = {
 
 const ENTRIES = [
   {
+    version: '1.0.4',
+    date: '11 de junio de 2026',
+    type: 'improve',
+    title: 'Análisis enriquecido con limitador, rutas y conceptos clave',
+    items: [
+      'Selector interactivo de cantidad de reseñas en la interfaz (opciones: 10, 20 o 30 opiniones a analizar).',
+      'Integración de react-router-dom para una navegación estructurada a través de las rutas /, /como-funciona y /changelog.',
+      'Sincronización bidireccional del estado de búsqueda e ID de juego con los parámetros de la URL usando useSearchParams.',
+      'Generación en tiempo real de "Conceptos Destacados" (nube de palabras adaptativa) para identificar rápidamente los elogios y críticas principales sobre cada juego, filtrando stopwords del español de forma dinámica.',
+    ],
+  },
+  {
     version: '1.0.3',
     date: '10 de junio de 2026',
     type: 'improve',

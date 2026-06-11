@@ -6,6 +6,8 @@ describe('healthService', () => {
     vi.restoreAllMocks();
   });
 
+  // ── checkBackendHealth ────────────────────────────────────────────────────
+
   describe('checkBackendHealth', () => {
     it('debería retornar status "online" cuando el servidor responde con ok', async () => {
       const fetchMock = vi.fn().mockResolvedValue({
@@ -61,6 +63,8 @@ describe('healthService', () => {
       );
     });
   });
+
+  // ── checkSteamStatus ──────────────────────────────────────────────────────
 
   describe('checkSteamStatus', () => {
     it('debería retornar status "online" cuando la búsqueda devuelve juegos (games array)', async () => {
