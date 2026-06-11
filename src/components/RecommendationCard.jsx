@@ -139,6 +139,7 @@ function getTopWords(reviews, sentiment, limit = 8) {
 export default function RecommendationCard({ result, gameInfo }) {
   const [activeTab, setActiveTab] = useState('all');
   const [copied, setCopied] = useState(false);
+  const [badgeCopied, setBadgeCopied] = useState(false);
 
   // Copiar enlace compartible al portapapeles
   const handleShareLink = () => {
@@ -156,6 +157,7 @@ export default function RecommendationCard({ result, gameInfo }) {
     sentiment_stats,
     steam_voted_up_pct,
     reviews_classified = [],
+    game_details = {}
   } = result;
 
   const topPositiveWords = getTopWords(reviews_classified, 'Positivo', 10);
@@ -228,6 +230,27 @@ export default function RecommendationCard({ result, gameInfo }) {
                       ID: {result.app_id}
                     </span>
                   </div>
+
+                  {game_details && (
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-[10px] text-slate-400">
+                      {game_details.developer && (
+                        <span>Desarrollador: <strong className="text-slate-200">{game_details.developer}</strong></span>
+                      )}
+                      {game_details.release_date && (
+                        <span>Lanzamiento: <strong className="text-slate-200">{game_details.release_date}</strong></span>
+                      )}
+                    </div>
+                  )}
+
+                  {game_details?.genres && game_details.genres.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {game_details.genres.map(g => (
+                        <span key={g} className="text-[8px] bg-white/5 border border-white/10 text-slate-300 px-1.5 py-0.5 rounded-md font-medium tracking-wide">
+                          {g.toUpperCase()}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -645,6 +668,47 @@ export default function RecommendationCard({ result, gameInfo }) {
         <p className="text-[10px] text-slate-600 text-center leading-relaxed">
           💡 Al usar estos enlaces de afiliado apoyas el mantenimiento de la plataforma sin coste adicional. ¡Gracias!
         </p>
+      </div>
+
+      {/* ── 4. BADGE DE GITHUB ────────────────────────────────────────── */}
+      <div className="bg-[#0a1628]/60 border border-[#1e293b]/80 p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
+        <div className="flex items-center gap-2">
+          <span className="text-base">🛡️</span>
+          <h4 className="text-sm font-bold text-slate-200">Embeber Badge en tu GitHub</h4>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          {/* Vista previa del Badge */}
+          <div className="bg-[#030712] border border-[#1e293b]/60 px-4 py-3.5 rounded-xl flex items-center justify-center shrink-0">
+            <img
+              src={`${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge`}
+              alt="Steam IA Badge"
+              className="h-5"
+            />
+          </div>
+
+          {/* Caja con Markdown */}
+          <div className="flex-1 w-full flex flex-col sm:flex-row gap-2">
+            <input
+              type="text"
+              readOnly
+              value={`[![Steam IA](${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge)](https://store.steampowered.com/app/${result.app_id})`}
+              className="flex-1 bg-slate-950/60 border border-[#1e293b] px-3 py-2 rounded-xl text-xs font-mono text-slate-300 outline-none select-all"
+            />
+            <button
+              onClick={() => {
+                const md = `[![Steam IA](${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge)](https://store.steampowered.com/app/${result.app_id})`;
+                navigator.clipboard.writeText(md).then(() => {
+                  setBadgeCopied(true);
+                  setTimeout(() => setBadgeCopied(false), 2000);
+                });
+              }}
+              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0"
+            >
+              {badgeCopied ? '¡Copiado!' : 'Copiar Markdown'}
+            </button>
+          </div>
+        </div>
       </div>
 
     </div>
