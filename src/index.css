@@ -18,7 +18,8 @@
 }
 
 /* Base oscura con cuadrícula de puntos sutil como fondo */
-html, body {
+html,
+body {
   background-color: var(--color-brand-bg);
   background-image: radial-gradient(circle, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
   background-size: 28px 28px;
@@ -30,7 +31,19 @@ html, body {
 }
 
 /* Scrollbar global minimalista */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(37, 99, 235, 0.5); }
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.5);
+}

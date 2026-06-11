@@ -108,6 +108,33 @@ function ExpandableReview({ text }) {
   );
 }
 
+const SPANISH_STOPWORDS = new Set([
+  'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'este', 'le', 'ya', 'o', 'esta', 'sí', 'porque', 'muy', 'sin', 'sobre', 'también', 'me', 'mi', 'te', 'es', 'son', 'era', 'esta', 'eso', 'esto', 'esta', 'un', 'una', 'unos', 'unas', 'tiene', 'tienen', 'todo', 'todos', 'bien', 'bueno', 'malo', 'juego', 'juegos', 'steam', 'hace', 'hacer', 'puede', 'puedo', 'solo', 'si', 'cuando', 'este', 'esta', 'estos', 'estas', 'ser', 'estar', 'ha', 'han', 'he', 'mas', 'muy', 'nos', 'lo', 'le', 'les', 'por', 'sus', 'sus', 'para', 'una', 'uno', 'unas', 'unos', 'del', 'al', 'lo', 'la', 'las', 'los', 'un', 'en', 'es', 'es', 'mi', 'mis', 'tu', 'tus', 'yo', 'el', 'ella', 'ellos', 'ellas', 'nosotros', 'vosotros', 'como', 'con', 'sin', 'muy', 'tan', 'asi', 'entonces', 'pero', 'porque', 'aunque', 'sino', 'o', 'y', 'e', 'ni', 'que', 'donde', 'cuando', 'como', 'quien', 'cual', 'cuyo', 'donde', 'muy', 'bastante', 'poco', 'mucho', 'demasiado', 'nada', 'todo', 'algo', 'alguno', 'ninguno', 'otro', 'mismo', 'tanto', 'tal', 'cual', 'cada', 'ambos', 'sendos', 'juego', 'jugar', 'jugado', 'jugando', 'reseña', 'reseñas', 'opinion', 'opiniones', 'mas', 'si', 'esta', 'esta', 'este', 'para', 'como', 'pero', 'bien', 'muy', 'solo', 'hace', 'puede', 'tiene'
+]);
+
+function getTopWords(reviews, sentiment, limit = 8) {
+  const counts = {};
+  const regex = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]+/g;
+  
+  reviews
+    .filter(r => r.sentiment_predicted === sentiment)
+    .forEach(r => {
+      const text = r.review_text.toLowerCase();
+      let match;
+      while ((match = regex.exec(text)) !== null) {
+        const word = match[0];
+        if (word.length > 3 && !SPANISH_STOPWORDS.has(word)) {
+          counts[word] = (counts[word] || 0) + 1;
+        }
+      }
+    });
+
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([word, count]) => ({ word, count }));
+}
+
 // ── Componente principal ──────────────────────────────────────────────────
 export default function RecommendationCard({ result, gameInfo }) {
   const [activeTab, setActiveTab] = useState('all');
@@ -130,6 +157,9 @@ export default function RecommendationCard({ result, gameInfo }) {
     steam_voted_up_pct,
     reviews_classified = [],
   } = result;
+
+  const topPositiveWords = getTopWords(reviews_classified, 'Positivo', 10);
+  const topNegativeWords = getTopWords(reviews_classified, 'Negativo', 10);
 
   const appIdStr = String(result.app_id);
   const popularLinks = POPULAR_GAMES_LINKS[appIdStr];
@@ -370,6 +400,74 @@ export default function RecommendationCard({ result, gameInfo }) {
             </div>
           </div>
         </div>
+
+        {/* ── CONCEPTOS DESTACADOS ── */}
+        {(topPositiveWords.length > 0 || topNegativeWords.length > 0) && (
+          <div className="border-t border-white/5 bg-slate-950/20 px-4 py-5 sm:px-6 sm:py-6 space-y-4">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">
+              Conceptos más destacados (IA)
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Destacados Positivos */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                  Lo más elogiado
+                </div>
+                {topPositiveWords.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {topPositiveWords.map(({ word, count }) => {
+                      const maxCount = topPositiveWords[0].count;
+                      const ratio = count / maxCount;
+                      const sizeClass = ratio > 0.8 ? 'text-sm px-3 py-1.5' : ratio > 0.4 ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5';
+                      return (
+                        <span
+                          key={word}
+                          className={`inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/15 hover:border-emerald-500/30 text-emerald-300 font-medium transition-all cursor-default ${sizeClass}`}
+                          title={`Aparece ${count} ${count === 1 ? 'vez' : 'veces'}`}
+                        >
+                          {word}
+                          <span className="text-[9px] opacity-60 bg-emerald-500/10 px-1 rounded-md">{count}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-600">No hay suficientes datos positivos.</p>
+                )}
+              </div>
+
+              {/* Destacados Negativos */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-xs font-bold text-rose-400">
+                  <span className="w-1.5 h-1.5 bg-rose-400 rounded-full" />
+                  Lo más criticado
+                </div>
+                {topNegativeWords.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {topNegativeWords.map(({ word, count }) => {
+                      const maxCount = topNegativeWords[0].count;
+                      const ratio = count / maxCount;
+                      const sizeClass = ratio > 0.8 ? 'text-sm px-3 py-1.5' : ratio > 0.4 ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5';
+                      return (
+                        <span
+                          key={word}
+                          className={`inline-flex items-center gap-1.5 rounded-xl bg-rose-500/5 hover:bg-rose-500/10 border border-rose-500/15 hover:border-rose-500/30 text-rose-300 font-medium transition-all cursor-default ${sizeClass}`}
+                          title={`Aparece ${count} ${count === 1 ? 'vez' : 'veces'}`}
+                        >
+                          {word}
+                          <span className="text-[9px] opacity-60 bg-rose-500/10 px-1 rounded-md">{count}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-600">No hay suficientes datos negativos.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── 2. RESEÑAS CLASIFICADAS ────────────────────────────────────────── */}
