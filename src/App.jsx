@@ -59,6 +59,7 @@ function AppContent() {
     try {
       const data = await analyzeGame(game.id, customLimit, controller.signal);
       setAnalysisResult(data);
+      lastAnalyzedLimitRef.current = customLimit;
     } catch (err) {
       if (err.name === 'AbortError') return;
       console.error('Error al analizar el juego:', err);
