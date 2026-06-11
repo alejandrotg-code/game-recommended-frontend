@@ -23,6 +23,7 @@ function AppContent() {
 
   const analyzeAbortRef = useRef(null);
   const resultsRef = useRef(null);
+  const lastAnalyzedLimitRef = useRef(30);
 
   const loadingTexts = [
     "Conectando con los servidores de Steam...",
@@ -56,6 +57,7 @@ function AppContent() {
     try {
       const data = await analyzeGame(game.id, customLimit, controller.signal);
       setAnalysisResult(data);
+      lastAnalyzedLimitRef.current = customLimit;
     } catch (err) {
       if (err.name === 'AbortError') return;
       console.error('Error al analizar el juego:', err);
@@ -76,7 +78,10 @@ function AppContent() {
     const activeLimit = [10, 20, 30].includes(gameLimit) ? gameLimit : 30;
 
     if (gameId) {
-      if (!selectedGameInfo || selectedGameInfo.id !== gameId) {
+      const isDifferentGame = !selectedGameInfo || selectedGameInfo.id !== gameId;
+      const isDifferentLimit = lastAnalyzedLimitRef.current !== activeLimit;
+
+      if (isDifferentGame || isDifferentLimit) {
         Promise.resolve().then(() => {
           handleGameSelect({
             id: gameId,
