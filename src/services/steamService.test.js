@@ -4,6 +4,7 @@ import { searchGames, analyzeGame } from './steamService';
 describe('steamService', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    vi.stubEnv('VITE_API_URL', 'http://localhost:8000');
   });
 
   describe('searchGames', () => {
