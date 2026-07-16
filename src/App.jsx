@@ -6,7 +6,9 @@ import GameSearch from './components/Input';
 import RecommendationCard from './components/RecommendationCard';
 import HowItWorks from './components/HowItWorks';
 import Changelog from './components/Changelog';
+import Recomendar from './components/Recomendar';
 import { analyzeGame } from './services/steamService';
+
 
 function AppContent() {
   const [selectedGameInfo, setSelectedGameInfo] = useState(null);
@@ -289,6 +291,9 @@ function AppContent() {
             </>
           } />
 
+          {/* RUTA RECOMENDAR */}
+          <Route path="/recomendar" element={<Recomendar />} />
+
           {/* RUTA CÓMO FUNCIONA */}
           <Route path="/como-funciona" element={
             <div className="py-10 sm:py-14">
@@ -300,6 +305,7 @@ function AppContent() {
           <Route path="/changelog" element={<Changelog />} />
         </Routes>
       </main>
+
 
       <footer className="w-full py-8 text-center border-t border-[#1e293b]/60 mt-auto">
         <p className="text-xs text-slate-600">
