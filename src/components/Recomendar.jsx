@@ -170,7 +170,8 @@ export default function Recomendar() {
               </div>
 
               <div className="space-y-4">
-                {result.predictions.map((p, index) => {
+                {result.predictions.map((p) => {
+
                   const isTop = p.genre === result.top_genre;
                   return (
                     <div key={p.genre} className="space-y-1.5">
