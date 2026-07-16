@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL_DEV;
 
 /**
  * Busca juegos en Steam que coincidan con el término proporcionado.
@@ -40,3 +40,24 @@ export async function analyzeGame(gameId, limit = 30, signal) {
 
   return await response.json();
 }
+
+/**
+ * Obtiene recomendaciones de juegos de Steam a partir de una descripción usando el clasificador de Keras.
+ * @param {string} description Descripción del tipo de juego que busca el usuario.
+ * @param {AbortSignal} [signal] Señal para cancelar la petición.
+ * @returns {Promise<Object>} Resultado con el género predicho, probabilidades y juegos recomendados.
+ */
+export async function getRecommendations(description, signal) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/recommend?description=${encodeURIComponent(description)}`,
+    { signal }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || `Error del servidor (código ${response.status})`);
+  }
+
+  return await response.json();
+}
+

@@ -32,13 +32,17 @@ export default function Header() {
     activePage = 'how-it-works';
   } else if (location.pathname === '/changelog') {
     activePage = 'changelog';
+  } else if (location.pathname === '/recomendar') {
+    activePage = 'recommend';
   }
 
   const navItems = [
     { key: 'home', label: 'Analizar Juego', shortLabel: 'Analizar', path: '/' },
+    { key: 'recommend', label: 'Recomendar por IA', shortLabel: 'Recomendador', path: '/recomendar' },
     { key: 'how-it-works', label: '¿Cómo funciona?', shortLabel: 'Cómo Funciona', path: '/como-funciona' },
     { key: 'changelog', label: 'Changelog', shortLabel: 'Changelog', path: '/changelog' },
   ];
+
 
   const statusConfig = {
     checking: { color: 'bg-slate-500', glow: '', label: 'Comprobando...' },

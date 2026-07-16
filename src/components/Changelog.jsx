@@ -9,8 +9,23 @@ const BADGE = {
 
 const ENTRIES = [
   {
+    version: '1.1.0',
+    date: '16 de julio de 2026',
+    type: 'new',
+    title: 'Recomendación de juegos mediante Inteligencia Artificial (Keras/TensorFlow)',
+    items: [
+      'Nueva pestaña en la navegación "Recomendar por IA" para buscar títulos por descripciones complejas.',
+      'Carga del modelo multietiqueta secuencial de Keras (game_classifier_keras.keras), el vectorizador de texto y el binarizador de géneros en el backend FastAPI.',
+      'Optimización y reentrenamiento del modelo a 120 épocas sobre el catálogo de descripciones en español para mejorar drásticamente la representatividad semántica y evitar el sesgo de predicción por defecto.',
+      'Módulo de recomendación en backend que filtra el catálogo local de juegos por el género predicho con mayor probabilidad.',
+      'Consulta en paralelo (asyncio.gather) de la información en tiempo real de los juegos recomendados (precio y puntuación Metascore en Steam).',
+      'Panel de visualización interactivo en el frontend con barras de probabilidad porcentual para cada género y una cuadrícula de juegos recomendados con enlaces directos a la tienda de Steam.',
+    ],
+  },
+  {
     version: '1.0.4',
     date: '11 de junio de 2026',
+
     type: 'improve',
     title: 'Análisis enriquecido con limitador, rutas, conceptos clave y badges',
     items: [
