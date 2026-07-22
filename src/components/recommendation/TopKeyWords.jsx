@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function TopKeyWords({ topPositiveWords = [], topNegativeWords = [] }) {
   if (topPositiveWords.length === 0 && topNegativeWords.length === 0) {
     return null;
