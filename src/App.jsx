@@ -7,6 +7,7 @@ import RecommendationCard from './components/RecommendationCard';
 import HowItWorks from './components/HowItWorks';
 import Changelog from './components/Changelog';
 import Recomendar from './components/Recomendar';
+import ErrorBoundary from './components/ErrorBoundary';
 import { analyzeGame } from './services/steamService';
 
 
@@ -319,7 +320,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <ErrorBoundary>
+        <AppContent />
+      </ErrorBoundary>
     </Router>
   );
 }
