@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo, useMemo } from 'react';
 import SentimentChart from './recommendation/SentimentChart';
 import TopKeyWords from './recommendation/TopKeyWords';
 import ReviewList from './recommendation/ReviewList';
@@ -82,7 +82,7 @@ function getTopWords(reviews, sentiment, limit = 8) {
     .map(([word, count]) => ({ word, count }));
 }
 
-export default function RecommendationCard({ result, gameInfo }) {
+const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }) {
   const [copied, setCopied] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
 
@@ -93,6 +93,14 @@ export default function RecommendationCard({ result, gameInfo }) {
     });
   };
 
+  const reviewsClassified = useMemo(() => result?.reviews_classified || [], [result?.reviews_classified]);
+
+  const topPositiveWords = useMemo(() => getTopWords(reviewsClassified, 'Positivo', 10), [reviewsClassified]);
+  const topNegativeWords = useMemo(() => getTopWords(reviewsClassified, 'Negativo', 10), [reviewsClassified]);
+
+  const positiveCount = useMemo(() => reviewsClassified.filter(r => r.sentiment_predicted === 'Positivo').length, [reviewsClassified]);
+  const negativeCount = useMemo(() => reviewsClassified.filter(r => r.sentiment_predicted === 'Negativo').length, [reviewsClassified]);
+
   if (!result) return null;
 
   const {
@@ -100,12 +108,8 @@ export default function RecommendationCard({ result, gameInfo }) {
     recommendation_level,
     sentiment_stats,
     steam_voted_up_pct,
-    reviews_classified = [],
     game_details = {}
   } = result;
-
-  const topPositiveWords = getTopWords(reviews_classified, 'Positivo', 10);
-  const topNegativeWords = getTopWords(reviews_classified, 'Negativo', 10);
 
   const appIdStr = String(result.app_id);
   const popularLinks = POPULAR_GAMES_LINKS[appIdStr];
@@ -113,8 +117,6 @@ export default function RecommendationCard({ result, gameInfo }) {
     ? `${popularLinks.ig}?igr=${INSTANT_GAMING_IGR_ID}`
     : `https://www.instant-gaming.com/es/busquedas/?query=${encodeURIComponent(gameInfo?.name || '')}&igr=${INSTANT_GAMING_IGR_ID}`;
 
-  const positiveCount = reviews_classified.filter(r => r.sentiment_predicted === 'Positivo').length;
-  const negativeCount = reviews_classified.filter(r => r.sentiment_predicted === 'Negativo').length;
   const cfg = getVerdictConfig(recommendation_level);
 
   return (
@@ -248,7 +250,7 @@ export default function RecommendationCard({ result, gameInfo }) {
 
       {/* ── 2. RESEÑAS CLASIFICADAS ── */}
       <ReviewList
-        reviewsClassified={reviews_classified}
+        reviewsClassified={reviewsClassified}
         positiveCount={positiveCount}
         negativeCount={negativeCount}
       />
@@ -364,4 +366,6 @@ export default function RecommendationCard({ result, gameInfo }) {
       </div>
     </div>
   );
-}
+});
+
+export default RecommendationCard;

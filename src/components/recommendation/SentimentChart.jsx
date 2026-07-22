@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const DonutTooltip = ({ active, payload }) => {
@@ -14,7 +15,7 @@ const DonutTooltip = ({ active, payload }) => {
   );
 };
 
-export default function SentimentChart({
+const SentimentChart = memo(function SentimentChart({
   sentimentStats,
   totalReviewsAnalyzed,
   positiveCount,
@@ -167,4 +168,6 @@ export default function SentimentChart({
       </div>
     </div>
   );
-}
+});
+
+export default SentimentChart;

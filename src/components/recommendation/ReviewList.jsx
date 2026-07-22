@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo, useMemo } from 'react';
 
 const CHAR_LIMIT = 280;
 
@@ -35,18 +35,20 @@ function getAvatarColor(name = '') {
   return colors[Math.abs(hash) % colors.length];
 }
 
-export default function ReviewList({
+const ReviewList = memo(function ReviewList({
   reviewsClassified = [],
   positiveCount = 0,
   negativeCount = 0,
 }) {
   const [activeTab, setActiveTab] = useState('all');
 
-  const filteredReviews = reviewsClassified.filter((r) => {
-    if (activeTab === 'positives') return r.sentiment_predicted === 'Positivo';
-    if (activeTab === 'negatives') return r.sentiment_predicted === 'Negativo';
-    return true;
-  });
+  const filteredReviews = useMemo(() => {
+    return reviewsClassified.filter((r) => {
+      if (activeTab === 'positives') return r.sentiment_predicted === 'Positivo';
+      if (activeTab === 'negatives') return r.sentiment_predicted === 'Negativo';
+      return true;
+    });
+  }, [reviewsClassified, activeTab]);
 
   return (
     <div className="space-y-4">
@@ -165,4 +167,6 @@ export default function ReviewList({
       </div>
     </div>
   );
-}
+});
+
+export default ReviewList;

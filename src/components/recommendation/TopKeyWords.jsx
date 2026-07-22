@@ -1,4 +1,6 @@
-export default function TopKeyWords({ topPositiveWords = [], topNegativeWords = [] }) {
+import { memo } from 'react';
+
+const TopKeyWords = memo(function TopKeyWords({ topPositiveWords = [], topNegativeWords = [] }) {
   if (topPositiveWords.length === 0 && topNegativeWords.length === 0) {
     return null;
   }
@@ -83,4 +85,6 @@ export default function TopKeyWords({ topPositiveWords = [], topNegativeWords = 
       </div>
     </div>
   );
-}
+});
+
+export default TopKeyWords;
