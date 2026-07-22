@@ -1,23 +1,35 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { searchGames } from '../services/steamService';
 
-export default function GameSearch({ onGameSelect, isLoading }) {
+const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [inputError, setInputError] = useState('');
-  // Índice de la sugerencia resaltada con teclado (-1 = ninguna)
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
   const containerRef = useRef(null);
   const inputRef = useRef(null);
-  // Ref para cancelar la búsqueda de sugerencias anterior
   const searchAbortRef = useRef(null);
 
-  // Exponer función para resetear el query desde el padre
-  // (no es necesario aquí pero lo dejamos limpio)
+  // ── Atajo de teclado '/' para enfocar el buscador ─────────────────────────
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (
+        e.key === '/' &&
+        document.activeElement !== inputRef.current &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        document.activeElement?.tagName !== 'TEXTAREA'
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // ── Cerrar dropdown al hacer clic fuera ──────────────────────────────────
   useEffect(() => {
@@ -322,4 +334,6 @@ export default function GameSearch({ onGameSelect, isLoading }) {
 
     </div>
   );
-}
+});
+
+export default GameSearch;
