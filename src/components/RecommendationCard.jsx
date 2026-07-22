@@ -1,35 +1,19 @@
 import { useState } from 'react';
-import {
-  PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
-} from 'recharts';
+import SentimentChart from './recommendation/SentimentChart';
+import TopKeyWords from './recommendation/TopKeyWords';
+import ReviewList from './recommendation/ReviewList';
 
 const INSTANT_GAMING_IGR_ID = 'game-recommended';
 
 const POPULAR_GAMES_LINKS = {
-  "1245620": { ig: "https://www.instant-gaming.com/es/4822-comprar-elden-ring-pc-juego-steam/" },
-  "1091500": { ig: "https://www.instant-gaming.com/es/2685-comprar-cyberpunk-2077-pc-juego-gog-com/" },
-  "367520":  { ig: "https://www.instant-gaming.com/es/2198-comprar-hollow-knight-pc-mac-steam/" },
-  "620":     { ig: "https://www.instant-gaming.com/es/400-comprar-portal-2-pc-mac-steam/" },
-  "292030":  { ig: "https://www.instant-gaming.com/es/290-comprar-the-witcher-3-wild-hunt-pc-juego-gog-com/" },
-  "413150":  { ig: "https://www.instant-gaming.com/es/2179-comprar-stardew-valley-pc-mac-steam/" },
+  '1245620': { ig: 'https://www.instant-gaming.com/es/4822-comprar-elden-ring-pc-juego-steam/' },
+  '1091500': { ig: 'https://www.instant-gaming.com/es/2685-comprar-cyberpunk-2077-pc-juego-gog-com/' },
+  '367520':  { ig: 'https://www.instant-gaming.com/es/2198-comprar-hollow-knight-pc-mac-steam/' },
+  '620':     { ig: 'https://www.instant-gaming.com/es/400-comprar-portal-2-pc-mac-steam/' },
+  '292030':  { ig: 'https://www.instant-gaming.com/es/290-comprar-the-witcher-3-wild-hunt-pc-juego-gog-com/' },
+  '413150':  { ig: 'https://www.instant-gaming.com/es/2179-comprar-stardew-valley-pc-mac-steam/' },
 };
 
-// ── Tooltip del gráfico Donut ─────────────────────────────────────────────────
-const DonutTooltip = ({ active, payload }) => {
-  if (!active || !payload?.length) return null;
-  const { name, value, fill } = payload[0].payload;
-  return (
-    <div className="bg-[#0a1628] border border-[#1e293b] px-3 py-2 rounded-xl text-xs shadow-2xl">
-      <div className="flex items-center gap-1.5">
-        <span className="w-2 h-2 rounded-full" style={{ background: fill }} />
-        <span className="text-slate-400">{name}:</span>
-        <span className="font-bold text-slate-100">{value}%</span>
-      </div>
-    </div>
-  );
-};
-
-// ── Configuración de estilos según veredicto ─────────────────────────────────
 const getVerdictConfig = (level) => {
   switch (level) {
     case 'Extremadamente Recomendado':
@@ -71,45 +55,8 @@ const getVerdictConfig = (level) => {
   }
 };
 
-// ── Genera un color único por nombre de autor ─────────────────────────────────
-function getAvatarColor(name = '') {
-  const colors = [
-    '#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444',
-    '#06b6d4', '#ec4899', '#84cc16', '#f97316', '#6366f1',
-  ];
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  return colors[Math.abs(hash) % colors.length];
-}
-
-// ── Reseña expandible con "Ver más / Ver menos" ─────────────────────────
-const CHAR_LIMIT = 280;
-
-function ExpandableReview({ text }) {
-  const [expanded, setExpanded] = useState(false);
-  const isLong = text.length > CHAR_LIMIT;
-  const displayed = isLong && !expanded ? text.slice(0, CHAR_LIMIT) + '...' : text;
-
-  return (
-    <div>
-      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed italic pl-2 group-hover:text-slate-300 transition-colors">
-        "{displayed}"
-      </p>
-      {isLong && (
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          className="mt-1.5 ml-2 text-[11px] font-semibold text-blue-400/70 hover:text-blue-400 transition-colors cursor-pointer"
-        >
-          {expanded ? 'Ver menos ↑' : 'Ver más ↓'}
-        </button>
-      )}
-    </div>
-  );
-}
-
 const SPANISH_STOPWORDS = new Set([
-  'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'este', 'le', 'ya', 'o', 'esta', 'sí', 'porque', 'muy', 'sin', 'sobre', 'también', 'me', 'mi', 'te', 'es', 'son', 'era', 'esta', 'eso', 'esto', 'esta', 'un', 'una', 'unos', 'unas', 'tiene', 'tienen', 'todo', 'todos', 'bien', 'bueno', 'malo', 'juego', 'juegos', 'steam', 'hace', 'hacer', 'puede', 'puedo', 'solo', 'si', 'cuando', 'este', 'esta', 'estos', 'estas', 'ser', 'estar', 'ha', 'han', 'he', 'mas', 'muy', 'nos', 'lo', 'le', 'les', 'por', 'sus', 'sus', 'para', 'una', 'uno', 'unas', 'unos', 'del', 'al', 'lo', 'la', 'las', 'los', 'un', 'en', 'es', 'es', 'mi', 'mis', 'tu', 'tus', 'yo', 'el', 'ella', 'ellos', 'ellas', 'nosotros', 'vosotros', 'como', 'con', 'sin', 'muy', 'tan', 'asi', 'entonces', 'pero', 'porque', 'aunque', 'sino', 'o', 'y', 'e', 'ni', 'que', 'donde', 'cuando', 'como', 'quien', 'cual', 'cuyo', 'donde', 'muy', 'bastante', 'poco', 'mucho', 'demasiado', 'nada', 'todo', 'algo', 'alguno', 'ninguno', 'otro', 'mismo', 'tanto', 'tal', 'cual', 'cada', 'ambos', 'sendos', 'juego', 'jugar', 'jugado', 'jugando', 'reseña', 'reseñas', 'opinion', 'opiniones', 'mas', 'si', 'esta', 'esta', 'este', 'para', 'como', 'pero', 'bien', 'muy', 'solo', 'hace', 'puede', 'tiene'
+  'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'este', 'le', 'ya', 'o', 'esta', 'sí', 'porque', 'muy', 'sin', 'sobre', 'también', 'me', 'mi', 'te', 'es', 'son', 'era', 'esta', 'eso', 'esto', 'esta', 'un', 'una', 'unos', 'unas', 'tiene', 'tienen', 'todo', 'todos', 'bien', 'bueno', 'malo', 'juego', 'juegos', 'steam', 'hace', 'hacer', 'puede', 'puedo', 'solo', 'si', 'cuando', 'este', 'esta', 'estos', 'estas', 'ser', 'estar', 'ha', 'han', 'he', 'mas', 'muy', 'nos', 'lo', 'le', 'les', 'por', 'sus', 'para', 'una', 'uno', 'unas', 'unos', 'del', 'al', 'lo', 'la', 'las', 'los', 'un', 'en', 'es', 'mi', 'mis', 'tu', 'tus', 'yo', 'el', 'ella', 'ellos', 'ellas', 'nosotros', 'vosotros', 'como', 'con', 'sin', 'muy', 'tan', 'asi', 'entonces', 'pero', 'porque', 'aunque', 'sino', 'o', 'y', 'e', 'ni', 'que', 'donde', 'cuando', 'como', 'quien', 'cual', 'cuyo', 'donde', 'muy', 'bastante', 'poco', 'mucho', 'demasiado', 'nada', 'todo', 'algo', 'alguno', 'ninguno', 'otro', 'mismo', 'tanto', 'tal', 'cual', 'cada', 'ambos', 'sendos', 'juego', 'jugar', 'jugado', 'jugando', 'reseña', 'reseñas', 'opinion', 'opiniones', 'mas', 'si', 'esta', 'este', 'para', 'como', 'pero', 'bien', 'muy', 'solo', 'hace', 'puede', 'tiene'
 ]);
 
 function getTopWords(reviews, sentiment, limit = 8) {
@@ -135,13 +82,10 @@ function getTopWords(reviews, sentiment, limit = 8) {
     .map(([word, count]) => ({ word, count }));
 }
 
-// ── Componente principal ──────────────────────────────────────────────────
 export default function RecommendationCard({ result, gameInfo }) {
-  const [activeTab, setActiveTab] = useState('all');
   const [copied, setCopied] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
 
-  // Copiar enlace compartible al portapapeles
   const handleShareLink = () => {
     navigator.clipboard.writeText(window.location.href).then(() => {
       setCopied(true);
@@ -169,30 +113,16 @@ export default function RecommendationCard({ result, gameInfo }) {
     ? `${popularLinks.ig}?igr=${INSTANT_GAMING_IGR_ID}`
     : `https://www.instant-gaming.com/es/busquedas/?query=${encodeURIComponent(gameInfo?.name || '')}&igr=${INSTANT_GAMING_IGR_ID}`;
 
-  const filteredReviews = reviews_classified.filter((r) => {
-    if (activeTab === 'positives') return r.sentiment_predicted === 'Positivo';
-    if (activeTab === 'negatives') return r.sentiment_predicted === 'Negativo';
-    return true;
-  });
-
   const positiveCount = reviews_classified.filter(r => r.sentiment_predicted === 'Positivo').length;
   const negativeCount = reviews_classified.filter(r => r.sentiment_predicted === 'Negativo').length;
   const cfg = getVerdictConfig(recommendation_level);
 
-  // Datos para el donut chart
-  const donutData = [
-    { name: 'Positivas', value: sentiment_stats.positives_pct, fill: '#10b981' },
-    { name: 'Negativas', value: sentiment_stats.negatives_pct, fill: '#f43f5e' },
-  ];
-
   return (
     <div className="w-full space-y-5 sm:space-y-6 animate-fade-up mt-4">
-
-      {/* ── 1. CARD PRINCIPAL ──────────────────────────────────────────────── */}
+      {/* ── 1. CARD PRINCIPAL ── */}
       <div className={`w-full bg-[#0a1628]/80 border rounded-2xl sm:rounded-3xl overflow-hidden ${cfg.bg} ${cfg.glow} transition-all duration-300`}>
-
-        {/* Cabecera con imagen como portada */}
-        {gameInfo?.image && (
+        {/* Banner de Portada */}
+        {gameInfo?.image ? (
           <div className="relative w-full h-32 sm:h-44 overflow-hidden">
             <img
               src={gameInfo.image}
@@ -200,10 +130,7 @@ export default function RecommendationCard({ result, gameInfo }) {
               className="w-full h-full object-cover scale-105"
               style={{ filter: 'blur(1px) brightness(0.5)' }}
             />
-            {/* Overlay degradado */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/60 to-transparent" />
-
-            {/* Info encima del banner */}
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex items-end justify-between gap-4">
               <div className="flex items-center gap-3">
                 <img
@@ -254,7 +181,6 @@ export default function RecommendationCard({ result, gameInfo }) {
                 </div>
               </div>
 
-              {/* Veredicto badge + botón compartir */}
               <div className="text-right shrink-0 flex flex-col items-end gap-2">
                 <div className="text-2xl">{cfg.icon}</div>
                 <span className={`text-xs font-bold px-3 py-1.5 rounded-xl border ${cfg.badge}`}>
@@ -284,10 +210,7 @@ export default function RecommendationCard({ result, gameInfo }) {
               </div>
             </div>
           </div>
-        )}
-
-        {/* Sin imagen: cabecera compacta */}
-        {!gameInfo?.image && (
+        ) : (
           <div className="p-4 sm:p-6 flex items-center justify-between border-b border-white/5">
             <div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-white">{gameInfo?.name || 'Juego Analizado'}</h2>
@@ -305,298 +228,32 @@ export default function RecommendationCard({ result, gameInfo }) {
           </div>
         )}
 
-        {/* Cuerpo de estadísticas */}
-        <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {/* Componente Gráfico y Estadísticas */}
+        <SentimentChart
+          sentimentStats={sentiment_stats}
+          totalReviewsAnalyzed={total_reviews_analyzed}
+          positiveCount={positiveCount}
+          negativeCount={negativeCount}
+          steamVotedUpPct={steam_voted_up_pct}
+          recommendationLevel={recommendation_level}
+          verdictConfig={cfg}
+        />
 
-          {/* Columna izquierda: barras de progreso */}
-          <div className="space-y-5">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Aprobación de reseñas en español</h3>
-
-            {/* IA */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400 font-medium">Clasificación IA</span>
-                <span className="font-bold text-emerald-400">{sentiment_stats.positives_pct}% positivo</span>
-              </div>
-              <div className="w-full h-2.5 bg-slate-950/60 rounded-full overflow-hidden flex border border-white/5">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-1000 ease-out"
-                  style={{ width: `${sentiment_stats.positives_pct}%` }}
-                />
-                <div
-                  className="h-full bg-rose-500/80 transition-all duration-1000 ease-out"
-                  style={{ width: `${sentiment_stats.negatives_pct}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-[10px] text-slate-600">
-                <span>✓ {positiveCount} positivas</span>
-                <span>{negativeCount} negativas ✗</span>
-              </div>
-            </div>
-
-            {/* Steam oficial */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400 font-medium">Recomendación Steam</span>
-                <span className="font-bold text-blue-400">{steam_voted_up_pct}% sí</span>
-              </div>
-              <div className="w-full h-2 bg-slate-950/60 rounded-full overflow-hidden border border-white/5">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-1000 ease-out"
-                  style={{ width: `${steam_voted_up_pct}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Resumen */}
-            <div className="bg-slate-950/30 border border-white/5 rounded-xl p-4 text-xs text-slate-400 leading-relaxed">
-              <strong className="text-slate-300">Resumen: </strong>
-              Nuestro modelo leyó individualmente{' '}
-              <span className="text-slate-200 font-semibold">{total_reviews_analyzed} reseñas</span>{' '}
-              en español. Las opiniones son mayoritariamente{' '}
-              <span className={`font-semibold ${cfg.text}`}>
-                {sentiment_stats.positives_pct >= 50 ? 'favorables' : 'críticas'}
-              </span>
-              , resultando en un veredicto de{' '}
-              <span className={`font-bold ${cfg.text}`}>{recommendation_level}</span>.
-            </div>
-          </div>
-
-          {/* Columna derecha: donut chart + contadores */}
-          <div className="flex flex-col items-center gap-4">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest w-full text-center">Distribución del sentimiento</h3>
-
-            {/* Gráfico donut */}
-            <div className="relative w-full" style={{ height: 160 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={donutData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={48}
-                    outerRadius={72}
-                    paddingAngle={3}
-                    dataKey="value"
-                    strokeWidth={0}
-                  >
-                    {donutData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<DonutTooltip />} />
-                </PieChart>
-              </ResponsiveContainer>
-              {/* Texto central del donut */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-2xl font-black text-emerald-400">{sentiment_stats.positives_pct}%</span>
-                <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">positivas</span>
-              </div>
-            </div>
-
-            {/* Leyenda */}
-            <div className="flex items-center gap-4 text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <span className="text-slate-400">Positivas</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-                <span className="text-slate-400">Negativas</span>
-              </div>
-            </div>
-
-            {/* Contadores */}
-            <div className="grid grid-cols-3 gap-2 w-full">
-              <div className="bg-slate-950/40 p-3 rounded-xl border border-white/5 text-center">
-                <span className="text-xl font-black text-slate-100">{total_reviews_analyzed}</span>
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">Total</p>
-              </div>
-              <div className="bg-emerald-500/5 p-3 rounded-xl border border-emerald-500/15 text-center">
-                <span className="text-xl font-black text-emerald-400">{positiveCount}</span>
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">Positivas</p>
-              </div>
-              <div className="bg-rose-500/5 p-3 rounded-xl border border-rose-500/15 text-center">
-                <span className="text-xl font-black text-rose-400">{negativeCount}</span>
-                <p className="text-[10px] text-slate-500 font-medium mt-0.5">Negativas</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── CONCEPTOS DESTACADOS ── */}
-        {(topPositiveWords.length > 0 || topNegativeWords.length > 0) && (
-          <div className="border-t border-white/5 bg-slate-950/20 px-4 py-5 sm:px-6 sm:py-6 space-y-4">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center">
-              Conceptos más destacados (IA)
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Destacados Positivos */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
-                  Lo más elogiado
-                </div>
-                {topPositiveWords.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {topPositiveWords.map(({ word, count }) => {
-                      const maxCount = topPositiveWords[0].count;
-                      const ratio = count / maxCount;
-                      const sizeClass = ratio > 0.8 ? 'text-sm px-3 py-1.5' : ratio > 0.4 ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5';
-                      return (
-                        <span
-                          key={word}
-                          className={`inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/15 hover:border-emerald-500/30 text-emerald-300 font-medium transition-all cursor-default ${sizeClass}`}
-                          title={`Aparece ${count} ${count === 1 ? 'vez' : 'veces'}`}
-                        >
-                          {word}
-                          <span className="text-[9px] opacity-60 bg-emerald-500/10 px-1 rounded-md">{count}</span>
-                        </span>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-xs text-slate-600">No hay suficientes datos positivos.</p>
-                )}
-              </div>
-
-              {/* Destacados Negativos */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-xs font-bold text-rose-400">
-                  <span className="w-1.5 h-1.5 bg-rose-400 rounded-full" />
-                  Lo más criticado
-                </div>
-                {topNegativeWords.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {topNegativeWords.map(({ word, count }) => {
-                      const maxCount = topNegativeWords[0].count;
-                      const ratio = count / maxCount;
-                      const sizeClass = ratio > 0.8 ? 'text-sm px-3 py-1.5' : ratio > 0.4 ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5';
-                      return (
-                        <span
-                          key={word}
-                          className={`inline-flex items-center gap-1.5 rounded-xl bg-rose-500/5 hover:bg-rose-500/10 border border-rose-500/15 hover:border-rose-500/30 text-rose-300 font-medium transition-all cursor-default ${sizeClass}`}
-                          title={`Aparece ${count} ${count === 1 ? 'vez' : 'veces'}`}
-                        >
-                          {word}
-                          <span className="text-[9px] opacity-60 bg-rose-500/10 px-1 rounded-md">{count}</span>
-                        </span>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-xs text-slate-600">No hay suficientes datos negativos.</p>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Componente Conceptos Destacados */}
+        <TopKeyWords
+          topPositiveWords={topPositiveWords}
+          topNegativeWords={topNegativeWords}
+        />
       </div>
 
-      {/* ── 2. RESEÑAS CLASIFICADAS ────────────────────────────────────────── */}
-      <div className="space-y-4">
-        {/* Cabecera + tabs */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
-            Reseñas clasificadas
-            <span className="text-xs font-semibold px-2 py-0.5 bg-[#1e293b] text-slate-400 rounded-full">
-              {filteredReviews.length}
-            </span>
-          </h3>
+      {/* ── 2. RESEÑAS CLASIFICADAS ── */}
+      <ReviewList
+        reviewsClassified={reviews_classified}
+        positiveCount={positiveCount}
+        negativeCount={negativeCount}
+      />
 
-          <div className="flex w-full sm:w-auto bg-[#0a1628]/80 border border-[#1e293b] p-1 rounded-xl text-[11px]">
-            {[
-              { key: 'all', label: `Todas`, count: reviews_classified.length },
-              { key: 'positives', label: `Positivas`, count: positiveCount },
-              { key: 'negatives', label: `Negativas`, count: negativeCount },
-            ].map(({ key, label, count }) => (
-              <button
-                key={key}
-                onClick={() => setActiveTab(key)}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex-1 sm:flex-initial text-center flex items-center justify-center gap-1 ${
-                  activeTab === key
-                    ? key === 'positives'
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : key === 'negatives'
-                        ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                        : 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
-                }`}
-              >
-                {label}
-                <span className="opacity-70">({count})</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Lista de reseñas */}
-        <div className="space-y-2.5 sm:space-y-3 max-h-[520px] overflow-y-auto pr-0.5 custom-scrollbar">
-          {filteredReviews.length === 0 ? (
-            <div className="text-center py-12 bg-white/[0.01] rounded-2xl border border-[#1e293b]/60 text-slate-600 text-sm">
-              No hay reseñas en esta categoría.
-            </div>
-          ) : (
-            filteredReviews.map((review, index) => {
-              const hoursPlayed = Math.round(review.playtime_forever / 60);
-              const isPositive = review.sentiment_predicted === 'Positivo';
-              const avatarColor = getAvatarColor(review.author);
-              const initials = (review.author || '?').slice(0, 2).toUpperCase();
-
-              return (
-                <div
-                  key={review.recommendation_id || index}
-                  className="review-item bg-[#0a1628]/60 border border-[#1e293b]/80 hover:border-[#2d3f55] p-4 sm:p-5 rounded-xl sm:rounded-2xl transition-all duration-200 relative overflow-hidden group"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  {/* Borde izquierdo de color */}
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${isPositive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-
-                  {/* Cabecera de la reseña */}
-                  <div className="flex items-start justify-between gap-3 mb-3 pl-2">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      {/* Avatar generado */}
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
-                        style={{ background: avatarColor, boxShadow: `0 0 12px -2px ${avatarColor}60` }}
-                      >
-                        {initials}
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-sm font-semibold text-slate-200 block truncate">{review.author}</span>
-                        <span className="text-[10px] text-slate-600">{hoursPlayed} horas jugadas</span>
-                      </div>
-                    </div>
-
-                    {/* Badges */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <span className={`text-[10px] font-semibold px-2 py-1 rounded-lg border ${
-                        review.voted_up_steam
-                          ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                          : 'bg-slate-800/60 text-slate-500 border-slate-700/60'
-                      }`}>
-                        Steam {review.voted_up_steam ? '👍' : '👎'}
-                      </span>
-                      <span className={`text-[10px] font-bold px-2 py-1 rounded-lg border ${
-                        isPositive
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                          : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                      }`}>
-                        IA: {review.sentiment_predicted}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Texto expandible */}
-                  <ExpandableReview text={review.review_text} />
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-
-      {/* ── 3. COMPARADOR DE PRECIOS ──────────────────────────────────────── */}
+      {/* ── 3. COMPARADOR DE PRECIOS ── */}
       <div className="bg-[#0a1628]/60 border border-[#1e293b]/80 p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
         <div className="flex items-center gap-2">
           <span className="text-base">🛒</span>
@@ -607,7 +264,6 @@ export default function RecommendationCard({ result, gameInfo }) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {/* Instant Gaming */}
           <a
             href={instantGamingUrl}
             target="_blank"
@@ -626,7 +282,6 @@ export default function RecommendationCard({ result, gameInfo }) {
             </svg>
           </a>
 
-          {/* G2A */}
           <a
             href="https://www.g2a.com/n/gamerecommended"
             target="_blank"
@@ -645,7 +300,6 @@ export default function RecommendationCard({ result, gameInfo }) {
             </svg>
           </a>
 
-          {/* Steam */}
           <a
             href={`https://store.steampowered.com/app/${result.app_id}`}
             target="_blank"
@@ -670,7 +324,7 @@ export default function RecommendationCard({ result, gameInfo }) {
         </p>
       </div>
 
-      {/* ── 4. BADGE DE GITHUB ────────────────────────────────────────── */}
+      {/* ── 4. BADGE DE GITHUB ── */}
       <div className="bg-[#0a1628]/60 border border-[#1e293b]/80 p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
         <div className="flex items-center gap-2">
           <span className="text-base">🛡️</span>
@@ -678,7 +332,6 @@ export default function RecommendationCard({ result, gameInfo }) {
         </div>
         
         <div className="flex flex-col sm:flex-row gap-4 items-center">
-          {/* Vista previa del Badge */}
           <div className="bg-[#030712] border border-[#1e293b]/60 px-4 py-3.5 rounded-xl flex items-center justify-center shrink-0">
             <img
               src={`${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge`}
@@ -687,7 +340,6 @@ export default function RecommendationCard({ result, gameInfo }) {
             />
           </div>
 
-          {/* Caja con Markdown */}
           <div className="flex-1 w-full flex flex-col sm:flex-row gap-2">
             <input
               type="text"
@@ -710,7 +362,6 @@ export default function RecommendationCard({ result, gameInfo }) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }
