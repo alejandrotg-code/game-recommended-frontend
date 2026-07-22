@@ -9,6 +9,22 @@ const BADGE = {
 
 const ENTRIES = [
   {
+    version: '1.2.0',
+    date: '22 de julio de 2026',
+    type: 'ui',
+    title: 'Rediseño Cyberpunk/Gaming, optimización de ciclo de vida de ML y resiliencia con ErrorBoundary',
+    items: [
+      'Rediseño visual completo con estética Cyberpunk/Gaming: gradientes multidestello, paneles glassmorphic con backdrop-blur y resplandor neón.',
+      'Refactorización modular de RecommendationCard en subcomponentes especializados (SentimentChart, ReviewList, TopKeyWords).',
+      'Optimización del rendimiento de renderizado en React usando React.memo y useMemo para el filtrado y cálculo de palabras clave.',
+      'Manejo de excepciones visuales en React mediante un nuevo componente ErrorBoundary con pantalla de recuperación estética.',
+      'Gestión del ciclo de vida del backend FastAPI refactorizado a @asynccontextmanager lifespan para diferir la carga de modelos de ML al arranque del servidor.',
+      'Prevención de fugas de memoria en RateLimitMiddleware mediante cachetools.TTLCache con expiración de tiempo de vida (TTL) automática por IP.',
+      'Atajo de teclado global "/" para enfocar la búsqueda e insignia resplandeciente "BETA" en la recomendación por IA.',
+      'Creación de suite de pruebas unitarias para componentes UI con React Testing Library y Vitest.',
+    ],
+  },
+  {
     version: '1.1.0',
     date: '16 de julio de 2026',
     type: 'new',

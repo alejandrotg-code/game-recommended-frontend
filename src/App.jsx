@@ -133,44 +133,45 @@ function AppContent() {
             <>
               {/* HERO */}
               <div className="relative pt-12 sm:pt-20 pb-8 sm:pb-12 text-center">
-                {/* Blobs de fondo */}
-                <div className="blob absolute top-[-40px] left-[10%] w-72 h-72 opacity-20 pointer-events-none select-none"
-                  style={{ background: 'radial-gradient(circle, #2563eb 0%, transparent 70%)' }} />
-                <div className="blob absolute top-[-20px] right-[5%] w-64 h-64 opacity-15 pointer-events-none select-none"
-                  style={{ background: 'radial-gradient(circle, #7c3aed 0%, transparent 70%)', animationDelay: '3s' }} />
-                <div className="blob absolute bottom-0 left-1/2 -translate-x-1/2 w-80 h-40 opacity-10 pointer-events-none select-none"
-                  style={{ background: 'radial-gradient(circle, #0ea5e9 0%, transparent 70%)', animationDelay: '5s' }} />
+                {/* Blobs de luz ambiental en el fondo */}
+                <div className="blob-cyan" />
+                <div className="blob-violet" />
+                <div className="blob-blue" />
 
                 {/* Badge de estado */}
-                <div className="inline-flex items-center gap-2 bg-blue-600/10 border border-blue-500/20 text-blue-400 text-[11px] font-semibold px-3 py-1.5 rounded-full mb-5 animate-fade-up">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" style={{ boxShadow: '0 0 6px 1px rgba(52,211,153,0.6)' }} />
-                  Modelo Naive Bayes · Activo
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-emerald-500/10 border border-blue-500/25 text-blue-300 text-[11px] font-bold px-4 py-1.5 rounded-full mb-6 animate-fade-up shadow-[0_0_20px_rgba(37,99,235,0.25)] backdrop-blur-md">
+                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  <span>Machine Learning & NLP · Motor de Inteligencia IA</span>
                 </div>
 
-                {/* Título */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4 animate-fade-up" style={{ animationDelay: '60ms' }}>
-                  <span className="gradient-text">Análisis de reseñas</span>
+                {/* Título Principal */}
+                <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-5 animate-fade-up leading-[1.1]" style={{ animationDelay: '60ms' }}>
+                  <span className="gradient-title">Decodifica la Opinión Real</span>
                   <br />
-                  <span className="text-slate-100">con inteligencia artificial</span>
+                  <span className="text-white drop-shadow-md">de la Comunidad de Steam</span>
                 </h1>
 
                 {/* Subtítulo */}
-                <p className="text-base md:text-lg text-slate-400 max-w-lg mx-auto leading-relaxed mb-6 animate-fade-up" style={{ animationDelay: '120ms' }}>
-                  Nuestro modelo de Machine Learning analiza las opiniones en{' '}
-                  <span className="text-slate-200 font-medium">español</span> y te dice si el juego de verdad merece la pena.
+                <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed mb-8 animate-fade-up font-normal" style={{ animationDelay: '120ms' }}>
+                  Analizamos quirúrgicamente miles de opiniones en <span className="text-blue-400 font-bold">español</span> utilizando IA para predecir si un juego verdaderamente merece tu tiempo y dinero.
                 </p>
 
                 {/* Chips de tecnología */}
-                <div className="flex items-center justify-center flex-wrap gap-2 mb-8 animate-fade-up" style={{ animationDelay: '180ms' }}>
-                  {['Naive Bayes', 'FastAPI', 'Steam API', 'NLP · Python'].map((tech) => (
-                    <span key={tech} className="text-[11px] font-semibold text-slate-500 border border-[#1e293b] bg-white/[0.02] px-3 py-1 rounded-full">
-                      {tech}
+                <div className="flex items-center justify-center flex-wrap gap-2.5 mb-10 animate-fade-up" style={{ animationDelay: '180ms' }}>
+                  {[
+                    { label: 'Naive Bayes & Keras', color: 'border-blue-500/20 text-blue-300 bg-blue-500/5' },
+                    { label: 'FastAPI Async Engine', color: 'border-emerald-500/20 text-emerald-300 bg-emerald-500/5' },
+                    { label: 'Steam Web API', color: 'border-violet-500/20 text-violet-300 bg-violet-500/5' },
+                    { label: 'TF-IDF NLP Vectorizer', color: 'border-amber-500/20 text-amber-300 bg-amber-500/5' }
+                  ].map(({ label, color }) => (
+                    <span key={label} className={`text-[11px] font-bold border px-3.5 py-1.5 rounded-full backdrop-blur-sm shadow-sm transition-all duration-300 hover:scale-105 ${color}`}>
+                      {label}
                     </span>
                   ))}
                 </div>
 
                 {/* Buscador */}
-                <div className="w-full animate-fade-up relative z-[100]" style={{ animationDelay: '240ms' }}>
+                <div className="w-full max-w-3xl mx-auto animate-fade-up relative z-[100]" style={{ animationDelay: '240ms' }}>
                   <GameSearch onGameSelect={(game) => handleGameSelect(game, limit)} isLoading={isLoading} />
                 </div>
 

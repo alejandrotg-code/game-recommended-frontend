@@ -256,31 +256,31 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
       />
 
       {/* ── 3. COMPARADOR DE PRECIOS ── */}
-      <div className="bg-[#0a1628]/60 border border-[#1e293b]/80 p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
+      <div className="glass-panel p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
         <div className="flex items-center gap-2">
           <span className="text-base">🛒</span>
-          <h4 className="text-sm font-bold text-slate-200">¿Interesado? Encuentra el mejor precio</h4>
-          <span className="ml-auto text-[10px] bg-[#1e293b] text-slate-500 px-2 py-0.5 rounded-full font-medium">
-            Afiliado
+          <h4 className="text-sm font-extrabold text-slate-200">¿Interesado en comprarlo? Comparador de Precios</h4>
+          <span className="ml-auto text-[10px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2.5 py-0.5 rounded-full font-bold">
+            Afiliado Oficial
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
           <a
             href={instantGamingUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-3.5 bg-[#ff5400]/8 hover:bg-[#ff5400]/15 text-[#ff8340] border border-[#ff5400]/20 hover:border-[#ff5400]/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
+            className="flex items-center justify-between p-4 bg-gradient-to-r from-[#ff5400]/10 to-[#ff5400]/5 hover:from-[#ff5400]/20 hover:to-[#ff5400]/10 text-[#ff8340] border border-[#ff5400]/30 hover:border-[#ff5400]/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(255,84,0,0.15)] hover:shadow-[0_0_30px_rgba(255,84,0,0.3)] hover:-translate-y-1 active:scale-98 group"
           >
-            <div className="flex items-center gap-2">
-              <span className="text-base group-hover:scale-110 transition-transform">🔥</span>
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl group-hover:scale-125 transition-transform duration-300">🔥</span>
               <div>
-                <div>Instant Gaming</div>
-                <div className="text-[9px] text-[#ff8340]/60 font-normal">Mejor precio</div>
+                <div className="font-extrabold text-white text-sm">Instant Gaming</div>
+                <div className="text-[10px] text-[#ff8340] font-semibold">Mejor precio digital</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
 
@@ -288,17 +288,17 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href="https://www.g2a.com/n/gamerecommended"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-3.5 bg-amber-500/8 hover:bg-amber-500/15 text-amber-400 border border-amber-500/20 hover:border-amber-500/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
+            className="flex items-center justify-between p-4 bg-gradient-to-r from-amber-500/10 to-amber-500/5 hover:from-amber-500/20 hover:to-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-500/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:-translate-y-1 active:scale-98 group"
           >
-            <div className="flex items-center gap-2">
-              <span className="text-base group-hover:scale-110 transition-transform">🎮</span>
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl group-hover:scale-125 transition-transform duration-300">🎮</span>
               <div>
-                <div>G2A</div>
-                <div className="text-[9px] text-amber-400/60 font-normal">Ofertas y descuentos</div>
+                <div className="font-extrabold text-white text-sm">G2A Marketplace</div>
+                <div className="text-[10px] text-amber-400 font-semibold">Descuentos globales</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
 
@@ -306,23 +306,23 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href={`https://store.steampowered.com/app/${result.app_id}`}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-3.5 bg-blue-600/8 hover:bg-blue-600/15 text-blue-400 border border-blue-500/20 hover:border-blue-500/40 rounded-xl font-bold text-xs transition-all active:scale-98 group"
+            className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600/10 to-blue-600/5 hover:from-blue-600/20 hover:to-blue-600/10 text-blue-400 border border-blue-500/30 hover:border-blue-500/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.15)] hover:shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:-translate-y-1 active:scale-98 group"
           >
-            <div className="flex items-center gap-2">
-              <span className="text-base group-hover:scale-110 transition-transform">⚓</span>
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl group-hover:scale-125 transition-transform duration-300">⚓</span>
               <div>
-                <div>Tienda Steam</div>
-                <div className="text-[9px] text-blue-400/60 font-normal">Precio oficial</div>
+                <div className="font-extrabold text-white text-sm">Tienda Steam</div>
+                <div className="text-[10px] text-blue-400 font-semibold">Precio oficial directo</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
         </div>
 
-        <p className="text-[10px] text-slate-600 text-center leading-relaxed">
-          💡 Al usar estos enlaces de afiliado apoyas el mantenimiento de la plataforma sin coste adicional. ¡Gracias!
+        <p className="text-[10px] text-slate-500 text-center leading-relaxed font-medium">
+          💡 Comprando a través de estos enlaces apoyas el mantenimiento de la plataforma sin pagar un céntimo más.
         </p>
       </div>
 

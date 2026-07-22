@@ -58,9 +58,12 @@ export default function Recomendar() {
         <div className="blob absolute top-[-30px] left-1/2 -translate-x-1/2 w-64 h-64 opacity-15 pointer-events-none select-none"
           style={{ background: 'radial-gradient(circle, #7c3aed 0%, transparent 70%)' }} />
         
-        <div className="inline-flex items-center gap-2 bg-purple-600/10 border border-purple-500/20 text-purple-400 text-[11px] font-semibold px-3 py-1.5 rounded-full mb-4">
-          <span className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" />
-          Modelo Keras Multi-etiqueta Activo
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/10 via-amber-500/10 to-purple-600/10 border border-purple-500/20 text-purple-300 text-[11px] font-bold px-3.5 py-1.5 rounded-full mb-4 shadow-[0_0_15px_rgba(124,58,237,0.2)]">
+          <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
+          <span>Modelo Keras Multi-etiqueta</span>
+          <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 tracking-wider shadow-[0_0_10px_rgba(245,158,11,0.5)] animate-pulse ml-1">
+            BETA
+          </span>
         </div>
         
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
