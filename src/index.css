@@ -30,6 +30,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Tipografía moderna balanceada */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Optimización de rendimiento para listas largas de reseñas */
+.review-item {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 110px;
+}
+
+/* Anillos de enfoque accesibles */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
 /* Scrollbar global minimalista */
 ::-webkit-scrollbar {
   width: 4px;

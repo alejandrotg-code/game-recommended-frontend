@@ -226,6 +226,13 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
               </svg>
             </button>
           )}
+
+          {/* Atajo de teclado / */}
+          {!query && !isSearching && (
+            <kbd className="hidden sm:inline-flex items-center justify-center h-5 px-1.5 text-[10px] font-mono text-slate-500 bg-white/5 border border-white/10 rounded mr-1 pointer-events-none" title="Presiona '/' para buscar">
+              /
+            </kbd>
+          )}
         </div>
 
         {/* Botón analizar */}
