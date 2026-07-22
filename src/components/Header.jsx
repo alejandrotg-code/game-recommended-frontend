@@ -88,18 +88,23 @@ export default function Header() {
         </button>
 
         {/* ── NAVEGACIÓN ── */}
-        <nav className="flex items-center gap-1 bg-white/[0.04] border border-white/[0.07] rounded-full p-1" aria-label="Navegación principal">
+        <nav className="flex items-center gap-1 bg-white/[0.04] border border-white/[0.08] backdrop-blur-md rounded-full p-1 shadow-inner" aria-label="Navegación principal">
           {navItems.map(({ key, label, shortLabel, path }) => (
             <button
               key={key}
               onClick={() => navigate(path)}
-              className={`relative px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer outline-none ${activePage === key
-                ? 'bg-blue-600 text-white shadow-[0_0_12px_-2px_rgba(37,99,235,0.6)]'
-                : 'text-slate-400 hover:text-slate-100 bg-transparent'
+              className={`relative px-3.5 sm:px-4.5 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer outline-none flex items-center gap-1.5 ${activePage === key
+                ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] scale-102'
+                : 'text-slate-400 hover:text-slate-100 hover:bg-white/5'
                 }`}
             >
               <span className="hidden sm:inline">{label}</span>
               <span className="inline sm:hidden">{shortLabel}</span>
+              {key === 'recommend' && (
+                <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 tracking-wider shadow-[0_0_10px_rgba(245,158,11,0.5)] animate-pulse">
+                  BETA
+                </span>
+              )}
             </button>
           ))}
         </nav>
