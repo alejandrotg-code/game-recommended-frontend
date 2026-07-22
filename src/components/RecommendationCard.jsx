@@ -93,7 +93,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
     });
   };
 
-  const reviewsClassified = result?.reviews_classified || [];
+  const reviewsClassified = useMemo(() => result?.reviews_classified || [], [result?.reviews_classified]);
 
   const topPositiveWords = useMemo(() => getTopWords(reviewsClassified, 'Positivo', 10), [reviewsClassified]);
   const topNegativeWords = useMemo(() => getTopWords(reviewsClassified, 'Negativo', 10), [reviewsClassified]);
@@ -250,7 +250,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
 
       {/* ── 2. RESEÑAS CLASIFICADAS ── */}
       <ReviewList
-        reviewsClassified={reviews_classified}
+        reviewsClassified={reviewsClassified}
         positiveCount={positiveCount}
         negativeCount={negativeCount}
       />

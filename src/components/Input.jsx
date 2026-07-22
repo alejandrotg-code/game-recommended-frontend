@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo, useCallback } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { searchGames } from '../services/steamService';
 
 const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
