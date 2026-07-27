@@ -1,117 +1,148 @@
-# Game Recommended AI - Frontend 🎮🤖
+# 🎮 Game Recommended AI — Frontend Client 💻✨
 
-¡Bienvenido al frontend de **Game Recommended AI**! Esta es una aplicación web moderna e interactiva diseñada para analizar y visualizar de forma inteligente la recomendación real de videojuegos en Steam mediante Inteligencia Artificial y Procesamiento de Lenguaje Natural (NLP).
+[![Demo en Vivo](https://img.shields.io/badge/Demo-En%20Vivo-brightgreen?style=for-the-badge&logo=vercel)](https://game-recommended.alejandrotg.es)
+[![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8.1-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![PNPM](https://img.shields.io/badge/PNPM-Supported-F69220?style=for-the-badge&logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Vitest](https://img.shields.io/badge/Tests-Vitest-729B1B?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
 
-El cliente web se conecta a un backend en FastAPI que extrae reseñas recientes escritas en español de la API de Steam, las limpia de caracteres innecesarios y calcula las probabilidades utilizando un modelo de Machine Learning para clasificar el sentimiento en positivo o negativo. De esta manera, el frontend presenta un veredicto alternativo al oficial de Steam, ayudando a identificar casos de *review bombing* o discrepancias de opinión.
+Cliente web moderno, rápido e interactivo desarrollado en **React 19** y **Tailwind CSS v4** para la plataforma **Game Recommended AI**. Permite a los usuarios consultar y analizar de forma inteligente la recomendación real de videojuegos en Steam mediante Inteligencia Artificial y Procesamiento de Lenguaje Natural (NLP).
+
+🚀 **[Explora la Aplicación en Vivo](https://game-recommended.alejandrotg.es)**
 
 ---
 
-## 🚀 Tecnologías Principales
+## 🎨 Vista General y Experiencia de Usuario (UI/UX)
 
-Para lograr una interfaz rápida, interactiva y visualmente espectacular, se ha empleado la siguiente pila tecnológica:
+La aplicación ofrece un diseño responsivo con estética *Dark Mode*, degradados sutiles, efectos de *glassmorphism* y micro-animaciones fluidas.
 
-*   **[React 19](https://react.dev/)**: Biblioteca principal para la construcción de la interfaz y la gestión reactiva del estado.
-*   **[React Router 7](https://reactrouter.com/)**: Enrutamiento declarativo para navegar fluidamente entre páginas.
-*   **[Vite 8](https://vite.dev/)**: Herramienta de compilación ultrarrápida y servidor de desarrollo con HMR instantáneo.
-*   **[Tailwind CSS v4](https://tailwindcss.com/)**: Motor de estilos de última generación para lograr un diseño responsivo, moderno, con gradientes sutiles y efectos de *glassmorphism*.
-*   **[PNPM](https://pnpm.io/)**: Gestor de paquetes rápido y eficiente en disco.
+```mermaid
+flowchart TD
+    User([👤 Usuario]) --> SearchBar[🔍 Buscador Inteligente / URL / AppID]
+    User --> PromptRec[🤖 Búsqueda por Descripción IA]
+
+    SearchBar -->|Query HTTP| BackendAPI[⚡ Backend FastAPI]
+    PromptRec -->|Predict HTTP| BackendAPI
+
+    BackendAPI --> PipelineAnim[⚙️ Simulador de Pipeline de Análisis]
+    PipelineAnim --> Dashboard[📊 Dashboard de Resultados & Veredicto]
+
+    subgraph Dashboard Components
+        Dashboard --> VerdictCard[🏆 Veredicto de la IA & Badge SVG]
+        Dashboard --> StatCharts[📈 Gráficos Comparativos con Recharts]
+        Dashboard --> WordCloud[☁️ Nube de Conceptos Relevantes]
+        Dashboard --> ReviewsList[💬 Reseñas Clasificadas por la IA]
+        Dashboard --> PriceCompare[🛍️ Comparador de Ofertas Steam / Instant Gaming]
+    end
+```
 
 ---
 
 ## ✨ Características Clave
 
-*   🔍 **Buscador Inteligente de Juegos**: Permite buscar cualquier título por su nombre directamente con autocompletado y sugerencias visuales, o bien realizar la consulta directa introduciendo el AppID o la URL de la tienda de Steam.
-*   ⚙️ **Simulador de Pipeline de Carga**: Durante el análisis, el frontend muestra dinámicamente cada uno de los pasos técnicos internos que ejecuta el backend (extracción, procesamiento de NLP, inferencia del clasificador, cálculo de veredicto, etc.).
-*   📊 **Dashboard de Reporte Interactivo**: Presenta un informe completo del juego analizado:
-    *   **Veredicto de la IA**: Cuatro niveles (Extremadamente Recomendado, Recomendado, Mixto, No Recomendado).
-    *   **Metadatos de Steam**: Muestra el desarrollador, géneros, fecha de lanzamiento y precio actual en la tarjeta del juego.
-    *   **Conceptos Destacados**: Nube de etiquetas dinámicas basada en la frecuencia de palabras encontradas en las reseñas.
-    *   **Insignia para GitHub (SVG Badge)**: Genera y permite copiar un badge dinámico en formato Markdown para lucir el veredicto en repositorios de GitHub.
-    *   **Ratio de Aprobación Real**: Comparativa en porcentaje de la puntuación calculada por el modelo Naive Bayes frente a la calificación oficial de Steam.
-    *   **Resumen Semántico**: Detalle del conteo de opiniones positivas y negativas clasificadas.
-*   🛍️ **Comparador de Precios**: Enlaces directos a Instant Gaming y Steam para adquirir el juego al mejor precio.
-*   💡 **Sección Informativa Técnica**: Una sección dedicada ("¿Cómo funciona?") que detalla paso a paso el flujo de datos del sistema, promoviendo la transparencia de la IA.
-*   📜 **Registro de Cambios**: Sección "Changelog" accesible para auditar la evolución y actualizaciones de la plataforma.
+* 🔍 **Búsqueda Dual e Inteligente**:
+  * **Por Título o AppID**: Buscador con sugerencias de autocompletado en tiempo real.
+  * **Por Descripción (IA)**: Recomienda el TOP 10 de juegos según la descripción en lenguaje natural introducida por el usuario.
+* ⚙️ **Simulador de Pipeline de Carga**: Animación dinámica en pantalla durante la llamada a la API que muestra en tiempo real las etapas del procesamiento de NLP e inferencia del modelo.
+* 📊 **Dashboard Interactivo con Recharts**:
+  * **Veredicto de la IA**: Clasificación clara (*Extremadamente Recomendado*, *Recomendado*, *Mixto*, *No Recomendado*).
+  * **Ratio de Aprobación Real**: Comparativa del porcentaje calculado por el modelo IA frente a la calificación oficial de Steam.
+  * **Etiquetas y Nube de Palabras**: Extracción semántica de conceptos clave en las opiniones de los usuarios.
+  * **Insignia SVG para GitHub**: Generador con opción de copia en 1-click para incrustar el badge dinámico en archivos Markdown.
+* 🛍️ **Comparador de Precios Directo**: Enlaces optimizados para comparar y adquirir títulos en tiendas autorizadas.
+* 📖 **Transparencia Técnica & Changelog**: Secciones explicativas integradas ("¿Cómo funciona?") para auditar el funcionamiento interno del sistema.
 
 ---
 
-## 📁 Estructura del Proyecto
+## 🛠️ Stack Tecnológico
 
-El código está estructurado de manera modular y limpia en el directorio `/src`:
+| Tecnología | Descripción |
+| :--- | :--- |
+| **React 19** | Biblioteca declarativa para componentes reactivos de alta velocidad |
+| **Vite 8** | Bundler y entorno de desarrollo ultra-rápido con HMR instantáneo |
+| **Tailwind CSS v4** | Motor CSS sin archivo de configuración masivo, optimizado en rendimiento |
+| **React Router v7** | Enrutamiento cliente para navegar fluidamente entre vistas |
+| **Recharts** | Biblioteca de gráficos basada en React para visualización de estadísticas |
+| **Vitest & Testing Library** | Suite de pruebas unitarias y de componentes UI |
+
+---
+
+## 📁 Estructura del Repositorio
 
 ```text
 frontend/
-├── public/                # Activos estáticos públicos
+├── public/                 # Recursos estáticos e iconos
 ├── src/
-│   ├── components/        # Componentes interactivos modulares
-│   │   ├── Header.jsx             # Barra de navegación con soporte para React Router
-│   │   ├── Input.jsx              # Buscador inteligente y manejo de autocompletado
-│   │   ├── RecommendationCard.jsx # Tarjeta de resultados detallados, nube de palabras y badge SVG
-│   │   ├── HowItWorks.jsx         # Panel con la explicación del flujo de datos de la IA
-│   │   └── Changelog.jsx          # Historial de cambios y versiones del proyecto
-│   ├── services/          # Conexiones con la API del backend
-│   │   ├── steamService.js        # Peticiones de búsqueda y análisis de juegos
-│   │   └── healthService.js       # Comprobación de salud de los servicios
-│   ├── App.jsx            # Configuración de rutas principales de la aplicación
-│   ├── App.css            # Estilos personalizados y variables de Tailwind v4
-│   └── main.jsx           # Punto de entrada de la aplicación React
-├── .env.development       # Variables de entorno para desarrollo local
-├── .env.production        # Variables de entorno para producción
-├── .gitignore             # Configuración de archivos omitidos en el control de versiones
-├── eslint.config.js       # Configuración de reglas y buenas prácticas de ESLint
-├── package.json           # Dependencias, scripts y configuración de npm
-└── vite.config.js         # Configuración del empaquetador Vite
+│   ├── components/         # Componentes modulares reutilizables
+│   │   ├── Header.jsx              # Barra de navegación principal
+│   │   ├── Input.jsx               # Buscador inteligente con autocompletado
+│   │   ├── RecommendationCard.jsx  # Tarjeta de veredicto, badges y visualización
+│   │   ├── HowItWorks.jsx          # Sección explicativa de la arquitectura IA
+│   │   └── Changelog.jsx           # Registro histórico de versiones y mejoras
+│   ├── services/           # Capa de comunicación con la API Backend
+│   │   ├── steamService.js         # Métodos de búsqueda, análisis y recomendación
+│   │   └── healthService.js        # Monitorización de estado de los servicios
+│   ├── App.jsx             # Definición de rutas principales
+│   ├── App.css             # Estilos globales y tokens de Tailwind v4
+│   └── main.jsx            # Punto de entrada de React
+├── .env.development        # Variables para entorno local
+├── .env.production         # Variables para entorno en producción
+├── eslint.config.js        # Configuración de linter ESLint
+├── package.json            # Scripts y dependencias del proyecto
+└── vite.config.js          # Configuración del servidor de desarrollo e hiper-build
 ```
 
 ---
 
-## 🛠️ Configuración Local
-
-Sigue estos pasos para levantar el entorno de desarrollo local:
+## 🚀 Instalación y Desarrollo Local
 
 ### 1. Requisitos Previos
+* [Node.js](https://nodejs.org/) v18+ 
+* [pnpm](https://pnpm.io/) (recomendado) o `npm` / `yarn`.
 
-Asegúrate de tener instalado [Node.js](https://nodejs.org/). Se recomienda utilizar `pnpm` como gestor de paquetes.
+### 2. Pasos para Iniciar
 
-### 2. Instalar Dependencias
+1. Navegar a la carpeta del frontend:
+   ```bash
+   cd frontend
+   ```
 
-Desde la raíz del subdirectorio `/frontend`, ejecuta el siguiente comando:
+2. Instalar las dependencias:
+   ```bash
+   pnpm install
+   ```
 
-```bash
-pnpm install
-```
-
-### 3. Variables de Entorno
-
-El proyecto gestiona la URL de conexión con el backend de Python mediante variables de entorno:
-
-*   **`.env.development`**:
-    ```ini
-    VITE_API_URL_DEV=http://localhost:8000
-    ```
-
-Asegúrate de que el backend de FastAPI esté corriendo en la dirección configurada en `VITE_API_URL` durante el desarrollo local.
-
-### 4. Iniciar Servidor de Desarrollo
-
-Inicia la aplicación en modo desarrollo:
-
-```bash
-pnpm run dev
-```
-
-Abre tu navegador en la dirección local indicada por la terminal (por defecto, `http://localhost:5173`).
+3. Iniciar el servidor de desarrollo:
+   ```bash
+   pnpm dev
+   ```
+   La aplicación se abrirá por defecto en `http://localhost:5173`. Asegúrate de tener corriendo el servidor de FastAPI en `http://localhost:8000`.
 
 ---
 
-## 🛡️ Estilo de Código y Calidad
+## 📜 Comandos Disponibles
 
-El proyecto utiliza **ESLint** configurado con las reglas estándar de React para garantizar la calidad del código. Puedes ejecutar el analizador de código estático con:
+| Comando | Descripción |
+| :--- | :--- |
+| `pnpm dev` | Inicia el servidor de desarrollo con HMR instantáneo |
+| `pnpm build` | Compila la aplicación optimizada para producción en `/dist` |
+| `pnpm preview` | Sirve la versión compilada de producción de forma local |
+| `pnpm test` | Ejecuta las pruebas unitarias con Vitest en modo watcher |
+| `pnpm test:run` | Ejecuta las pruebas una única vez |
+| `pnpm lint` | Analiza el código fuente con ESLint en busca de errores |
 
-```bash
-pnpm lint
+---
+
+## 🔑 Variables de Entorno
+
+Definidas en `.env.development`:
+
+```ini
+# .env.development
+VITE_API_URL_DEV=http://localhost:8000
 ```
 
 ---
 
-Desarrollado con fines educativos y profesionales de portfolio por [Alejandro TG](https://portfolio.alejandrotg.es).
+Desarrollado por [Alejandro Tacoronte González](https://alejandrotg.es).
