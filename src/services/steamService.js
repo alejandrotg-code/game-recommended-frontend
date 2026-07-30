@@ -41,21 +41,26 @@ export async function analyzeGame(gameId, limit = 30, signal) {
   return await response.json();
 }
 
+
+
 /**
- * Obtiene recomendaciones de juegos de Steam a partir de una descripción usando el clasificador de Keras.
- * @param {string} description Descripción del tipo de juego que busca el usuario.
- * @param {AbortSignal} [signal] Señal para cancelar la petición.
- * @returns {Promise<Object>} Resultado con el género predicho, probabilidades y juegos recomendados.
+ * Obtiene recomendaciones inteligentes RAG + Groq + Qdrant basadas en lenguaje natural.
+ * @param {string} query Consulta o estado de ánimo del usuario en español.
+ * @param {number} topK Cantidad de juegos a devolver.
+ * @param {AbortSignal} [signal] Señal de cancelación.
+ * @returns {Promise<Object>} Resultado RAG con resumen en español y lista de juegos recomendados.
  */
-export async function getRecommendations(description, signal) {
-  const response = await fetch(
-    `${API_BASE_URL}/api/recommend?description=${encodeURIComponent(description)}`,
-    { signal }
-  );
+export async function getRagRecommendations(query, topK = 4, signal) {
+  const response = await fetch(`${API_BASE_URL}/api/rag/recommend`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, top_k: topK }),
+    signal,
+  });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.detail || `Error del servidor (código ${response.status})`);
+    throw new Error(errorData.detail || `Error al procesar recomendación RAG (código ${response.status})`);
   }
 
   return await response.json();

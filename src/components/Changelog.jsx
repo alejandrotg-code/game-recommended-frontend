@@ -9,6 +9,20 @@ const BADGE = {
 
 const ENTRIES = [
   {
+    version: '2.0.0',
+    date: '30 de julio de 2026',
+    type: 'new',
+    title: 'Migración a Agente RAG IA (Qdrant Cloud + Groq Llama 3) y Sistema de Afiliación',
+    items: [
+      'Migración completa de la recomendación heredada Keras a una arquitectura RAG en lenguaje natural sobre 10.000 juegos top de Steam.',
+      'Búsqueda semántica vectorial de alta precisión en Qdrant Cloud utilizando embeddings SentenceTransformers (384 dimensiones).',
+      'Integración con Groq Cloud API (Llama 3.1 8B) para traducción automática inteligente de consultas (ES ➔ EN) y síntesis empática en español.',
+      'Integración de enlaces monetizados con códigos de afiliados para Instant Gaming (igr=game-recommended) y G2A (gname=gamerecommended).',
+      'Carga optimizada de carátulas en alta definición utilizando la CDN oficial de Steam Akamai.',
+      'Limpieza completa del código obsoleto del modelo Keras en frontend y backend.'
+    ],
+  },
+  {
     version: '1.2.0',
     date: '22 de julio de 2026',
     type: 'ui',
