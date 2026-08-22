@@ -146,9 +146,10 @@ function AppContent() {
 
                 {/* Título Principal */}
                 <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-5 animate-fade-up leading-[1.1]" style={{ animationDelay: '60ms' }}>
-                  <span className="gradient-title">Decodifica la Opinión Real</span>
+                  <span className="text-white">Decodifica la </span>
+                  <span className="text-blue-400">Opinión Real</span>
                   <br />
-                  <span className="text-white drop-shadow-md">de la Comunidad de Steam</span>
+                  <span className="text-slate-200">de la Comunidad de Steam</span>
                 </h1>
 
                 {/* Subtítulo */}

@@ -111,21 +111,21 @@
   pointer-events: none;
 }
 
-/* Texto con gradiente cyberpunk multidestello */
+/* Texto con gradiente de alto contraste para modo oscuro */
 .gradient-title {
-  background: linear-gradient(135deg, #f8fafc 0%, #93c5fd 35%, #c084fc 70%, #38bdf8 100%);
-  background-size: 250% 250%;
+  background: linear-gradient(135deg, #ffffff 0%, #60a5fa 45%, #38bdf8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientShift 6s ease infinite;
+  color: #60a5fa;
 }
 
 .gradient-subtitle {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #34d399 100%);
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: #38bdf8;
 }
 
 /* Paneles glassmorphism ultra elegantes */
