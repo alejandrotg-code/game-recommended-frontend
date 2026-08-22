@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URLS;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 /**
  * Verifica el estado de salud del backend (FastAPI).
