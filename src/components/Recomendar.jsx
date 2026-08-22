@@ -65,8 +65,8 @@ export default function Recomendar() {
         />
         
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/15 via-indigo-500/15 to-purple-600/15 border border-purple-500/30 text-purple-300 text-xs font-bold px-4 py-1.5 rounded-full mb-4 shadow-[0_0_20px_rgba(139,92,246,0.25)]">
-          <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-          <span>Agente RAG IA (Qdrant + Groq Llama 3)</span>
+          <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+          <span>En desarrollo · Agente RAG IA (Qdrant + Groq Llama 3)</span>
         </div>
         
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">

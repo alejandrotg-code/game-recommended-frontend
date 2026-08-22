@@ -88,7 +88,7 @@ export default function HowItWorks() {
         </div>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-50 tracking-tight">
           ¿Cómo funciona{' '}
-          <span className="gradient-text">Game Recommended AI</span>?
+          <span className="gradient-title">Game Recommended AI</span>?
         </h2>
         <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
           Desde que buscas un juego hasta que obtienes el veredicto, esto es lo que ocurre por dentro.
