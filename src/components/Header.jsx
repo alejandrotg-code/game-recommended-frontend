@@ -28,11 +28,6 @@ export default function Header() {
     return () => clearInterval(interval);
   }, []);
 
-  // Cerrar menú móvil al cambiar de ruta
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
-
   // Cerrar menú móvil con tecla Escape o clic fuera
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -142,7 +137,10 @@ export default function Header() {
 
         {/* ── LOGO ── */}
         <button
-          onClick={() => navigate('/')}
+          onClick={() => {
+            navigate('/');
+            setMobileMenuOpen(false);
+          }}
           className="flex items-center gap-2.5 cursor-pointer bg-transparent border-0 p-0 text-left outline-none group shrink-0"
           aria-label="Ir al inicio"
         >
