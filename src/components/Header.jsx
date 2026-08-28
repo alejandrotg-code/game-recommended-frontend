@@ -179,8 +179,8 @@ export default function Header() {
             >
               <span>{label}</span>
               {isBeta && (
-                <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 tracking-wider shadow-[0_0_10px_rgba(245,158,11,0.5)] animate-pulse">
-                  EN DESARROLLO
+                <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-gradient-to-r from-emerald-400 to-green-500 text-slate-950 tracking-wider shadow-[0_0_10px_rgba(52,211,153,0.5)] animate-pulse">
+                  NOVEDAD
                 </span>
               )}
             </button>
@@ -277,8 +277,8 @@ export default function Header() {
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold leading-none">{label}</span>
                         {isBeta && (
-                          <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 tracking-wider animate-pulse">
-                            EN DESARROLLO
+                          <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded-full bg-gradient-to-r from-emerald-400 to-green-500 text-slate-950 tracking-wider animate-pulse">
+                            NOVEDAD
                           </span>
                         )}
                       </div>
