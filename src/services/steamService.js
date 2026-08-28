@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV;
 
 /**
  * Busca juegos en Steam que coincidan con el término proporcionado.
@@ -50,7 +50,7 @@ export async function analyzeGame(gameId, limit = 30, signal) {
  * @param {AbortSignal} [signal] Señal de cancelación.
  * @returns {Promise<Object>} Resultado RAG con resumen en español y lista de juegos recomendados.
  */
-export async function getRagRecommendations(query, topK = 4, signal) {
+export async function getRagRecommendations(query, topK = 10, signal) {
   const response = await fetch(`${API_BASE_URL}/api/rag/recommend`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

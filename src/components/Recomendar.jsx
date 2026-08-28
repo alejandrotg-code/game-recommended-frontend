@@ -6,10 +6,14 @@ const G2A_GNAME_ID = 'gamerecommended';
 
 export default function Recomendar() {
   const [query, setQuery] = useState('');
+  const [topK, setTopK] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
   const abortRef = useRef(null);
+  const resultsTopRef = useRef(null);
 
   const ejemplos = [
     { text: 'Un juego relajante para tener mi propia granja y plantar hortalizas', label: '🌾 Granja / Relajante' },
@@ -32,9 +36,10 @@ export default function Recomendar() {
     setIsLoading(true);
     setError(null);
     setResult(null);
+    setCurrentPage(1);
 
     try {
-      const data = await getRagRecommendations(query, 4, controller.signal);
+      const data = await getRagRecommendations(query, topK, controller.signal);
       setResult(data);
     } catch (err) {
       if (err.name === 'AbortError') return;
@@ -49,11 +54,23 @@ export default function Recomendar() {
     setQuery(text);
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    if (resultsTopRef.current && typeof resultsTopRef.current.scrollIntoView === 'function') {
+      resultsTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (abortRef.current) abortRef.current.abort();
     };
   }, []);
+
+  const totalItems = result?.games?.length || 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedGames = result?.games ? result.games.slice(startIndex, startIndex + itemsPerPage) : [];
 
   return (
     <div className="py-8 sm:py-12 animate-fade-in space-y-10">
@@ -65,15 +82,15 @@ export default function Recomendar() {
         />
         
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600/15 via-indigo-500/15 to-purple-600/15 border border-purple-500/30 text-purple-300 text-xs font-bold px-4 py-1.5 rounded-full mb-4 shadow-[0_0_20px_rgba(139,92,246,0.25)]">
-          <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
-          <span>En desarrollo · Agente RAG IA (Qdrant + Groq Llama 3)</span>
+          <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+          <span>Recomendador IA</span>
         </div>
         
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
           Recomendador por <span className="gradient-text">Lenguaje Natural & Estado de Ánimo</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Escribe cómo te sientes o describe el tipo de juego que quieres jugar. Nuestro motor RAG traducirá tu búsqueda al catálogo vectorial de Steam e IA de Groq razonará por qué cada juego es ideal para ti.
+          Escribe cómo te sientes o describe el tipo de juego que quieres jugar. La IA traducirá tu búsqueda al catálogo de Steam e IA de Groq razonará por qué cada juego es ideal para ti.
         </p>
       </div>
 
@@ -103,6 +120,31 @@ export default function Recomendar() {
             </div>
           </div>
 
+          {/* SELECTOR DE CANTIDAD DE RECOMENDACIONES (4, 10, 20) */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-t border-[#1e293b]/60">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Cantidad a buscar:
+              </span>
+              <div className="flex items-center gap-1.5 bg-[#030712] p-1 rounded-xl border border-[#1e293b]">
+                {[4, 10, 20].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setTopK(num)}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      topK === num
+                        ? 'bg-purple-600 text-white shadow-[0_0_12px_rgba(139,92,246,0.5)]'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                    }`}
+                  >
+                    {num} juegos
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
             {/* Ejemplos rápidos */}
             <div className="flex flex-wrap gap-1.5 items-center">
@@ -127,14 +169,14 @@ export default function Recomendar() {
               {isLoading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  <span>Razonando con IA...</span>
+                  <span>Cargando recomendaciones...</span>
                 </>
               ) : (
                 <>
                   <svg xmlns="http://www.w3.org/2000/svg" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  <span>Recomendar con IA</span>
+                  <span>Recomiéndame ({topK})</span>
                 </>
               )}
             </button>
@@ -159,52 +201,46 @@ export default function Recomendar() {
             <div className="absolute inset-0 w-14 h-14 border border-purple-500/20 rounded-full animate-ping opacity-30" />
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-slate-300 font-bold">Consultando Qdrant Vector DB & Groq Llama 3...</p>
-            <p className="text-xs text-slate-500">Traduciendo consulta y buscando mejores coincidencias semánticas</p>
+            <p className="text-sm text-slate-300 font-bold">Consultando Steam & Groq IA...</p>
+            <p className="text-xs text-slate-500">Analizando {topK} juegos para ti...</p>
           </div>
         </div>
       )}
 
       {/* RESULTADO DE LA RECOMENDACIÓN RAG */}
       {!isLoading && result && (
-        <div className="space-y-8 max-w-5xl mx-auto animate-fade-up">
-          {/* BANNER DE RESUMEN DE LA IA */}
-          <div className="bg-gradient-to-r from-purple-950/40 via-[#0a1628]/80 to-indigo-950/40 border border-purple-500/30 rounded-3xl p-6 sm:p-7 shadow-[0_0_30px_rgba(139,92,246,0.15)] relative overflow-hidden">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white shrink-0 shadow-lg mt-0.5">
-                🤖
+        <div ref={resultsTopRef} className="space-y-8 max-w-5xl mx-auto animate-fade-up">
+          {/* RESUMEN DE LA IA */}
+          {result.summary && (
+            <div className="bg-gradient-to-r from-purple-950/40 via-[#0a1628]/80 to-indigo-950/40 border border-purple-500/30 rounded-3xl p-6 backdrop-blur-xl shadow-xl space-y-2">
+              <div className="flex items-center gap-2 text-purple-300 font-bold text-xs uppercase tracking-wider">
+                <span>🤖 Diagnóstico de IA</span>
               </div>
-              <div className="space-y-2 flex-1">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-purple-300 flex items-center gap-2">
-                    Resumen del Agente IA
-                  </h3>
-                  {result.query_en && (
-                    <span className="text-[10px] bg-slate-800/80 border border-slate-700 text-slate-400 px-2.5 py-0.5 rounded-full font-mono">
-                      Query EN: "{result.query_en}"
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
-                  "{result.summary}"
-                </p>
-              </div>
+              <p className="text-slate-200 text-sm leading-relaxed font-medium">
+                {result.summary}
+              </p>
             </div>
-          </div>
+          )}
 
           {/* LISTA DE JUEGOS RECOMENDADOS */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+          <div className="space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <h3 className="text-lg font-extrabold text-slate-200 flex items-center gap-2">
                 <span>Juegos Recomendados</span>
                 <span className="text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full font-bold">
-                  {result.games.length} Títulos
+                  {totalItems} Títulos
                 </span>
               </h3>
+
+              {totalPages > 1 && (
+                <span className="text-xs text-slate-400 font-medium">
+                  Página <strong className="text-purple-400">{currentPage}</strong> de <strong className="text-slate-200">{totalPages}</strong>
+                </span>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {result.games.map((game) => {
+              {paginatedGames.map((game) => {
                 const steamUrl = `https://store.steampowered.com/app/${game.app_id}`;
                 const instantGamingUrl = `https://www.instant-gaming.com/es/buscar/?q=${encodeURIComponent(game.name)}&igr=${INSTANT_GAMING_IGR_ID}`;
                 const g2aUrl = `https://www.g2a.com/search?query=${encodeURIComponent(game.name)}&gname=${G2A_GNAME_ID}`;
@@ -257,7 +293,6 @@ export default function Recomendar() {
                     <div className="pt-2 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">
                       <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Comprar en:</span>
                       <div className="flex flex-wrap items-center gap-2">
-                        {/* Instant Gaming (Afiliado) */}
                         <a
                           href={instantGamingUrl}
                           target="_blank"
@@ -268,7 +303,6 @@ export default function Recomendar() {
                           <span>⚡ Instant Gaming</span>
                         </a>
 
-                        {/* G2A (Afiliado) */}
                         <a
                           href={g2aUrl}
                           target="_blank"
@@ -279,7 +313,6 @@ export default function Recomendar() {
                           <span>🟡 G2A</span>
                         </a>
 
-                        {/* Steam Official Store */}
                         <a
                           href={steamUrl}
                           target="_blank"
@@ -298,6 +331,50 @@ export default function Recomendar() {
                 );
               })}
             </div>
+
+            {/* CONTROLES DE PAGINACIÓN */}
+            {totalPages > 1 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#1e293b]/80">
+                <p className="text-xs text-slate-400">
+                  Mostrando <span className="text-slate-200 font-bold">{startIndex + 1}</span> - <span className="text-slate-200 font-bold">{Math.min(startIndex + itemsPerPage, totalItems)}</span> de <span className="text-purple-400 font-bold">{totalItems}</span> recomendaciones
+                </p>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    className="px-3.5 py-1.5 rounded-xl border border-[#1e293b] bg-[#0a1628] text-xs font-bold text-slate-300 hover:border-purple-500/50 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+                  >
+                    &larr; Anterior
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                        currentPage === pageNum
+                          ? 'bg-purple-600 border-purple-500 text-white shadow-[0_0_10px_rgba(139,92,246,0.4)]'
+                          : 'bg-[#0a1628] border-[#1e293b] text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="px-3.5 py-1.5 rounded-xl border border-[#1e293b] bg-[#0a1628] text-xs font-bold text-slate-300 hover:border-purple-500/50 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+                  >
+                    Siguiente &rarr;
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
