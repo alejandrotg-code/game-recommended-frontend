@@ -93,10 +93,11 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
       onGameSelect({ id: query.trim(), name: `Juego de Steam (ID: ${query.trim()})` });
       setShowDropdown(false);
     } else {
-      if (suggestions.length > 0) {
-        handleSelectSuggestion(suggestions[highlightedIndex >= 0 ? highlightedIndex : 0]);
+      if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
+        handleSelectSuggestion(suggestions[highlightedIndex]);
+      } else if (suggestions.length > 0) {
+        handleSelectSuggestion(suggestions[0]);
       } else {
-        // Error inline, no alert()
         setInputError('Selecciona un juego de las sugerencias, o introduce un ID o URL de Steam directamente.');
         setTimeout(() => setInputError(''), 4000);
       }

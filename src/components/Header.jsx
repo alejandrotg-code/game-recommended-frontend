@@ -17,9 +17,10 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Health check al montar y cada 60 segundos
+  // Health check al montar y cada 60 segundos (solo si la pestaña está activa)
   useEffect(() => {
     const runCheck = async () => {
+      if (document.hidden) return;
       const result = await checkBackendHealth();
       setBackendStatus(result.status);
     };

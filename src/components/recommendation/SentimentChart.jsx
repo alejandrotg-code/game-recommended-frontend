@@ -64,7 +64,7 @@ const SentimentChart = memo(function SentimentChart({
         {/* Recomendación Steam */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-400 font-medium">Recomendación Steam</span>
+            <span className="text-slate-400 font-medium">Aprobación Muestra Steam</span>
             <span className="font-bold text-blue-400">{steamVotedUpPct}% sí</span>
           </div>
           <div className="w-full h-2 bg-slate-950/60 rounded-full overflow-hidden border border-white/5">

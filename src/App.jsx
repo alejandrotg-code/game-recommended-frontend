@@ -83,28 +83,25 @@ function AppContent() {
     const activeLimit = [10, 20, 30].includes(gameLimit) ? gameLimit : 30;
 
     if (gameId) {
-      const isDifferentGame = !selectedGameInfo || selectedGameInfo.id !== gameId;
+      const isDifferentGame = !selectedGameInfo || String(selectedGameInfo.id) !== String(gameId);
       const isDifferentLimit = lastAnalyzedLimitRef.current !== activeLimit;
 
       if (isDifferentGame || isDifferentLimit) {
-        Promise.resolve().then(() => {
-          handleGameSelect({
-            id: gameId,
-            name: gameName || `Juego (ID: ${gameId})`
-          }, activeLimit);
-        });
+        handleGameSelect({
+          id: gameId,
+          name: gameName || `Juego (ID: ${gameId})`
+        }, activeLimit);
       }
     } else {
-      // Si no hay parámetros query en la URL, limpiar el estado
-      if (selectedGameInfo || analysisResult) {
-        Promise.resolve().then(() => {
+      if (selectedGameInfo) {
+        queueMicrotask(() => {
           setSelectedGameInfo(null);
           setAnalysisResult(null);
           setError(null);
         });
       }
     }
-  }, [searchParams, selectedGameInfo, analysisResult, handleGameSelect]);
+  }, [searchParams, selectedGameInfo, handleGameSelect]);
 
   useEffect(() => {
     let interval;
