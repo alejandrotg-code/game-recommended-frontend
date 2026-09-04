@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { getRagRecommendations } from '../services/steamService';
-
-const INSTANT_GAMING_IGR_ID = 'game-recommended';
-const G2A_GNAME_ID = 'gamerecommended';
+import { getInstantGamingUrl, getG2aUrl, getSteamStoreUrl } from '../config/affiliates';
 
 export default function Recomendar() {
   const [query, setQuery] = useState('');
@@ -241,9 +239,9 @@ export default function Recomendar() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {paginatedGames.map((game) => {
-                const steamUrl = `https://store.steampowered.com/app/${game.app_id}`;
-                const instantGamingUrl = `https://www.instant-gaming.com/es/buscar/?q=${encodeURIComponent(game.name)}&igr=${INSTANT_GAMING_IGR_ID}`;
-                const g2aUrl = `https://www.g2a.com/search?query=${encodeURIComponent(game.name)}&gname=${G2A_GNAME_ID}`;
+                const steamUrl = getSteamStoreUrl(game.app_id);
+                const instantGamingUrl = getInstantGamingUrl(game.name, game.app_id);
+                const g2aUrl = getG2aUrl(game.name);
 
                 return (
                   <div 

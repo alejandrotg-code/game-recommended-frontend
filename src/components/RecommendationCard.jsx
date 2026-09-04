@@ -2,17 +2,7 @@ import { useState, memo, useMemo } from 'react';
 import SentimentChart from './recommendation/SentimentChart';
 import TopKeyWords from './recommendation/TopKeyWords';
 import ReviewList from './recommendation/ReviewList';
-
-const INSTANT_GAMING_IGR_ID = 'game-recommended';
-
-const POPULAR_GAMES_LINKS = {
-  '1245620': { ig: 'https://www.instant-gaming.com/es/4822-comprar-elden-ring-pc-juego-steam/' },
-  '1091500': { ig: 'https://www.instant-gaming.com/es/2685-comprar-cyberpunk-2077-pc-juego-gog-com/' },
-  '367520':  { ig: 'https://www.instant-gaming.com/es/2198-comprar-hollow-knight-pc-mac-steam/' },
-  '620':     { ig: 'https://www.instant-gaming.com/es/400-comprar-portal-2-pc-mac-steam/' },
-  '292030':  { ig: 'https://www.instant-gaming.com/es/290-comprar-the-witcher-3-wild-hunt-pc-juego-gog-com/' },
-  '413150':  { ig: 'https://www.instant-gaming.com/es/2179-comprar-stardew-valley-pc-mac-steam/' },
-};
+import { getInstantGamingUrl, getG2aUrl, getSteamStoreUrl } from '../config/affiliates';
 
 const getVerdictConfig = (level) => {
   switch (level) {
@@ -56,7 +46,7 @@ const getVerdictConfig = (level) => {
 };
 
 const SPANISH_STOPWORDS = new Set([
-  'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'este', 'le', 'ya', 'o', 'esta', 'sí', 'porque', 'muy', 'sin', 'sobre', 'también', 'me', 'mi', 'te', 'es', 'son', 'era', 'esta', 'eso', 'esto', 'esta', 'un', 'una', 'unos', 'unas', 'tiene', 'tienen', 'todo', 'todos', 'bien', 'bueno', 'malo', 'juego', 'juegos', 'steam', 'hace', 'hacer', 'puede', 'puedo', 'solo', 'si', 'cuando', 'este', 'esta', 'estos', 'estas', 'ser', 'estar', 'ha', 'han', 'he', 'mas', 'muy', 'nos', 'lo', 'le', 'les', 'por', 'sus', 'para', 'una', 'uno', 'unas', 'unos', 'del', 'al', 'lo', 'la', 'las', 'los', 'un', 'en', 'es', 'mi', 'mis', 'tu', 'tus', 'yo', 'el', 'ella', 'ellos', 'ellas', 'nosotros', 'vosotros', 'como', 'con', 'sin', 'muy', 'tan', 'asi', 'entonces', 'pero', 'porque', 'aunque', 'sino', 'o', 'y', 'e', 'ni', 'que', 'donde', 'cuando', 'como', 'quien', 'cual', 'cuyo', 'donde', 'muy', 'bastante', 'poco', 'mucho', 'demasiado', 'nada', 'todo', 'algo', 'alguno', 'ninguno', 'otro', 'mismo', 'tanto', 'tal', 'cual', 'cada', 'ambos', 'sendos', 'juego', 'jugar', 'jugado', 'jugando', 'reseña', 'reseñas', 'opinion', 'opiniones', 'mas', 'si', 'esta', 'este', 'para', 'como', 'pero', 'bien', 'muy', 'solo', 'hace', 'puede', 'tiene'
+  'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'este', 'le', 'ya', 'o', 'esta', 'sí', 'porque', 'muy', 'sin', 'sobre', 'también', 'me', 'mi', 'te', 'es', 'son', 'era', 'eso', 'esto', 'unos', 'unas', 'tiene', 'tienen', 'todo', 'todos', 'bien', 'bueno', 'malo', 'juego', 'juegos', 'steam', 'hace', 'hacer', 'puede', 'puedo', 'solo', 'si', 'cuando', 'estos', 'estas', 'ser', 'estar', 'ha', 'han', 'he', 'mas', 'nos', 'les', 'mis', 'tu', 'tus', 'yo', 'ella', 'ellos', 'ellas', 'nosotros', 'vosotros', 'tan', 'asi', 'entonces', 'aunque', 'sino', 'e', 'ni', 'donde', 'quien', 'cual', 'cuyo', 'bastante', 'poco', 'mucho', 'demasiado', 'nada', 'algo', 'alguno', 'ninguno', 'otro', 'mismo', 'tanto', 'tal', 'cada', 'ambos', 'sendos', 'jugar', 'jugado', 'jugando', 'reseña', 'reseñas', 'opinion', 'opiniones'
 ]);
 
 function getTopWords(reviews, sentiment, limit = 8) {
@@ -111,11 +101,9 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
     game_details = {}
   } = result;
 
-  const appIdStr = String(result.app_id);
-  const popularLinks = POPULAR_GAMES_LINKS[appIdStr];
-  const instantGamingUrl = popularLinks?.ig
-    ? `${popularLinks.ig}?igr=${INSTANT_GAMING_IGR_ID}`
-    : `https://www.instant-gaming.com/es/busquedas/?query=${encodeURIComponent(gameInfo?.name || '')}&igr=${INSTANT_GAMING_IGR_ID}`;
+  const instantGamingUrl = getInstantGamingUrl(gameInfo?.name, result.app_id);
+  const g2aUrl = getG2aUrl(gameInfo?.name);
+  const steamUrl = getSteamStoreUrl(result.app_id);
 
   const cfg = getVerdictConfig(recommendation_level);
 
@@ -285,7 +273,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
           </a>
 
           <a
-            href="https://www.g2a.com/n/gamerecommended"
+            href={g2aUrl}
             target="_blank"
             rel="noreferrer"
             className="flex items-center justify-between p-4 bg-gradient-to-r from-amber-500/10 to-amber-500/5 hover:from-amber-500/20 hover:to-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-500/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:-translate-y-1 active:scale-98 group"
@@ -303,7 +291,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
           </a>
 
           <a
-            href={`https://store.steampowered.com/app/${result.app_id}`}
+            href={steamUrl}
             target="_blank"
             rel="noreferrer"
             className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600/10 to-blue-600/5 hover:from-blue-600/20 hover:to-blue-600/10 text-blue-400 border border-blue-500/30 hover:border-blue-500/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.15)] hover:shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:-translate-y-1 active:scale-98 group"
