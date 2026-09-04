@@ -8,37 +8,33 @@ const getVerdictConfig = (level) => {
   switch (level) {
     case 'Extremadamente Recomendado':
       return {
-        bg: 'bg-emerald-500/8 border-emerald-500/25',
+        bg: 'bg-emerald-500/10 border-emerald-500/30',
         text: 'text-emerald-400',
-        glow: 'shadow-[0_0_60px_-10px_rgba(16,185,129,0.3)]',
-        badge: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+        badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
         icon: '🏆',
         barColor: '#10b981',
       };
     case 'Recomendado':
       return {
-        bg: 'bg-blue-500/8 border-blue-500/25',
+        bg: 'bg-blue-500/10 border-blue-500/30',
         text: 'text-blue-400',
-        glow: 'shadow-[0_0_60px_-10px_rgba(59,130,246,0.3)]',
-        badge: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+        badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
         icon: '👍',
         barColor: '#3b82f6',
       };
     case 'Mixto':
       return {
-        bg: 'bg-amber-500/8 border-amber-500/25',
+        bg: 'bg-amber-500/10 border-amber-500/30',
         text: 'text-amber-400',
-        glow: 'shadow-[0_0_60px_-10px_rgba(245,158,11,0.25)]',
-        badge: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+        badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
         icon: '⚖️',
         barColor: '#f59e0b',
       };
     default:
       return {
-        bg: 'bg-rose-500/8 border-rose-500/25',
+        bg: 'bg-rose-500/10 border-rose-500/30',
         text: 'text-rose-400',
-        glow: 'shadow-[0_0_60px_-10px_rgba(244,63,94,0.3)]',
-        badge: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+        badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
         icon: '👎',
         barColor: '#f43f5e',
       };
@@ -108,117 +104,94 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
   const cfg = getVerdictConfig(recommendation_level);
 
   return (
-    <div className="w-full space-y-5 sm:space-y-6 animate-fade-up mt-4">
+    <div className="w-full space-y-5 animate-fade-up mt-2">
       {/* ── 1. CARD PRINCIPAL ── */}
-      <div className={`w-full bg-[#0a1628]/80 border rounded-2xl sm:rounded-3xl overflow-hidden ${cfg.bg} ${cfg.glow} transition-all duration-300`}>
+      <div className={`tactical-card overflow-hidden border ${cfg.bg}`}>
         {/* Banner de Portada */}
         {gameInfo?.image ? (
-          <div className="relative w-full h-32 sm:h-44 overflow-hidden">
+          <div className="relative w-full h-36 sm:h-44 overflow-hidden border-b border-[#1b2434]">
             <img
               src={gameInfo.image}
               alt={gameInfo.name || 'Juego'}
-              className="w-full h-full object-cover scale-105"
-              style={{ filter: 'blur(1px) brightness(0.5)' }}
+              className="w-full h-full object-cover brightness-[0.45]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/60 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex items-end justify-between gap-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0f1520] via-[#0f1520]/50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex items-end justify-between gap-4">
               <div className="flex items-center gap-3">
                 <img
                   src={gameInfo.image}
                   alt={gameInfo.name}
-                  className="w-16 h-10 sm:w-20 sm:h-12 object-cover rounded-xl border-2 border-white/20 shadow-xl shrink-0"
+                  className="w-16 h-10 sm:w-20 sm:h-12 object-cover rounded-lg border border-white/20 shadow-md shrink-0"
                 />
                 <div>
-                  <h2 className="text-lg sm:text-2xl font-extrabold text-white drop-shadow-lg leading-tight">
+                  <h2 className="text-base sm:text-xl font-extrabold text-white leading-tight">
                     {gameInfo?.name || 'Juego Analizado'}
                   </h2>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {gameInfo?.price && (
-                      <span className="text-[10px] bg-black/40 text-slate-200 border border-white/10 px-2 py-0.5 rounded-md font-semibold backdrop-blur-sm">
+                      <span className="text-[10px] bg-[#080b11] text-slate-200 border border-[#1b2434] px-2 py-0.5 rounded font-semibold">
                         {gameInfo.price}
                       </span>
                     )}
                     {gameInfo?.metascore && gameInfo.metascore !== 'N/A' && (
-                      <span className="text-[10px] bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-2 py-0.5 rounded-md font-semibold backdrop-blur-sm">
+                      <span className="text-[10px] bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-bold">
                         Metascore: {gameInfo.metascore}
                       </span>
                     )}
-                    <span className="text-[10px] bg-black/40 text-slate-400 border border-white/10 px-2 py-0.5 rounded-md font-mono backdrop-blur-sm">
-                      ID: {result.app_id}
+                    <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-2 py-0.5 rounded font-mono">
+                      AppID: {result.app_id}
                     </span>
                   </div>
 
                   {game_details && (
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-[10px] text-slate-400">
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5 text-[10px] text-slate-400">
                       {game_details.developer && (
-                        <span>Desarrollador: <strong className="text-slate-200">{game_details.developer}</strong></span>
+                        <span>Dev: <strong className="text-slate-200">{game_details.developer}</strong></span>
                       )}
                       {game_details.release_date && (
-                        <span>Lanzamiento: <strong className="text-slate-200">{game_details.release_date}</strong></span>
+                        <span>Fecha: <strong className="text-slate-200">{game_details.release_date}</strong></span>
                       )}
-                    </div>
-                  )}
-
-                  {game_details?.genres && game_details.genres.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {game_details.genres.map(g => (
-                        <span key={g} className="text-[8px] bg-white/5 border border-white/10 text-slate-300 px-1.5 py-0.5 rounded-md font-medium tracking-wide">
-                          {g.toUpperCase()}
-                        </span>
-                      ))}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="text-right shrink-0 flex flex-col items-end gap-2">
-                <div className="text-2xl">{cfg.icon}</div>
-                <span className={`text-xs font-bold px-3 py-1.5 rounded-xl border ${cfg.badge}`}>
-                  {recommendation_level}
+              <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
+                <span className={`text-xs font-bold px-2.5 py-1 rounded border ${cfg.badge}`}>
+                  {cfg.icon} {recommendation_level}
                 </span>
                 <button
                   type="button"
                   onClick={handleShareLink}
-                  className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 hover:text-slate-100 bg-black/30 hover:bg-black/50 border border-white/10 hover:border-white/20 px-2.5 py-1.5 rounded-xl transition-all backdrop-blur-sm cursor-pointer"
+                  className="flex items-center gap-1 text-[10px] font-semibold text-slate-300 hover:text-white bg-[#080b11]/80 border border-[#1b2434] px-2.5 py-1 rounded transition-all cursor-pointer btn-tactical"
                 >
                   {copied ? (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="size-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-emerald-400">¡Copiado!</span>
-                    </>
+                    <span className="text-emerald-400 font-bold">¡Copiado!</span>
                   ) : (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                      </svg>
-                      Compartir
-                    </>
+                    <span>Compartir</span>
                   )}
                 </button>
               </div>
             </div>
           </div>
         ) : (
-          <div className="p-4 sm:p-6 flex items-center justify-between border-b border-white/5">
+          <div className="p-4 sm:p-5 flex items-center justify-between border-b border-[#1b2434]">
             <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-white">{gameInfo?.name || 'Juego Analizado'}</h2>
+              <h2 className="text-lg sm:text-xl font-extrabold text-white">{gameInfo?.name || 'Juego Analizado'}</h2>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {gameInfo?.price && (
-                  <span className="text-[10px] bg-slate-800 text-slate-300 border border-slate-700 px-2 py-0.5 rounded-md font-semibold">{gameInfo.price}</span>
+                  <span className="text-[10px] bg-[#080b11] text-slate-300 border border-[#1b2434] px-2 py-0.5 rounded font-semibold">{gameInfo.price}</span>
                 )}
-                <span className="text-[10px] bg-slate-800 text-slate-500 border border-slate-700 px-2 py-0.5 rounded-md font-mono">ID: {result.app_id}</span>
+                <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-2 py-0.5 rounded font-mono">AppID: {result.app_id}</span>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-2xl mb-1">{cfg.icon}</div>
-              <span className={`text-xs font-bold px-3 py-1.5 rounded-xl border ${cfg.badge}`}>{recommendation_level}</span>
+              <span className={`text-xs font-bold px-2.5 py-1 rounded border ${cfg.badge}`}>{cfg.icon} {recommendation_level}</span>
             </div>
           </div>
         )}
 
-        {/* Componente Gráfico y Estadísticas */}
+        {/* Gráfico y Estadísticas */}
         <SentimentChart
           sentimentStats={sentiment_stats}
           totalReviewsAnalyzed={total_reviews_analyzed}
@@ -229,7 +202,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
           verdictConfig={cfg}
         />
 
-        {/* Componente Conceptos Destacados */}
+        {/* Conceptos Destacados */}
         <TopKeyWords
           topPositiveWords={topPositiveWords}
           topNegativeWords={topNegativeWords}
@@ -244,31 +217,30 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
       />
 
       {/* ── 3. COMPARADOR DE PRECIOS ── */}
-      <div className="glass-panel p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
-        <div className="flex items-center gap-2">
-          <span className="text-base">🛒</span>
-          <h4 className="text-sm font-extrabold text-slate-200">¿Interesado en comprarlo? Comparador de Precios</h4>
-          <span className="ml-auto text-[10px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2.5 py-0.5 rounded-full font-bold">
-            Afiliado Oficial
+      <div className="tactical-card p-4 sm:p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Tiendas y Precios Digitales</h4>
+          <span className="text-[10px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-semibold">
+            Enlaces Verificados
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <a
             href={instantGamingUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-4 bg-gradient-to-r from-[#ff5400]/10 to-[#ff5400]/5 hover:from-[#ff5400]/20 hover:to-[#ff5400]/10 text-[#ff8340] border border-[#ff5400]/30 hover:border-[#ff5400]/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(255,84,0,0.15)] hover:shadow-[0_0_30px_rgba(255,84,0,0.3)] hover:-translate-y-1 active:scale-98 group"
+            className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-orange-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl group-hover:scale-125 transition-transform duration-300">🔥</span>
+            <div className="flex items-center gap-2">
+              <span className="text-orange-400">⚡</span>
               <div>
-                <div className="font-extrabold text-white text-sm">Instant Gaming</div>
-                <div className="text-[10px] text-[#ff8340] font-semibold">Mejor precio digital</div>
+                <div className="text-slate-100 font-bold">Instant Gaming</div>
+                <div className="text-[10px] text-slate-500 font-normal">Claves de Steam</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-slate-500 group-hover:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
 
@@ -276,17 +248,17 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href={g2aUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-4 bg-gradient-to-r from-amber-500/10 to-amber-500/5 hover:from-amber-500/20 hover:to-amber-500/10 text-amber-400 border border-amber-500/30 hover:border-amber-500/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.15)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] hover:-translate-y-1 active:scale-98 group"
+            className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-amber-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl group-hover:scale-125 transition-transform duration-300">🎮</span>
+            <div className="flex items-center gap-2">
+              <span className="text-amber-400">🟡</span>
               <div>
-                <div className="font-extrabold text-white text-sm">G2A Marketplace</div>
-                <div className="text-[10px] text-amber-400 font-semibold">Descuentos globales</div>
+                <div className="text-slate-100 font-bold">G2A Marketplace</div>
+                <div className="text-[10px] text-slate-500 font-normal">Ofertas Globales</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
 
@@ -294,35 +266,28 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href={steamUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600/10 to-blue-600/5 hover:from-blue-600/20 hover:to-blue-600/10 text-blue-400 border border-blue-500/30 hover:border-blue-500/60 rounded-2xl font-bold text-xs transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.15)] hover:shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:-translate-y-1 active:scale-98 group"
+            className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-blue-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
           >
-            <div className="flex items-center gap-2.5">
-              <span className="text-xl group-hover:scale-125 transition-transform duration-300">⚓</span>
+            <div className="flex items-center gap-2">
+              <span className="text-blue-400">🎮</span>
               <div>
-                <div className="font-extrabold text-white text-sm">Tienda Steam</div>
-                <div className="text-[10px] text-blue-400 font-semibold">Precio oficial directo</div>
+                <div className="text-slate-100 font-bold">Tienda Steam</div>
+                <div className="text-[10px] text-slate-500 font-normal">Precio Oficial</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
         </div>
-
-        <p className="text-[10px] text-slate-500 text-center leading-relaxed font-medium">
-          💡 Comprando a través de estos enlaces apoyas el mantenimiento de la plataforma sin pagar un céntimo más.
-        </p>
       </div>
 
       {/* ── 4. BADGE DE GITHUB ── */}
-      <div className="bg-[#0a1628]/60 border border-[#1e293b]/80 p-5 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
-        <div className="flex items-center gap-2">
-          <span className="text-base">🛡️</span>
-          <h4 className="text-sm font-bold text-slate-200">Embeber Badge en tu GitHub</h4>
-        </div>
+      <div className="tactical-card p-4 space-y-3">
+        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Badge Dinámico de Veredicto</h4>
         
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <div className="bg-[#030712] border border-[#1e293b]/60 px-4 py-3.5 rounded-xl flex items-center justify-center shrink-0">
+        <div className="flex flex-col sm:flex-row gap-3 items-center">
+          <div className="bg-[#080b11] border border-[#1b2434] px-3 py-2 rounded flex items-center justify-center shrink-0">
             <img
               src={`${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge`}
               alt="Steam IA Badge"
@@ -335,7 +300,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               type="text"
               readOnly
               value={`[![Steam IA](${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge)](https://store.steampowered.com/app/${result.app_id})`}
-              className="flex-1 bg-slate-950/60 border border-[#1e293b] px-3 py-2 rounded-xl text-xs font-mono text-slate-300 outline-none select-all"
+              className="flex-1 bg-[#080b11] border border-[#1b2434] px-3 py-1.5 rounded text-xs font-mono text-slate-300 outline-none select-all"
             />
             <button
               onClick={() => {
@@ -345,7 +310,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                   setTimeout(() => setBadgeCopied(false), 2000);
                 });
               }}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0"
+              className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition-all cursor-pointer shrink-0 btn-tactical"
             >
               {badgeCopied ? '¡Copiado!' : 'Copiar Markdown'}
             </button>

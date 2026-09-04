@@ -44,7 +44,7 @@ export async function analyzeGame(gameId, limit = 30, signal) {
 
 
 /**
- * Obtiene recomendaciones inteligentes RAG + Groq + Qdrant basadas en lenguaje natural.
+ * Obtiene recomendaciones inteligentes RAG + Groq basadas en lenguaje natural.
  * @param {string} query Consulta o estado de ánimo del usuario en español.
  * @param {number} topK Cantidad de juegos a devolver.
  * @param {AbortSignal} [signal] Señal de cancelación.

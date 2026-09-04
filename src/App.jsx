@@ -30,13 +30,13 @@ function AppContent() {
 
   const loadingTexts = [
     "Conectando con los servidores de Steam...",
-    "Buscando reseñas escritas en español...",
+    "Buscando opiniones escritas en español...",
     "Descargando las opiniones más recientes...",
-    "Limpiando el texto de ruido (hashtags, emojis)...",
-    "Enviando reseñas al modelo Naive Bayes...",
+    "Limpiando el texto de ruido y caracteres nulos...",
+    "Procesando con el clasificador de Inteligencia IA...",
     "Clasificando cada opinión como Positiva o Negativa...",
-    "Comparando con la valoración oficial de Steam...",
-    "Generando informe interactivo...",
+    "Comparando con la valoración de la muestra...",
+    "Generando el informe interactivo...",
   ];
 
   const handleGameSelect = useCallback(async (game, customLimit = limit) => {
@@ -108,7 +108,7 @@ function AppContent() {
     if (isLoading) {
       interval = setInterval(() => {
         setLoadingStep((prev) => (prev + 1) % loadingTexts.length);
-      }, 2000);
+      }, 1800);
     }
     return () => clearInterval(interval);
   }, [isLoading, loadingTexts.length]);
@@ -120,63 +120,41 @@ function AppContent() {
   }, [isLoading, analysisResult]);
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden">
+    <div className="min-h-screen bg-[#080b11] text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden">
       <Header />
 
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 flex-1 flex flex-col">
+      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 flex-1 flex flex-col">
         <Routes>
           {/* RUTA INICIO */}
           <Route path="/" element={
             <>
               {/* HERO */}
-              <div className="relative pt-12 sm:pt-20 pb-8 sm:pb-12 text-center">
-                {/* Blobs de luz ambiental en el fondo */}
-                <div className="blob-cyan" />
-                <div className="blob-violet" />
-                <div className="blob-blue" />
-
-                {/* Badge de estado */}
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-emerald-500/10 border border-blue-500/25 text-blue-300 text-[11px] font-bold px-4 py-1.5 rounded-full mb-6 animate-fade-up shadow-[0_0_20px_rgba(37,99,235,0.25)] backdrop-blur-md">
-                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                  <span>Machine Learning & NLP · Motor de Inteligencia IA</span>
+              <div className="relative pt-10 sm:pt-16 pb-6 text-center">
+                {/* Badge de estado táctico */}
+                <div className="inline-flex items-center gap-2 bg-[#0f1520] border border-[#1b2434] text-slate-300 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-5 animate-fade-up shadow-sm">
+                  <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                  <span className="tracking-wide">Motor NLP & Análisis de Sentimiento para Steam</span>
                 </div>
 
                 {/* Título Principal */}
-                <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight mb-5 animate-fade-up leading-[1.1]" style={{ animationDelay: '60ms' }}>
-                  <span className="text-white">Decodifica la </span>
-                  <span className="text-blue-400">Opinión Real</span>
-                  <br />
-                  <span className="text-slate-200">de la Comunidad de Steam</span>
+                <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 animate-fade-up leading-[1.15] text-slate-100" style={{ animationDelay: '50ms' }}>
+                  Decodifica la Opinión Real de la <span className="text-blue-500">Comunidad de Steam</span>
                 </h1>
 
                 {/* Subtítulo */}
-                <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed mb-8 animate-fade-up font-normal" style={{ animationDelay: '120ms' }}>
-                  Analizamos quirúrgicamente miles de opiniones en <span className="text-blue-400 font-bold">español</span> utilizando IA para predecir si un juego verdaderamente merece tu tiempo y dinero.
+                <p className="text-sm sm:text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8 animate-fade-up font-normal" style={{ animationDelay: '100ms' }}>
+                  Analizamos quirúrgicamente las opiniones más recientes en <strong className="text-slate-200">español</strong> con modelos de Inteligencia IA para determinar si un juego realmente merece tu tiempo.
                 </p>
 
-                {/* Chips de tecnología */}
-                <div className="flex items-center justify-center flex-wrap gap-2.5 mb-10 animate-fade-up" style={{ animationDelay: '180ms' }}>
-                  {[
-                    { label: 'Naive Bayes & Keras', color: 'border-blue-500/20 text-blue-300 bg-blue-500/5' },
-                    { label: 'FastAPI Async Engine', color: 'border-emerald-500/20 text-emerald-300 bg-emerald-500/5' },
-                    { label: 'Steam Web API', color: 'border-violet-500/20 text-violet-300 bg-violet-500/5' },
-                    { label: 'TF-IDF NLP Vectorizer', color: 'border-amber-500/20 text-amber-300 bg-amber-500/5' }
-                  ].map(({ label, color }) => (
-                    <span key={label} className={`text-[11px] font-bold border px-3.5 py-1.5 rounded-full backdrop-blur-sm shadow-sm transition-all duration-300 hover:scale-105 ${color}`}>
-                      {label}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Buscador */}
-                <div className="w-full max-w-3xl mx-auto animate-fade-up relative z-[100]" style={{ animationDelay: '240ms' }}>
+                {/* Buscador de Juego */}
+                <div className="w-full max-w-2xl mx-auto animate-fade-up relative z-[100]" style={{ animationDelay: '150ms' }}>
                   <GameSearch onGameSelect={(game) => handleGameSelect(game, limit)} isLoading={isLoading} />
                 </div>
 
                 {/* Selector de cantidad de reseñas */}
-                <div className="flex items-center justify-center gap-3 mt-4 text-xs text-slate-400 animate-fade-up relative z-[90]" style={{ animationDelay: '270ms' }}>
-                  <span>Analizar últimas reseñas:</span>
-                  <div className="flex bg-[#0a1628]/85 border border-[#1e293b] p-1 rounded-xl">
+                <div className="flex items-center justify-center gap-3 mt-4 text-xs text-slate-400 animate-fade-up relative z-[90]" style={{ animationDelay: '200ms' }}>
+                  <span className="font-medium text-slate-500">Muestra a analizar:</span>
+                  <div className="flex bg-[#0f1520] border border-[#1b2434] p-1 rounded-lg">
                     {[10, 20, 30].map((num) => (
                       <button
                         key={num}
@@ -188,13 +166,13 @@ function AppContent() {
                             limit: num.toString()
                           });
                         }}
-                        className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                        className={`px-3 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
                           limit === num
                             ? 'bg-blue-600 text-white shadow-sm'
                             : 'text-slate-400 hover:text-slate-200'
                         }`}
                       >
-                        {num}
+                        {num} reseñas
                       </button>
                     ))}
                   </div>
@@ -203,50 +181,47 @@ function AppContent() {
 
               {/* ERROR */}
               {error && (
-                <div className="w-full bg-rose-500/8 border border-rose-500/25 p-4 sm:p-5 rounded-2xl text-rose-400 text-sm flex gap-3 items-start animate-fade-up">
+                <div className="w-full bg-rose-500/10 border border-rose-500/30 p-4 rounded-xl text-rose-400 text-sm flex gap-3 items-start animate-fade-up my-4">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                   <div>
-                    <h4 className="font-bold text-rose-300 mb-0.5">Error al analizar</h4>
-                    <p className="opacity-85 leading-relaxed">{error}</p>
+                    <h4 className="font-bold text-rose-300 mb-0.5">Error en el análisis</h4>
+                    <p className="opacity-90 leading-relaxed text-xs sm:text-sm">{error}</p>
                   </div>
                 </div>
               )}
 
               {/* CARGANDO */}
               {isLoading && (
-                <div className="w-full py-12 flex flex-col items-center justify-center space-y-8 animate-fade-in">
+                <div className="w-full py-12 flex flex-col items-center justify-center space-y-6 animate-fade-in">
                   <div className="relative flex items-center justify-center">
-                    <div className="w-14 h-14 border-[3px] border-blue-600/20 border-t-blue-500 rounded-full animate-spin" />
-                    <div className="absolute w-20 h-20 border border-blue-600/10 rounded-full animate-ping opacity-30" />
-                    <div className="absolute w-8 h-8 bg-blue-600/20 rounded-full blur-md" />
+                    <div className="w-12 h-12 border-2 border-blue-600/30 border-t-blue-500 rounded-full animate-spin" />
                   </div>
 
-                  <div className="text-center space-y-2 max-w-sm">
-                    <p className="text-base font-bold text-slate-100">{loadingTexts[loadingStep]}</p>
-                    <p className="text-xs text-slate-600">Esto puede tardar unos segundos con los servidores de Steam...</p>
+                  <div className="text-center space-y-1.5 max-w-sm">
+                    <p className="text-sm font-bold text-slate-200">{loadingTexts[loadingStep]}</p>
+                    <p className="text-xs text-slate-500">Procesando datos en tiempo real desde Steam...</p>
                   </div>
 
-                  <div className="w-full max-w-xs bg-slate-900 border border-[#1e293b] rounded-full h-1 overflow-hidden">
+                  <div className="w-full max-w-xs bg-[#0f1520] border border-[#1b2434] rounded-full h-1 overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full transition-all duration-[2000ms] ease-linear"
+                      className="h-full bg-blue-500 rounded-full transition-all duration-[1800ms] ease-linear"
                       style={{ width: `${((loadingStep + 1) / loadingTexts.length) * 100}%` }}
                     />
                   </div>
 
-                  <div className="w-full max-w-2xl space-y-3">
-                    <div className="bg-[#0a1628]/60 border border-[#1e293b]/60 p-5 rounded-2xl space-y-4">
-                      <div className="flex gap-4">
-                        <div className="w-24 h-14 rounded-xl animate-shimmer shrink-0" />
-                        <div className="flex-1 space-y-2.5 pt-1">
-                          <div className="h-4 w-3/4 rounded-full animate-shimmer" />
-                          <div className="h-3 w-1/2 rounded-full animate-shimmer" />
+                  <div className="w-full max-w-2xl space-y-3 pt-2">
+                    <div className="tactical-card p-5 space-y-3">
+                      <div className="flex gap-4 items-center">
+                        <div className="w-20 h-12 rounded-lg animate-shimmer shrink-0" />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-4 w-2/3 rounded animate-shimmer" />
+                          <div className="h-3 w-1/3 rounded animate-shimmer" />
                         </div>
                       </div>
-                      <div className="h-2.5 w-full rounded-full animate-shimmer mt-2" />
-                      <div className="h-2.5 w-5/6 rounded-full animate-shimmer" />
-                      <div className="h-2.5 w-4/6 rounded-full animate-shimmer" />
+                      <div className="h-2 w-full rounded animate-shimmer mt-2" />
+                      <div className="h-2 w-5/6 rounded animate-shimmer" />
                     </div>
                   </div>
                 </div>
@@ -261,17 +236,17 @@ function AppContent() {
 
               {/* ESTADO VACÍO INICIAL */}
               {!isLoading && !analysisResult && !error && (
-                <div className="text-center py-12 sm:py-16 px-6 border border-dashed border-[#1e293b]/70 rounded-3xl bg-white/[0.01] max-w-xl mx-auto w-full animate-fade-up" style={{ animationDelay: '300ms' }}>
-                  <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="size-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <div className="text-center py-10 px-6 border border-dashed border-[#1b2434] rounded-2xl bg-[#0f1520]/40 max-w-lg mx-auto w-full animate-fade-up my-4" style={{ animationDelay: '250ms' }}>
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-300 mb-2">Listo para analizar</h3>
-                  <p className="text-xs text-slate-600 max-w-xs mx-auto leading-relaxed">
-                    Busca por nombre, pega el ID de Steam o la URL completa de la tienda
+                  <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Empieza a analizar</h3>
+                  <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed mb-4">
+                    Escribe el título de cualquier videojuego, introduce su AppID o pega la URL de la tienda
                   </p>
-                  <div className="flex flex-wrap justify-center gap-2 mt-5">
+                  <div className="flex flex-wrap justify-center gap-2">
                     {[
                       { name: 'Elden Ring', id: '1245620' },
                       { name: 'Stardew Valley', id: '413150' },
@@ -279,8 +254,9 @@ function AppContent() {
                     ].map((game) => (
                       <button
                         key={game.id}
+                        type="button"
                         onClick={() => handleGameSelect(game)}
-                        className="text-[11px] font-medium text-slate-500 border border-[#1e293b] hover:border-blue-500/40 hover:text-blue-400 bg-white/[0.02] px-3 py-1.5 rounded-full transition-all cursor-pointer"
+                        className="text-xs font-semibold text-slate-400 border border-[#1b2434] hover:border-blue-500/40 hover:text-blue-400 bg-[#0f1520] px-3 py-1 rounded-lg transition-all cursor-pointer btn-tactical"
                       >
                         {game.name}
                       </button>
@@ -296,7 +272,7 @@ function AppContent() {
 
           {/* RUTA CÓMO FUNCIONA */}
           <Route path="/como-funciona" element={
-            <div className="py-10 sm:py-14">
+            <div className="py-8">
               <HowItWorks />
             </div>
           } />
@@ -306,10 +282,9 @@ function AppContent() {
         </Routes>
       </main>
 
-
-      <footer className="w-full py-8 text-center border-t border-[#1e293b]/60 mt-auto">
-        <p className="text-xs text-slate-600">
-          Game Recommended AI © {new Date().getFullYear()} ·{' '}
+      <footer className="w-full py-6 text-center border-t border-[#1b2434] mt-auto">
+        <p className="text-xs text-slate-500">
+          Game Recommended AI © {new Date().getFullYear()} · Inteligencia para Decidir tus Juegos
         </p>
       </footer>
     </div>

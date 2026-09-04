@@ -1,181 +1,91 @@
 /* ═══════════════════════════════════════════════════════
-   KEYFRAMES — Animaciones del sistema
-═══════════════════════════════════════════════════════ */
+   ANIMACIONES & MICRO-INTERACCIONES MATE PREMIUM
+   ═══════════════════════════════════════════════════════ */
 
-/* Entrada suave con desplazamiento hacia arriba */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Fade simple */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* Shimmer: efecto de brillo que recorre una superficie (skeleton loaders) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-/* Blob de luz difusa que se mueve lentamente en el fondo */
-@keyframes blobFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%       { transform: translate(45px, -30px) scale(1.1); }
-  66%       { transform: translate(-30px, 25px) scale(0.95); }
-}
-
-/* Latido suave para elementos de glow */
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 20px -4px rgba(37, 99, 235, 0.4); }
-  50%       { box-shadow: 0 0 45px 2px rgba(37, 99, 235, 0.75); }
-}
-
-/* Gradiente animado para títulos y badges */
-@keyframes gradientShift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Entrada escalonada para listas */
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* Pulso de punto vivo */
-@keyframes dotBounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
-}
-
 /* ═══════════════════════════════════════════════════════
-   CLASES UTILITARIAS PERSONALIZADAS DE ALTO NIVEL
-═══════════════════════════════════════════════════════ */
+   UTILIDADES & COMPONENTES TÁCTICOS
+   ═══════════════════════════════════════════════════════ */
 
 .animate-fade-up {
-  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.4s ease forwards;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Shimmer para skeleton loaders */
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(30, 41, 59, 0.4) 0%,
-    rgba(51, 65, 85, 0.6) 50%,
-    rgba(30, 41, 59, 0.4) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.8s linear infinite;
-}
-
-/* Blobs de luz ambiental en el fondo */
-.blob-cyan {
-  position: absolute;
-  top: 15%; left: 20%;
-  width: 450px; height: 450px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, transparent 70%);
-  animation: blobFloat 12s ease-in-out infinite;
-  filter: blur(80px);
-  pointer-events: none;
-}
-
-.blob-violet {
-  position: absolute;
-  top: 40%; right: 15%;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
-  animation: blobFloat 15s ease-in-out infinite reverse;
-  filter: blur(90px);
-  pointer-events: none;
-}
-
-.blob-blue {
-  position: absolute;
-  top: 70%; left: 30%;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
-  animation: blobFloat 10s ease-in-out infinite;
-  filter: blur(85px);
-  pointer-events: none;
-}
-
-/* Texto con gradiente de alto contraste para modo oscuro */
-.gradient-title {
-  background: linear-gradient(135deg, #ffffff 0%, #60a5fa 45%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #60a5fa;
-}
-
-.gradient-subtitle {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #38bdf8;
-}
-
-/* Paneles glassmorphism ultra elegantes */
-.glass-panel {
-  background: rgba(10, 22, 40, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.glass-panel-hover {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-panel-hover:hover {
-  transform: translateY(-2px);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 25px 60px -10px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-/* Scrollbar personalizado oscuro */
-.custom-scrollbar::-webkit-scrollbar { width: 5px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.4); border-radius: 9999px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(30, 41, 59, 0.8); border-radius: 9999px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(37, 99, 235, 0.5); }
-.custom-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(30, 41, 59, 0.8) transparent; }
-
-/* Escala al pulsar botones */
-.active\:scale-98:active { transform: scale(0.98); }
-
-/* Animación de entrada para reseñas */
-.review-item {
-  opacity: 0;
   animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Dots de cargando */
-.loading-dot {
-  display: inline-block;
-  width: 7px; height: 7px;
-  border-radius: 9999px;
-  background: rgba(56, 189, 248, 0.9);
-  animation: dotBounce 1.4s ease-in-out infinite both;
+.animate-fade-in {
+  animation: fadeIn 0.3s ease forwards;
 }
-.loading-dot:nth-child(1) { animation-delay: 0s; }
-.loading-dot:nth-child(2) { animation-delay: 0.16s; }
-.loading-dot:nth-child(3) { animation-delay: 0.32s; }
 
-/* Soporte para motion-reduce */
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(21, 29, 44, 0.6) 0%,
+    rgba(40, 54, 77, 0.5) 50%,
+    rgba(21, 29, 44, 0.6) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Panel Táctil Principal con Glassmorphism Mate */
+.tactical-card {
+  background: rgba(15, 21, 32, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #1b2434;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.tactical-card-interactive {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tactical-card-interactive:hover {
+  border-color: #28364d;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.65);
+}
+
+/* Scrollbar interno */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 21, 32, 0.5); border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #1b2434; border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+.custom-scrollbar { scrollbar-width: thin; scrollbar-color: #1b2434 transparent; }
+
+/* Feedback al presionar botones */
+.btn-tactical {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-tactical:active {
+  transform: scale(0.98);
+}
+
+/* Soporte para accesibilidad motion-reduce */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
