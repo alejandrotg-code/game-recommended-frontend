@@ -1,70 +1,68 @@
-/* Fuente premium de Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @import "tailwindcss";
 
 @theme {
-  --color-brand-bg: #030712;
-  --color-brand-card: #0a1628;
-  --color-brand-card-2: #0f172a;
-  --color-brand-border: #1e293b;
-  --color-brand-border-light: #2d3f55;
-  --color-brand-accent: #2563eb;
-  --color-brand-accent-hover: #1d4ed8;
-  --color-brand-glow: rgba(37, 99, 235, 0.35);
-  --color-brand-glow-soft: rgba(37, 99, 235, 0.12);
+  --color-brand-bg: #080b11;
+  --color-brand-surface: #0f1520;
+  --color-brand-surface-elevated: #151d2c;
+  --color-brand-border: #1b2434;
+  --color-brand-border-highlight: #28364d;
+  --color-brand-accent: #3b82f6;
+  --color-brand-accent-hover: #2563eb;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Base oscura con cuadrícula de puntos sutil como fondo */
+/* Base Táctica Mate */
 html,
 body {
   background-color: var(--color-brand-bg);
-  background-image: radial-gradient(circle, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
-  color: #f8fafc;
+  background-image: radial-gradient(circle, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: #f1f5f9;
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tipografía moderna balanceada */
+/* Tipografía jerarquizada y balanceada */
 h1, h2, h3, h4 {
   text-wrap: balance;
+  letter-spacing: -0.02em;
 }
 
 p {
   text-wrap: pretty;
 }
 
-/* Optimización de rendimiento para listas largas de reseñas */
+/* Optimización de rendimiento para renderizado de listas de reseñas */
 .review-item {
   content-visibility: auto;
-  contain-intrinsic-size: 0 110px;
+  contain-intrinsic-size: 0 100px;
 }
 
-/* Anillos de enfoque accesibles */
+/* Enfoque accesible sin degradar el diseño */
 :focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
-/* Scrollbar global minimalista */
+/* Scrollbar táctil minimalista */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #080b11;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #1b2434;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 99, 235, 0.5);
+  background: #3b82f6;
 }

@@ -5,7 +5,7 @@ const DonutTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const { name, value, fill } = payload[0].payload;
   return (
-    <div className="bg-[#0a1628] border border-[#1e293b] px-3 py-2 rounded-xl text-xs shadow-2xl">
+    <div className="bg-[#080b11] border border-[#1b2434] px-2.5 py-1.5 rounded text-xs shadow-xl">
       <div className="flex items-center gap-1.5">
         <span className="w-2 h-2 rounded-full" style={{ background: fill }} />
         <span className="text-slate-400">{name}:</span>
@@ -30,86 +30,78 @@ const SentimentChart = memo(function SentimentChart({
   ];
 
   return (
-    <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+    <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 border-b border-[#1b2434]">
       {/* Columna izquierda: barras de progreso */}
-      <div className="space-y-5">
-        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-          Aprobación de reseñas en español
+      <div className="space-y-4">
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+          Análisis de la Muestra (Español)
         </h3>
 
         {/* Clasificación IA */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-400 font-medium">Clasificación IA</span>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-semibold">
+            <span className="text-slate-400">Modelo IA (Sentimiento)</span>
             <span className="font-bold text-emerald-400">
               {sentimentStats.positives_pct}% positivo
             </span>
           </div>
-          <div className="w-full h-2.5 bg-slate-950/60 rounded-full overflow-hidden flex border border-white/5">
+          <div className="w-full h-2 bg-[#080b11] rounded overflow-hidden flex border border-[#1b2434]">
             <div
-              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-1000 ease-out"
+              className="h-full bg-emerald-500 transition-all duration-700 ease-out"
               style={{ width: `${sentimentStats.positives_pct}%` }}
             />
             <div
-              className="h-full bg-rose-500/80 transition-all duration-1000 ease-out"
+              className="h-full bg-rose-500 transition-all duration-700 ease-out"
               style={{ width: `${sentimentStats.negatives_pct}%` }}
             />
           </div>
-          <div className="flex justify-between text-[10px] text-slate-600">
+          <div className="flex justify-between text-[10px] text-slate-500 font-mono">
             <span>✓ {positiveCount} positivas</span>
             <span>{negativeCount} negativas ✗</span>
           </div>
         </div>
 
         {/* Recomendación Steam */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-400 font-medium">Aprobación Muestra Steam</span>
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-semibold">
+            <span className="text-slate-400">Aprobación Muestra Steam</span>
             <span className="font-bold text-blue-400">{steamVotedUpPct}% sí</span>
           </div>
-          <div className="w-full h-2 bg-slate-950/60 rounded-full overflow-hidden border border-white/5">
+          <div className="w-full h-2 bg-[#080b11] rounded overflow-hidden border border-[#1b2434]">
             <div
-              className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-1000 ease-out"
+              className="h-full bg-blue-500 transition-all duration-700 ease-out"
               style={{ width: `${steamVotedUpPct}%` }}
             />
           </div>
         </div>
 
-        {/* Resumen */}
-        <div className="bg-slate-950/30 border border-white/5 rounded-xl p-4 text-xs text-slate-400 leading-relaxed">
-          <strong className="text-slate-300">Resumen: </strong>
-          Nuestro modelo leyó individualmente{' '}
-          <span className="text-slate-200 font-semibold">
-            {totalReviewsAnalyzed} reseñas
-          </span>{' '}
-          en español. Las opiniones son mayoritariamente{' '}
-          <span className={`font-semibold ${verdictConfig.text}`}>
+        {/* Resumen táctico */}
+        <div className="bg-[#080b11] border border-[#1b2434] rounded-lg p-3 text-xs text-slate-400 leading-relaxed">
+          <span className="text-slate-300 font-bold">Diagnóstico: </span>
+          Analizadas <strong className="text-slate-200">{totalReviewsAnalyzed} reseñas</strong> en español. El sentimiento general es mayoritariamente{' '}
+          <span className={`font-bold ${verdictConfig.text}`}>
             {sentimentStats.positives_pct >= 50 ? 'favorables' : 'críticas'}
           </span>
-          , resultando en un veredicto de{' '}
-          <span className={`font-bold ${verdictConfig.text}`}>
-            {recommendationLevel}
-          </span>
-          .
+          , determinando un veredicto de <strong className={verdictConfig.text}>{recommendationLevel}</strong>.
         </div>
       </div>
 
       {/* Columna derecha: donut chart + contadores */}
-      <div className="flex flex-col items-center gap-4">
-        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest w-full text-center">
-          Distribución del sentimiento
+      <div className="flex flex-col items-center gap-3">
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider w-full text-center">
+          Distribución de Votos
         </h3>
 
-        {/* Gráfico donut */}
-        <div className="relative w-full" style={{ height: 160 }}>
+        {/* Gráfico Donut */}
+        <div className="relative w-full" style={{ height: 140 }}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={donutData}
                 cx="50%"
                 cy="50%"
-                innerRadius={48}
-                outerRadius={72}
+                innerRadius={42}
+                outerRadius={62}
                 paddingAngle={3}
                 dataKey="value"
                 strokeWidth={0}
@@ -121,48 +113,35 @@ const SentimentChart = memo(function SentimentChart({
               <Tooltip content={<DonutTooltip />} />
             </PieChart>
           </ResponsiveContainer>
-          {/* Texto central del donut */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-2xl font-black text-emerald-400">
+            <span className="text-xl font-extrabold text-emerald-400 font-mono">
               {sentimentStats.positives_pct}%
             </span>
-            <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">
+            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
               positivas
             </span>
           </div>
         </div>
 
-        {/* Leyenda */}
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-            <span className="text-slate-400">Positivas</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-            <span className="text-slate-400">Negativas</span>
-          </div>
-        </div>
-
-        {/* Contadores */}
+        {/* Contadores Tácticos */}
         <div className="grid grid-cols-3 gap-2 w-full">
-          <div className="bg-slate-950/40 p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-xl font-black text-slate-100">
+          <div className="bg-[#080b11] p-2.5 rounded border border-[#1b2434] text-center">
+            <span className="text-base font-extrabold text-slate-100 font-mono">
               {totalReviewsAnalyzed}
             </span>
-            <p className="text-[10px] text-slate-500 font-medium mt-0.5">Total</p>
+            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Total</p>
           </div>
-          <div className="bg-emerald-500/5 p-3 rounded-xl border border-emerald-500/15 text-center">
-            <span className="text-xl font-black text-emerald-400">
+          <div className="bg-[#080b11] p-2.5 rounded border border-emerald-500/20 text-center">
+            <span className="text-base font-extrabold text-emerald-400 font-mono">
               {positiveCount}
             </span>
-            <p className="text-[10px] text-slate-500 font-medium mt-0.5">Positivas</p>
+            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Positivas</p>
           </div>
-          <div className="bg-rose-500/5 p-3 rounded-xl border border-rose-500/15 text-center">
-            <span className="text-xl font-black text-rose-400">
+          <div className="bg-[#080b11] p-2.5 rounded border border-rose-500/20 text-center">
+            <span className="text-base font-extrabold text-rose-400 font-mono">
               {negativeCount}
             </span>
-            <p className="text-[10px] text-slate-500 font-medium mt-0.5">Negativas</p>
+            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Negativas</p>
           </div>
         </div>
       </div>
