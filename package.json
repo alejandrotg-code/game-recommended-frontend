@@ -11,6 +11,11 @@
     "test:run": "vitest run",
     "preview": "vite preview"
   },
+  "pnpm": {
+    "overrides": {
+      "nanoid": ">=3.3.18"
+    }
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "react": "^19.2.8",
