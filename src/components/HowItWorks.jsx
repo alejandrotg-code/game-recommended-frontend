@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   HelpCircle,
   Zap,
+  ShieldCheck,
 } from 'lucide-react';
 import SeoHead from './SeoHead';
 import { getBreadcrumbJsonLd, getFaqJsonLd } from '../services/seo/seoService';
@@ -69,6 +70,16 @@ const faqs = [
     question: '¿Con qué frecuencia se actualiza la información?',
     answer:
       'Las consultas extraen las opiniones más recientes directamente de la API de Steam en tiempo real, respaldadas por un sistema de caché de 30 minutos para maximizar el rendimiento.',
+  },
+  {
+    question: '¿Se recopilan mis datos personales al navegar o buscar en la web?',
+    answer:
+      'No. Este sitio web no recopila, almacena ni procesa ningún dato personal. No existen cuentas de usuario, formularios de registro ni cookies de seguimiento o analítica de terceros.',
+  },
+  {
+    question: '¿Cómo funcionan los enlaces a tiendas de videojuegos (Instant Gaming, G2A)?',
+    answer:
+      'Los enlaces a tiendas digitales contienen parámetros de afiliación (conforme al Art. 20 de la LSSI-CE). Si decides comprar un juego a través de estos enlaces, el proyecto puede recibir una comisión de afiliado que contribuye al mantenimiento del servicio sin coste adicional para ti.',
   },
   {
     question: '¿Cómo puedo incluir el badge del veredicto en mi GitHub README?',
@@ -180,6 +191,28 @@ export default function HowItWorks() {
                 </p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* SECCIÓN AVISO LEGAL Y TRANSPARENCIA */}
+        <section id="aviso-legal" className="bg-[#111726] border border-[#1e2d4a] rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="size-6 text-emerald-400 shrink-0" />
+            <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-wider">
+              Aviso Legal, Transparencia & Exención de Responsabilidad
+            </h3>
+          </div>
+
+          <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+            <p>
+              <strong className="text-white font-bold">1. Ausencia de Tratamiento de Datos Personales:</strong> Este sitio web opera únicamente como una herramienta de consulta pública. No solicitamos, almacenamos ni procesamos ningún dato personal de los usuarios. No existen formularios de registro, inicio de sesión ni cookies de seguimiento o analíticas de terceros.
+            </p>
+            <p>
+              <strong className="text-white font-bold">2. Enlaces de Afiliación (LSSI-CE Art. 20):</strong> Algunos enlaces salientes hacia plataformas externas (Instant Gaming y G2A) incorporan identificadores de afiliado. Si el usuario decide realizar una compra tras acceder desde esta web, este servicio puede percibir una comisión sin coste adicional para el comprador, destinada al sostenimiento de la infraestructura de servidores de Inteligencia Artificial.
+            </p>
+            <p>
+              <strong className="text-white font-bold">3. Precios y Veredictos de IA:</strong> Las valoraciones y resúmenes son estimaciones automatizadas generadas por algoritmos NLP a partir de opiniones públicas de Steam. Los precios mostrados de tiendas de terceros son únicamente orientativos y pueden sufrir variaciones en el proceso de compra final.
+            </p>
           </div>
         </section>
       </div>
