@@ -1,7 +1,19 @@
 import { useState, memo, useMemo } from 'react';
-import { ThumbsUp, ThumbsDown, MessageSquare, Clock, Sparkles } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, MessageSquare, Clock, Sparkles, Calendar } from 'lucide-react';
 
 const CHAR_LIMIT = 280;
+
+function formatReviewDate(rawTimestamp) {
+  if (!rawTimestamp) return null;
+  const timestamp = typeof rawTimestamp === 'number' && rawTimestamp < 1e11 ? rawTimestamp * 1000 : rawTimestamp;
+  const date = new Date(timestamp);
+  if (isNaN(date.getTime())) return null;
+  return date.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
 
 function ExpandableReview({ text }) {
   const [expanded, setExpanded] = useState(false);
@@ -103,6 +115,8 @@ const ReviewList = memo(function ReviewList({
             const isPositive = review.sentiment_predicted === 'Positivo';
             const avatarColor = getAvatarColor(review.author);
             const initials = (review.author || '?').slice(0, 2).toUpperCase();
+            const rawDate = review.timestamp_created || review.timestamp_updated || review.timestamp || review.date_posted || review.created_at;
+            const postedDate = formatReviewDate(rawDate);
 
             return (
               <div
@@ -126,9 +140,20 @@ const ReviewList = memo(function ReviewList({
                       <span className="text-xs font-extrabold text-white block truncate">
                         {review.author}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono font-medium flex items-center gap-1">
-                        <Clock className="size-3 text-slate-500" />
-                        <span>{hoursPlayed} hrs jugadas</span>
+                      <span className="text-[10px] text-slate-400 font-mono font-medium flex items-center gap-1.5 flex-wrap">
+                        <span className="flex items-center gap-1">
+                          <Clock className="size-3 text-slate-500" />
+                          <span>{hoursPlayed} hrs jugadas</span>
+                        </span>
+                        {postedDate && (
+                          <>
+                            <span className="text-slate-600">·</span>
+                            <span className="flex items-center gap-1 text-slate-400">
+                              <Calendar className="size-3 text-slate-500" />
+                              <span>{postedDate}</span>
+                            </span>
+                          </>
+                        )}
                       </span>
                     </div>
                   </div>
