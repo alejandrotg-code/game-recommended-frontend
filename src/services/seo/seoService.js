@@ -5,6 +5,7 @@ import {
   AUTHOR_NAME,
   AUTHOR_URL,
 } from '../../constants/seo';
+import { getInstantGamingUrl, getG2aUrl, getSteamStoreUrl } from '../../config/affiliates';
 
 /**
  * Normaliza y devuelve una URL canónica absoluta a partir de una ruta.
@@ -129,7 +130,9 @@ export function getGameAnalysisJsonLd(gameInfo, result) {
   if (!gameInfo || !result) return null;
 
   const gameName = gameInfo.name || `Juego (AppID: ${result.app_id})`;
-  const gameUrl = `https://store.steampowered.com/app/${result.app_id}`;
+  const gameUrl = getSteamStoreUrl(result.app_id);
+  const igUrl = getInstantGamingUrl(gameName, result.app_id);
+  const g2aUrl = getG2aUrl(gameName);
 
   return {
     '@context': 'https://schema.org',
@@ -146,6 +149,26 @@ export function getGameAnalysisJsonLd(gameInfo, result) {
       ratingCount: result.total_reviews_analyzed || 1,
       reviewCount: result.total_reviews_analyzed || 1,
     },
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Instant Gaming Key',
+        url: igUrl,
+        seller: {
+          '@type': 'Organization',
+          name: 'Instant Gaming',
+        },
+      },
+      {
+        '@type': 'Offer',
+        name: 'G2A Marketplace',
+        url: g2aUrl,
+        seller: {
+          '@type': 'Organization',
+          name: 'G2A',
+        },
+      },
+    ],
     review: {
       '@type': 'Review',
       author: {
