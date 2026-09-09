@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useSearchParams, Link } from 'react-router-dom';
 import { AlertTriangle, Search } from 'lucide-react';
 import './App.css';
 import Header from './components/Header';
@@ -298,7 +298,18 @@ function AppContent() {
         </Routes>
       </main>
 
-      <footer className="w-full py-6 text-center border-t border-[#1b2434] mt-auto">
+      <footer className="w-full py-8 text-center border-t border-[#1b2434] mt-auto bg-[#080b11]/80 space-y-3">
+        <div className="flex flex-wrap justify-center items-center gap-4 text-xs text-slate-400 font-medium">
+          <Link to="/" className="hover:text-blue-400 transition-colors">Inicio</Link>
+          <span>·</span>
+          <Link to="/recomendar" className="hover:text-blue-400 transition-colors">Recomendar</Link>
+          <span>·</span>
+          <Link to="/como-funciona" className="hover:text-blue-400 transition-colors">¿Cómo Funciona?</Link>
+          <span>·</span>
+          <a href="/como-funciona#aviso-legal" className="hover:text-blue-400 transition-colors">Aviso Legal & Transparencia</a>
+          <span>·</span>
+          <Link to="/estado" className="hover:text-blue-400 transition-colors">Estado</Link>
+        </div>
         <p className="text-xs text-slate-500">
           Game Recommended AI © {new Date().getFullYear()} · Inteligencia para Decidir tus Juegos
         </p>
