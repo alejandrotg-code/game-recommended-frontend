@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://steam-reviews.alejandrotg.es/sitemap.xml
-Host: https://steam-reviews.alejandrotg.es
+Sitemap: https://game-recommended.alejandrotg.es/sitemap.xml
+Host: https://game-recommended.alejandrotg.es
