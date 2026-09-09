@@ -1,0 +1,16 @@
+{
+  "name": "Game Recommended AI — Steam Review NLP & Sentiment Analysis",
+  "short_name": "Game Recommended AI",
+  "description": "Decodifica la opinión real de la comunidad de Steam con Inteligencia Artificial NLP en español.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080b11",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080b11"/>
+      <stop offset="50%" stop-color="#0d1424"/>
+      <stop offset="100%" stop-color="#05070c"/>
+    </linearGradient>
+    <linearGradient id="blueGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <radialGradient id="cyanRadial" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#080b11" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#cyanRadial)"/>
+
+  <!-- Grid subtle lines -->
+  <g stroke="#1b2434" stroke-width="1" opacity="0.3">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Badge Top -->
+  <g transform="translate(100, 100)">
+    <rect width="320" height="36" rx="18" fill="#0f1520" stroke="#1b2434" stroke-width="1.5"/>
+    <circle cx="20" cy="18" r="4" fill="#10b981"/>
+    <text x="34" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#94a3b8" letter-spacing="1">STEAM REVIEW AI NLP</text>
+  </g>
+
+  <!-- Main Title -->
+  <g transform="translate(100, 210)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="900" fill="#f8fafc" letter-spacing="-1">
+      Decodifica la Opinión Real
+    </text>
+    <text y="70" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="900" fill="url(#blueGlow)" letter-spacing="-1">
+      de la Comunidad de Steam
+    </text>
+  </g>
+
+  <!-- Description -->
+  <g transform="translate(100, 360)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#94a3b8">
+      Motor de Análisis de Sentimiento con IA NLP en Español
+    </text>
+    <text y="34" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#64748b">
+      Clasificación Naive Bayes + TF-IDF y Recomendador RAG Conversacional.
+    </text>
+  </g>
+
+  <!-- Feature Cards / Badges -->
+  <g transform="translate(100, 480)">
+    <rect x="0" y="0" width="220" height="50" rx="10" fill="#0f1520" stroke="#1b2434"/>
+    <text x="20" y="31" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#38bdf8">⚡ Análisis Quirúrgico</text>
+
+    <rect x="240" y="0" width="220" height="50" rx="10" fill="#0f1520" stroke="#1b2434"/>
+    <text x="260" y="31" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#34d399">🧠 RAG & Groq LLM</text>
+
+    <rect x="480" y="0" width="240" height="50" rx="10" fill="#0f1520" stroke="#1b2434"/>
+    <text x="500" y="31" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#fbbf24">📊 Gráficos Interactivos</text>
+  </g>
+</svg>

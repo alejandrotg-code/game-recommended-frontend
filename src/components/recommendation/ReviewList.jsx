@@ -1,4 +1,5 @@
 import { useState, memo, useMemo } from 'react';
+import { ThumbsUp, ThumbsDown, MessageSquare, Clock, User, Sparkles } from 'lucide-react';
 
 const CHAR_LIMIT = 280;
 
@@ -8,15 +9,15 @@ function ExpandableReview({ text }) {
   const displayed = isLong && !expanded ? text.slice(0, CHAR_LIMIT) + '...' : text;
 
   return (
-    <div>
-      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic pl-2 group-hover:text-slate-100 transition-colors">
+    <div className="pt-1">
+      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic pl-3 border-l-2 border-[#1e293b] group-hover:border-blue-500/50 transition-colors">
         "{displayed}"
       </p>
       {isLong && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
-          className="mt-1.5 ml-2 text-[11px] font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+          className="mt-2 text-[11px] font-extrabold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
         >
           {expanded ? 'Ver menos ↑' : 'Ver más ↓'}
         </button>
@@ -51,17 +52,20 @@ const ReviewList = memo(function ReviewList({
   }, [reviewsClassified, activeTab]);
 
   return (
-    <div className="space-y-3">
+    <div className="tactical-card p-6 sm:p-8 space-y-6">
       {/* Cabecera + Tabs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-          Reseñas Clasificadas
-          <span className="text-[10px] font-mono px-2 py-0.5 bg-[#0f1520] border border-[#1b2434] text-slate-300 rounded">
-            {filteredReviews.length}
-          </span>
-        </h3>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[#1e293b]">
+        <div className="flex items-center gap-2.5">
+          <MessageSquare className="size-4 text-blue-400" />
+          <h3 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+            <span>Muestra de Reseñas Clasificadas</span>
+            <span className="text-[10px] font-mono px-2.5 py-0.5 bg-[#080b11] border border-[#1e293b] text-slate-300 rounded-md font-bold">
+              {filteredReviews.length}
+            </span>
+          </h3>
+        </div>
 
-        <div className="flex w-full sm:w-auto bg-[#0f1520] border border-[#1b2434] p-1 rounded-lg text-xs">
+        <div className="flex w-full sm:w-auto bg-[#080b11] border border-[#1e293b] p-1.5 rounded-xl text-xs gap-1 shadow-inner">
           {[
             { key: 'all', label: 'Todas', count: reviewsClassified.length },
             { key: 'positives', label: 'Positivas', count: positiveCount },
@@ -70,27 +74,27 @@ const ReviewList = memo(function ReviewList({
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`px-3 py-1 rounded font-semibold transition-all cursor-pointer flex-1 sm:flex-initial text-center flex items-center justify-center gap-1.5 btn-tactical ${
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex-1 sm:flex-initial text-center flex items-center justify-center gap-1.5 ${
                 activeTab === key
                   ? key === 'positives'
-                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
                     : key === 'negatives'
-                    ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                    : 'bg-blue-600 text-white'
-                  : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
+                    : 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-white hover:bg-[#151d2c]'
               }`}
             >
-              {label}
-              <span className="text-[10px] font-mono opacity-80">({count})</span>
+              <span>{label}</span>
+              <span className="text-[10px] font-mono font-extrabold opacity-80">({count})</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Lista de Reseñas */}
-      <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
+      <div className="space-y-4 max-h-[520px] overflow-y-auto pr-2 custom-scrollbar">
         {filteredReviews.length === 0 ? (
-          <div className="text-center py-10 bg-[#0f1520] rounded-xl border border-[#1b2434] text-slate-500 text-xs">
+          <div className="text-center py-12 bg-[#080b11] rounded-2xl border border-[#1e293b] text-slate-400 text-xs font-medium">
             No hay reseñas en esta categoría.
           </div>
         ) : (
@@ -103,50 +107,58 @@ const ReviewList = memo(function ReviewList({
             return (
               <div
                 key={review.recommendation_id || index}
-                className="review-item tactical-card p-3.5 sm:p-4 transition-all duration-200 relative overflow-hidden group border-l-4"
+                className="review-item bg-[#080b11] border border-[#1e293b] rounded-xl p-4 sm:p-5 transition-all duration-200 relative overflow-hidden group hover:border-slate-700 shadow-md space-y-3"
                 style={{
+                  borderLeftWidth: '4px',
                   borderLeftColor: isPositive ? '#10b981' : '#f43f5e',
-                  animationDelay: `${index * 30}ms`
                 }}
               >
                 {/* Cabecera de Reseña */}
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className="w-7 h-7 rounded flex items-center justify-center text-xs font-bold text-white shrink-0"
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black text-white shrink-0 shadow-sm"
                       style={{ background: avatarColor }}
                     >
                       {initials}
                     </div>
                     <div className="min-w-0">
-                      <span className="text-xs font-bold text-slate-200 block truncate">
+                      <span className="text-xs font-extrabold text-white block truncate">
                         {review.author}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">
-                        {hoursPlayed} hrs jugadas
+                      <span className="text-[10px] text-slate-400 font-mono font-medium flex items-center gap-1">
+                        <Clock className="size-3 text-slate-500" />
+                        <span>{hoursPlayed} hrs jugadas</span>
                       </span>
                     </div>
                   </div>
 
                   {/* Badges */}
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0">
                     <span
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
+                      className={`text-[10px] font-bold px-2.5 py-1 rounded-md border flex items-center gap-1 ${
                         review.voted_up_steam
-                          ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                          : 'bg-[#080b11] text-slate-500 border-[#1b2434]'
+                          ? 'bg-blue-500/15 text-blue-300 border-blue-500/30'
+                          : 'bg-[#0f1520] text-slate-400 border-[#1e293b]'
                       }`}
                     >
-                      Steam {review.voted_up_steam ? '👍' : '👎'}
+                      <span>Steam</span>
+                      {review.voted_up_steam ? (
+                        <ThumbsUp className="size-3 text-blue-400" />
+                      ) : (
+                        <ThumbsDown className="size-3 text-slate-400" />
+                      )}
                     </span>
+
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                      className={`text-[10px] font-black px-2.5 py-1 rounded-md border flex items-center gap-1 ${
                         isPositive
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                          : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                          : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
                       }`}
                     >
-                      IA: {review.sentiment_predicted}
+                      <Sparkles className="size-3" />
+                      <span>IA: {review.sentiment_predicted}</span>
                     </span>
                   </div>
                 </div>

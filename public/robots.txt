@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://steam-reviews.alejandrotg.es/sitemap.xml
+Host: https://steam-reviews.alejandrotg.es
