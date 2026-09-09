@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { BarChart3, PieChart as PieChartIcon } from 'lucide-react';
+import { BarChart3, PieChart as PieChartIcon, ChevronRight } from 'lucide-react';
 
 const DonutTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
@@ -24,6 +24,7 @@ const SentimentChart = memo(function SentimentChart({
   steamVotedUpPct,
   recommendationLevel,
   verdictConfig,
+  onToggleSummary,
 }) {
   const donutData = [
     { name: 'Positivas', value: sentimentStats.positives_pct, fill: '#10b981' },
@@ -34,11 +35,25 @@ const SentimentChart = memo(function SentimentChart({
     <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-[#1e293b]">
       {/* Columna izquierda: barras de progreso */}
       <div className="space-y-5">
-        <div className="flex items-center gap-2">
-          <BarChart3 className="size-4 text-blue-400" />
-          <h3 className="text-xs font-black text-slate-300 uppercase tracking-wider">
-            Análisis de la Muestra (Español)
-          </h3>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BarChart3 className="size-4 text-blue-400" />
+            <h3 className="text-xs font-black text-slate-300 uppercase tracking-wider">
+              Análisis de la Muestra (Español)
+            </h3>
+          </div>
+
+          {onToggleSummary && (
+            <button
+              type="button"
+              onClick={onToggleSummary}
+              className="flex items-center gap-1 text-[11px] font-extrabold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-2.5 py-1 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0"
+              title="Ver Síntesis Inteligente de la Comunidad"
+            >
+              <span>Ver Resumen IA</span>
+              <ChevronRight className="size-3.5 text-blue-400 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
         </div>
 
         {/* Clasificación IA */}

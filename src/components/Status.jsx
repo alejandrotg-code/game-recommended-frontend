@@ -96,7 +96,7 @@ export default function Status() {
       description: 'Modelo de análisis de sentimiento optimizado para reseñas en español.',
     },
     {
-      name: 'Motor RAG & Groq LLM (Llama 3.1)',
+      name: 'Motor RAG & Groq LLM',
       type: 'Agente Semántico IA',
       status: 'online',
       latency: '~120 ms',

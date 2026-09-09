@@ -30,6 +30,19 @@ const BADGE = {
 
 const ENTRIES = [
   {
+    version: '2.2.0',
+    date: '9 de septiembre de 2026',
+    type: 'new',
+    title: 'Integración de Síntesis Inteligente de la Comunidad, Navegación con Flechas e Interfaz de Muestra',
+    items: [
+      'Integración unificada de la Síntesis Inteligente de la Comunidad (Groq AI) dentro de la tarjeta de análisis principal.',
+      'Sistema de navegación interactiva con botón de flecha (ChevronRight) para conmutar dinámicamente entre el Análisis de la Muestra (Español) / Sentimiento Semántico y el Resumen Ejecutivo IA.',
+      'Acceso rápido con flecha en la cabecera de la gráfica de sentimiento (SentimentChart) para cambiar al instante entre métricas estadísticas y el resumen desglosado.',
+      'Incorporación de la tarjeta de muestra interactiva para Stardew Valley (AppID: 413150, Extremadamente Recomendado) en los estados iniciales de la vista principal y de Game Recommended (/recomendar).',
+      'Añadidos botones tácticos de acceso directo a la Síntesis Inteligente en cada tarjeta de resultado del Recomendador RAG por IA.',
+    ],
+  },
+  {
     version: '2.1.0',
     date: '9 de septiembre de 2026',
     type: 'ui',
@@ -50,7 +63,7 @@ const ENTRIES = [
     items: [
       'Migración completa de la recomendación heredada Keras a una arquitectura RAG en lenguaje natural sobre 10.000 juegos top de Steam.',
       'Búsqueda semántica e inteligencia conversacional impulsada por Groq LLM sobre el catálogo de Steam.',
-      'Integración con Groq Cloud API (Llama 3.1 8B) para traducción automática inteligente de consultas (ES ➔ EN) y síntesis empática en español.',
+      'Integración con Groq Cloud API para traducción automática inteligente de consultas (ES ➔ EN) y síntesis empática en español.',
       'Integración de enlaces monetizados con códigos de afiliados para Instant Gaming (igr=game-recommended) y G2A (gname=gamerecommended).',
       'Carga optimizada de carátulas en alta definición utilizando la CDN oficial de Steam Akamai.',
       'Limpieza completa del código obsoleto del modelo Keras en frontend y backend.',

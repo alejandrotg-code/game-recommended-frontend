@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Sparkles,
   BrainCircuit,
@@ -215,6 +216,54 @@ export default function Recomendar() {
           )}
         </section>
 
+        {/* MUESTRA DESTACADA EN GAME RECOMMENDED: STARDEW VALLEY */}
+        {!isLoading && !result && (
+          <div className="bg-[#111726] border border-emerald-500/30 p-5 sm:p-6 max-w-3xl mx-auto rounded-3xl shadow-2xl space-y-4 text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-lg shrink-0">
+                  🌾
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2 flex-wrap">
+                    <span>Stardew Valley</span>
+                    <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1e2d4a] px-2 py-0.5 rounded font-mono">
+                      AppID: 413150
+                    </span>
+                  </h3>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 mt-0.5">
+                    <span>Análisis de la Muestra (Español)</span>
+                    <span>•</span>
+                    <span className="text-emerald-400 font-semibold">Modelo IA (Sentimiento Semántico)</span>
+                  </div>
+                </div>
+              </div>
+              <span className="text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-xl shrink-0 self-start sm:self-center">
+                Extremadamente Recomendado
+              </span>
+            </div>
+
+            <div className="pt-3 border-t border-[#1e2d4a] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="space-y-0.5">
+                <span className="text-slate-200 font-extrabold block">
+                  Síntesis Inteligente de la Comunidad
+                </span>
+                <span className="text-slate-400 text-[11px] font-normal">
+                  Resumen ejecutivo de reseñas reales en español generado por IA
+                </span>
+              </div>
+
+              <Link
+                to="/?game=413150&name=Stardew+Valley"
+                className="flex items-center justify-center gap-2 text-xs font-black text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-4 py-2.5 rounded-2xl transition-all cursor-pointer group btn-tactical shrink-0 shadow-md"
+              >
+                <span>Ver Análisis y Resumen</span>
+                <ChevronRight className="size-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* CARGANDO */}
         {isLoading && (
           <div className="py-16 bg-[#111726] border border-[#1e2d4a] rounded-3xl shadow-2xl flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
@@ -302,9 +351,16 @@ export default function Recomendar() {
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-[#1e2d4a] flex items-center justify-between gap-2">
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Comprar:</span>
-                        <div className="flex items-center gap-2">
+                      <div className="pt-3 border-t border-[#1e2d4a] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                        <Link
+                          to={`/?game=${game.app_id}&name=${encodeURIComponent(game.name)}`}
+                          className="text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-3 py-1.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 group btn-tactical"
+                        >
+                          <span>Síntesis Inteligente</span>
+                          <ChevronRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+
+                        <div className="flex items-center gap-2 justify-end">
                           <a
                             href={instantGamingUrl}
                             target="_blank"

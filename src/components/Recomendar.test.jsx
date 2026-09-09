@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Recomendar from './Recomendar';
 import * as steamService from '../services/steamService';
@@ -27,7 +28,11 @@ describe('Recomendar Component', () => {
       games: mockGames
     });
 
-    render(<Recomendar />);
+    render(
+      <MemoryRouter>
+        <Recomendar />
+      </MemoryRouter>
+    );
 
     // Verificar que existen los botones de selección 4, 10, 20
     const btn10 = screen.getByRole('button', { name: /10 juegos/i });
@@ -73,7 +78,11 @@ describe('Recomendar Component', () => {
       games: mockGames
     });
 
-    render(<Recomendar />);
+    render(
+      <MemoryRouter>
+        <Recomendar />
+      </MemoryRouter>
+    );
 
     const input = screen.getByPlaceholderText(/Busco un juego para desconectar/i);
     fireEvent.change(input, { target: { value: 'Un juego RPG largo' } });

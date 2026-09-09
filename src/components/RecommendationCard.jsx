@@ -5,10 +5,14 @@ import {
   Scale,
   ThumbsDown,
   ExternalLink,
+  ChevronRight,
+  BarChart3,
+  Cpu,
 } from 'lucide-react';
 import SentimentChart from './recommendation/SentimentChart';
 import TopKeyWords from './recommendation/TopKeyWords';
 import ReviewList from './recommendation/ReviewList';
+import GroqSummaryCard from './recommendation/GroqSummaryCard';
 import { getInstantGamingUrl, getG2aUrl, getSteamStoreUrl } from '../config/affiliates';
 
 const getVerdictConfig = (level) => {
@@ -82,6 +86,7 @@ function getTopWords(reviews, sentiment, limit = 8) {
 const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }) {
   const [copied, setCopied] = useState(false);
   const [badgeCopied, setBadgeCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState('analysis'); // 'analysis' | 'summary'
 
   const handleShareLink = () => {
     navigator.clipboard.writeText(window.location.href).then(() => {
@@ -213,22 +218,81 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
           </div>
         )}
 
-        {/* Gráfico y Estadísticas */}
-        <SentimentChart
-          sentimentStats={sentiment_stats}
-          totalReviewsAnalyzed={total_reviews_analyzed}
-          positiveCount={positiveCount}
-          negativeCount={negativeCount}
-          steamVotedUpPct={steam_voted_up_pct}
-          recommendationLevel={recommendation_level}
-          verdictConfig={cfg}
-        />
+        {/* ── BARRA HEADER DE NAVEGACIÓN ENTRE ANÁLISIS Y SÍNTESIS INTELIGENTE CON FLECHA A LA DERECHA ── */}
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-[#1b2434] bg-[#080b11]/70 flex-wrap gap-2">
+          <div className="flex items-center gap-2 overflow-x-auto py-0.5 scrollbar-none">
+            <button
+              type="button"
+              onClick={() => setActiveTab('analysis')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+                activeTab === 'analysis'
+                  ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+              }`}
+            >
+              <BarChart3 className="size-3.5" />
+              <span>Análisis de la Muestra (Español)</span>
+            </button>
 
-        {/* Conceptos Destacados */}
-        <TopKeyWords
-          topPositiveWords={topPositiveWords}
-          topNegativeWords={topNegativeWords}
-        />
+            {result?.groq_summary && (
+              <button
+                type="button"
+                onClick={() => setActiveTab('summary')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+                  activeTab === 'summary'
+                    ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                }`}
+              >
+                <Cpu className="size-3.5 text-blue-400 animate-pulse" />
+                <span>Síntesis Inteligente de la Comunidad</span>
+              </button>
+            )}
+          </div>
+
+          {result?.groq_summary && (
+            <button
+              type="button"
+              onClick={() => setActiveTab(activeTab === 'analysis' ? 'summary' : 'analysis')}
+              className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
+              title={activeTab === 'analysis' ? 'Ver Síntesis Inteligente / Resumen' : 'Ver Análisis de Sentimiento'}
+            >
+              <span>{activeTab === 'analysis' ? 'Ver Resumen IA' : 'Ver Análisis'}</span>
+              <ChevronRight className={`size-4 transition-transform duration-300 ${activeTab === 'analysis' ? 'group-hover:translate-x-1' : 'rotate-180 group-hover:-translate-x-1'}`} />
+            </button>
+          )}
+        </div>
+
+        {/* ── CONTENIDO DINÁMICO (ANÁLISIS O SÍNTESIS INTELIGENTE) ── */}
+        {activeTab === 'analysis' ? (
+          <>
+            {/* Gráfico y Estadísticas */}
+            <SentimentChart
+              sentimentStats={sentiment_stats}
+              totalReviewsAnalyzed={total_reviews_analyzed}
+              positiveCount={positiveCount}
+              negativeCount={negativeCount}
+              steamVotedUpPct={steam_voted_up_pct}
+              recommendationLevel={recommendation_level}
+              verdictConfig={cfg}
+              onToggleSummary={result?.groq_summary ? () => setActiveTab('summary') : null}
+            />
+
+            {/* Conceptos Destacados */}
+            <TopKeyWords
+              topPositiveWords={topPositiveWords}
+              topNegativeWords={topNegativeWords}
+            />
+          </>
+        ) : (
+          <div className="p-2 sm:p-5 bg-[#0a0e17]/80">
+            <GroqSummaryCard
+              groqSummary={result?.groq_summary}
+              onToggleAnalysis={() => setActiveTab('analysis')}
+              embedded
+            />
+          </div>
+        )}
       </div>
 
       {/* ── 2. RESEÑAS CLASIFICADAS ── */}
