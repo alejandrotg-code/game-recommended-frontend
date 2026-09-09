@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useSearchParams, Link } from 'react-router-dom';
-import { AlertTriangle, Search } from 'lucide-react';
+import { AlertTriangle, Search, ChevronRight } from 'lucide-react';
 import './App.css';
 import Header from './components/Header';
 import GameSearch from './components/Input';
@@ -245,31 +245,74 @@ function AppContent() {
 
                 {/* ESTADO VACÍO INICIAL */}
                 {!isLoading && !analysisResult && !error && (
-                  <div className="text-center py-10 px-6 border border-dashed border-[#1b2434] rounded-2xl bg-[#0f1520]/40 max-w-lg mx-auto w-full my-4">
-                    <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-                      <Search className="size-5" />
+                  <div className="space-y-4 max-w-lg mx-auto w-full my-4">
+                    <div className="text-center py-8 px-6 border border-dashed border-[#1b2434] rounded-2xl bg-[#0f1520]/40">
+                      <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                        <Search className="size-5" />
+                      </div>
+                      <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                        Empieza a analizar
+                      </h3>
+                      <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed mb-4">
+                        Escribe el título de cualquier videojuego, introduce su AppID o pega la URL de la tienda
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {[
+                          { name: 'Elden Ring', id: '1245620' },
+                          { name: 'Stardew Valley', id: '413150' },
+                          { name: 'Cyberpunk 2077', id: '1091500' },
+                        ].map((game) => (
+                          <button
+                            key={game.id}
+                            type="button"
+                            onClick={() => handleGameSelect(game)}
+                            className="text-xs font-semibold text-slate-400 border border-[#1b2434] hover:border-blue-500/40 hover:text-blue-400 bg-[#0f1520] px-3 py-1 rounded-lg transition-all cursor-pointer btn-tactical"
+                          >
+                            {game.name}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                      Empieza a analizar
-                    </h3>
-                    <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed mb-4">
-                      Escribe el título de cualquier videojuego, introduce su AppID o pega la URL de la tienda
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {[
-                        { name: 'Elden Ring', id: '1245620' },
-                        { name: 'Stardew Valley', id: '413150' },
-                        { name: 'Cyberpunk 2077', id: '1091500' },
-                      ].map((game) => (
+
+                    {/* MUESTRA DESTACADA: STARDEW VALLEY */}
+                    <div className="bg-[#0f1520] border border-emerald-500/30 p-4 rounded-2xl text-left space-y-3 shadow-lg">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xs shrink-0">
+                            🌾
+                          </div>
+                          <div>
+                            <h4 className="text-xs sm:text-sm font-extrabold text-white flex items-center gap-2">
+                              <span>Stardew Valley</span>
+                              <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-1.5 py-0.5 rounded font-mono">
+                                AppID: 413150
+                              </span>
+                            </h4>
+                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mt-0.5">
+                              <span>Análisis de la Muestra (Español)</span>
+                              <span>•</span>
+                              <span className="text-emerald-400 font-semibold">Modelo IA (Sentimiento Semántico)</span>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded shrink-0">
+                          Extremadamente Recomendado
+                        </span>
+                      </div>
+
+                      <div className="pt-2 border-t border-[#1b2434] flex items-center justify-between gap-2 text-xs">
+                        <span className="text-slate-400 text-[11px] font-medium">
+                          Síntesis Inteligente de la Comunidad
+                        </span>
                         <button
-                          key={game.id}
                           type="button"
-                          onClick={() => handleGameSelect(game)}
-                          className="text-xs font-semibold text-slate-400 border border-[#1b2434] hover:border-blue-500/40 hover:text-blue-400 bg-[#0f1520] px-3 py-1 rounded-lg transition-all cursor-pointer btn-tactical"
+                          onClick={() => handleGameSelect({ name: 'Stardew Valley', id: '413150' })}
+                          className="flex items-center gap-1.5 text-xs font-black text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical"
                         >
-                          {game.name}
+                          <span>Ver Resumen IA</span>
+                          <ChevronRight className="size-4 group-hover:translate-x-1 transition-transform" />
                         </button>
-                      ))}
+                      </div>
                     </div>
                   </div>
                 )}
