@@ -32,14 +32,15 @@ const SentimentChart = memo(function SentimentChart({
   ];
 
   return (
-    <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-[#1e293b]">
+    <div className="p-4 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 border-b border-[#1e293b]">
       {/* Columna izquierda: barras de progreso */}
-      <div className="space-y-5">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 sm:space-y-5">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
-            <BarChart3 className="size-4 text-blue-400" />
+            <BarChart3 className="size-4 text-blue-400 shrink-0" />
             <h3 className="text-xs font-black text-slate-300 uppercase tracking-wider">
-              Análisis de la Muestra (Español)
+              <span className="hidden xs:inline">Análisis de la Muestra (Español)</span>
+              <span className="xs:hidden">Análisis Muestra</span>
             </h3>
           </div>
 
@@ -47,7 +48,7 @@ const SentimentChart = memo(function SentimentChart({
             <button
               type="button"
               onClick={onToggleSummary}
-              className="flex items-center gap-1 text-[11px] font-extrabold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-2.5 py-1 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0"
+              className="flex items-center gap-1 text-[11px] font-extrabold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-2.5 py-1 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
               title="Ver Síntesis Inteligente de la Comunidad"
             >
               <span>Ver Resumen IA</span>

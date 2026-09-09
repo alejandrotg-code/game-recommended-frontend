@@ -136,7 +136,7 @@ function AppContent() {
     <div className="min-h-screen bg-[#080b11] text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden selection:bg-blue-600 selection:text-white">
       <Header />
 
-      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 flex-1 flex flex-col">
+      <main className="w-full max-w-5xl mx-auto px-3 sm:px-6 flex-1 flex flex-col">
         <Routes>
           {/* RUTA INICIO */}
           <Route
@@ -151,20 +151,20 @@ function AppContent() {
                 />
 
                 {/* HERO */}
-                <div className="relative pt-8 sm:pt-14 pb-6 text-center">
+                <div className="relative pt-6 sm:pt-14 pb-6 text-center">
                   {/* Badge de Estado Táctico */}
-                  <div className="inline-flex items-center gap-2 bg-[#0f1520] border border-[#1b2434] text-slate-300 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-5 shadow-sm">
-                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                    <span className="tracking-wide">Motor NLP & Análisis de Sentimiento para Steam</span>
+                  <div className="inline-flex items-center gap-2 bg-[#0f1520] border border-[#1b2434] text-slate-300 text-[11px] sm:text-xs font-semibold px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full mb-4 sm:mb-5 shadow-sm max-w-full">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shrink-0" />
+                    <span className="tracking-wide truncate">Motor NLP & Análisis de Sentimiento para Steam</span>
                   </div>
 
                   {/* Título Principal */}
-                  <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-4 leading-[1.15] text-slate-100">
+                  <h1 className="text-2xl xs:text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-3 sm:mb-4 leading-[1.15] text-slate-100">
                     Decodifica la Opinión Real de la <span className="text-blue-500">Comunidad de Steam</span>
                   </h1>
 
                   {/* Subtítulo */}
-                  <p className="text-sm sm:text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8 font-normal">
+                  <p className="text-xs sm:text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 font-normal px-1">
                     Analizamos quirúrgicamente las opiniones más recientes en <strong className="text-slate-200">español</strong> con modelos de Inteligencia IA para determinar si un juego realmente merece tu tiempo.
                   </p>
 
@@ -177,7 +177,7 @@ function AppContent() {
                   </div>
 
                   {/* Selector de cantidad de reseñas */}
-                  <div className="flex flex-wrap items-center justify-center gap-3 mt-6 text-xs text-slate-400 relative z-[90]">
+                  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-5 sm:mt-6 text-xs text-slate-400 relative z-[90]">
                     <span className="font-semibold text-slate-400 whitespace-nowrap">Muestra a analizar:</span>
                     <div className="flex items-center gap-1 bg-[#0f1520] border border-[#1b2434] p-1 rounded-xl">
                       {[10, 20, 30].map((num) => (
@@ -191,7 +191,7 @@ function AppContent() {
                               limit: num.toString(),
                             });
                           }}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                          className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                             limit === num
                               ? 'bg-blue-600 text-white shadow-sm'
                               : 'text-slate-400 hover:text-slate-200 hover:bg-[#151d2c]'
@@ -246,7 +246,7 @@ function AppContent() {
                 {/* ESTADO VACÍO INICIAL */}
                 {!isLoading && !analysisResult && !error && (
                   <div className="space-y-4 max-w-lg mx-auto w-full my-4">
-                    <div className="text-center py-8 px-6 border border-dashed border-[#1b2434] rounded-2xl bg-[#0f1520]/40">
+                    <div className="text-center py-6 sm:py-8 px-4 sm:px-6 border border-dashed border-[#1b2434] rounded-2xl bg-[#0f1520]/40">
                       <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                         <Search className="size-5" />
                       </div>
@@ -275,23 +275,23 @@ function AppContent() {
                     </div>
 
                     {/* MUESTRA DESTACADA: STARDEW VALLEY */}
-                    <div className="bg-[#0f1520] border border-emerald-500/30 p-4 rounded-2xl text-left space-y-3 shadow-lg">
-                      <div className="flex items-center justify-between gap-2">
+                    <div className="bg-[#0f1520] border border-emerald-500/30 p-3.5 sm:p-4 rounded-2xl text-left space-y-3 shadow-lg">
+                      <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
                         <div className="flex items-center gap-2.5">
                           <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xs shrink-0">
                             🌾
                           </div>
                           <div>
-                            <h4 className="text-xs sm:text-sm font-extrabold text-white flex items-center gap-2">
+                            <h4 className="text-xs sm:text-sm font-extrabold text-white flex flex-wrap items-center gap-1.5">
                               <span>Stardew Valley</span>
                               <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-1.5 py-0.5 rounded font-mono">
                                 AppID: 413150
                               </span>
                             </h4>
-                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400 mt-0.5">
-                              <span>Análisis de la Muestra (Español)</span>
+                            <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400 mt-0.5">
+                              <span>Análisis Muestra</span>
                               <span>•</span>
-                              <span className="text-emerald-400 font-semibold">Modelo IA (Sentimiento Semántico)</span>
+                              <span className="text-emerald-400 font-semibold">Modelo IA</span>
                             </div>
                           </div>
                         </div>

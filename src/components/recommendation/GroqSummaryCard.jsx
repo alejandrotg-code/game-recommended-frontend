@@ -108,18 +108,18 @@ const GroqSummaryCard = memo(function GroqSummaryCard({ groqSummary, onToggleAna
       </div>
 
       {/* Grid de Pros y Contras */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-1">
         {pros.length > 0 && (
-          <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl space-y-2">
+          <div className="bg-emerald-500/5 border border-emerald-500/20 p-3.5 sm:p-4 rounded-xl space-y-2">
             <h5 className="text-xs font-bold text-emerald-400 flex items-center gap-2 uppercase tracking-wider">
-              <ThumbsUp className="size-3.5" />
+              <ThumbsUp className="size-3.5 shrink-0" />
               <span>Puntos Fuertes (Pros)</span>
             </h5>
             <ul className="space-y-1.5 text-xs text-slate-300">
               {pros.map((pro, idx) => (
-                <li key={idx} className="flex items-start gap-2">
+                <li key={idx} className="flex items-start gap-2 min-w-0">
                   <span className="text-emerald-400 font-bold shrink-0">✓</span>
-                  <span>{pro}</span>
+                  <span className="break-words leading-relaxed">{pro}</span>
                 </li>
               ))}
             </ul>
@@ -127,16 +127,16 @@ const GroqSummaryCard = memo(function GroqSummaryCard({ groqSummary, onToggleAna
         )}
 
         {cons.length > 0 && (
-          <div className="bg-rose-500/5 border border-rose-500/20 p-4 rounded-xl space-y-2">
+          <div className="bg-rose-500/5 border border-rose-500/20 p-3.5 sm:p-4 rounded-xl space-y-2">
             <h5 className="text-xs font-bold text-rose-400 flex items-center gap-2 uppercase tracking-wider">
-              <ThumbsDown className="size-3.5" />
+              <ThumbsDown className="size-3.5 shrink-0" />
               <span>Puntos Débiles (Contras)</span>
             </h5>
             <ul className="space-y-1.5 text-xs text-slate-300">
               {cons.map((con, idx) => (
-                <li key={idx} className="flex items-start gap-2">
+                <li key={idx} className="flex items-start gap-2 min-w-0">
                   <span className="text-rose-400 font-bold shrink-0">✗</span>
-                  <span>{con}</span>
+                  <span className="break-words leading-relaxed">{con}</span>
                 </li>
               ))}
             </ul>
@@ -146,10 +146,10 @@ const GroqSummaryCard = memo(function GroqSummaryCard({ groqSummary, onToggleAna
 
       {/* Perfil del Jugador Ideal */}
       {target_audience && (
-        <div className="bg-blue-500/10 border border-blue-500/20 p-3.5 rounded-xl flex items-center gap-3">
-          <Target className="size-5 text-blue-400 shrink-0" />
-          <div className="text-xs">
-            <span className="font-extrabold text-blue-300 mr-1.5 uppercase tracking-wide">Jugador Ideal:</span>
+        <div className="bg-blue-500/10 border border-blue-500/20 p-3.5 rounded-xl flex items-start sm:items-center gap-3">
+          <Target className="size-5 text-blue-400 shrink-0 mt-0.5 sm:mt-0" />
+          <div className="text-xs leading-relaxed">
+            <span className="font-extrabold text-blue-300 mr-1.5 uppercase tracking-wide block sm:inline mb-0.5 sm:mb-0">Jugador Ideal:</span>
             <span className="text-slate-200">{target_audience}</span>
           </div>
         </div>

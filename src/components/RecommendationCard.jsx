@@ -134,28 +134,28 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
       <div className={`tactical-card overflow-hidden border ${cfg.bg}`}>
         {/* Banner de Portada / Header Hero */}
         {gameInfo?.image ? (
-          <div className="relative w-full h-36 sm:h-44 overflow-hidden border-b border-[#1b2434]">
+          <div className="relative w-full min-h-[160px] sm:h-44 overflow-hidden border-b border-[#1b2434]">
             <img
               src={gameInfo.image}
               alt={gameInfo.name || 'Juego'}
-              className="w-full h-full object-cover brightness-[0.45]"
+              className="w-full h-full object-cover brightness-[0.35]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0f1520] via-[#0f1520]/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0f1520] via-[#0f1520]/70 to-transparent" />
 
-            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex items-end justify-between gap-4">
-              <div className="flex items-center gap-3">
+            <div className="relative sm:absolute sm:bottom-0 sm:left-0 sm:right-0 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 z-10">
+              <div className="flex items-start sm:items-center gap-3 w-full sm:w-auto">
                 <img
                   src={gameInfo.image}
                   alt={gameInfo.name}
-                  className="w-16 h-10 sm:w-20 sm:h-12 object-cover rounded-lg border border-white/20 shadow-md shrink-0"
+                  className="w-14 h-14 sm:w-20 sm:h-12 object-cover rounded-lg border border-white/20 shadow-md shrink-0 mt-0.5 sm:mt-0"
                 />
-                <div>
-                  <h2 className="text-base sm:text-xl font-extrabold text-white leading-tight">
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-base sm:text-xl font-extrabold text-white leading-tight break-words">
                     {gameInfo?.name || 'Juego Analizado'}
                   </h2>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {gameInfo?.price && (
-                      <span className="text-[10px] bg-[#080b11] text-slate-200 border border-[#1b2434] px-2 py-0.5 rounded font-semibold">
+                      <span className="text-[10px] bg-[#080b11]/90 text-slate-200 border border-[#1b2434] px-2 py-0.5 rounded font-semibold">
                         {gameInfo.price}
                       </span>
                     )}
@@ -164,7 +164,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                         Metascore: {gameInfo.metascore}
                       </span>
                     )}
-                    <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-2 py-0.5 rounded font-mono">
+                    <span className="text-[10px] bg-[#080b11]/90 text-slate-400 border border-[#1b2434] px-2 py-0.5 rounded font-mono">
                       AppID: {result.app_id}
                     </span>
                   </div>
@@ -182,7 +182,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                 </div>
               </div>
 
-              <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
+              <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto shrink-0 pt-1 sm:pt-0 border-t border-white/10 sm:border-t-0 gap-2">
                 <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 ${cfg.badge}`}>
                   {cfg.icon}
                   <span>{recommendation_level}</span>
@@ -202,7 +202,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             </div>
           </div>
         ) : (
-          <div className="p-4 sm:p-5 flex items-center justify-between border-b border-[#1b2434]">
+          <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#1b2434] gap-3">
             <div>
               <h2 className="text-lg sm:text-xl font-extrabold text-white">{gameInfo?.name || 'Juego Analizado'}</h2>
               <div className="flex flex-wrap gap-1.5 mt-1">
@@ -219,39 +219,41 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
         )}
 
         {/* ── BARRA HEADER DE NAVEGACIÓN ENTRE ANÁLISIS Y SÍNTESIS INTELIGENTE CON FLECHA A LA DERECHA ── */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-[#1b2434] bg-[#080b11]/70 flex-wrap gap-2">
-          <div className="flex items-center gap-2 overflow-x-auto py-0.5 scrollbar-none">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3 border-b border-[#1b2434] bg-[#080b11]/70 flex-wrap gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-0.5 scrollbar-none w-full sm:w-auto justify-start">
             <button
               type="button"
               onClick={() => setActiveTab('analysis')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'analysis'
                   ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 border border-transparent'
               }`}
             >
-              <BarChart3 className="size-3.5" />
-              <span>Análisis de la Muestra (Español)</span>
+              <BarChart3 className="size-3.5 shrink-0" />
+              <span className="hidden sm:inline">Análisis de la Muestra (Español)</span>
+              <span className="sm:hidden">Análisis Muestra</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('summary')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'summary'
                   ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 border border-transparent'
               }`}
             >
-              <Cpu className="size-3.5 text-blue-400 animate-pulse" />
-              <span>Síntesis Inteligente de la Comunidad</span>
+              <Cpu className="size-3.5 text-blue-400 animate-pulse shrink-0" />
+              <span className="hidden sm:inline">Síntesis Inteligente de la Comunidad</span>
+              <span className="sm:hidden">Síntesis IA</span>
             </button>
           </div>
 
           <button
             type="button"
             onClick={() => setActiveTab(activeTab === 'analysis' ? 'summary' : 'analysis')}
-            className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
+            className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-2.5 sm:px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
             title={activeTab === 'analysis' ? 'Ver Síntesis Inteligente / Resumen' : 'Ver Análisis de Sentimiento'}
           >
             <span>{activeTab === 'analysis' ? 'Ver Resumen IA' : 'Ver Análisis'}</span>
