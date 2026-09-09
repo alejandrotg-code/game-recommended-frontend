@@ -234,33 +234,29 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               <span>Análisis de la Muestra (Español)</span>
             </button>
 
-            {result?.groq_summary && (
-              <button
-                type="button"
-                onClick={() => setActiveTab('summary')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
-                  activeTab === 'summary'
-                    ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 border border-transparent'
-                }`}
-              >
-                <Cpu className="size-3.5 text-blue-400 animate-pulse" />
-                <span>Síntesis Inteligente de la Comunidad</span>
-              </button>
-            )}
-          </div>
-
-          {result?.groq_summary && (
             <button
               type="button"
-              onClick={() => setActiveTab(activeTab === 'analysis' ? 'summary' : 'analysis')}
-              className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
-              title={activeTab === 'analysis' ? 'Ver Síntesis Inteligente / Resumen' : 'Ver Análisis de Sentimiento'}
+              onClick={() => setActiveTab('summary')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+                activeTab === 'summary'
+                  ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+              }`}
             >
-              <span>{activeTab === 'analysis' ? 'Ver Resumen IA' : 'Ver Análisis'}</span>
-              <ChevronRight className={`size-4 transition-transform duration-300 ${activeTab === 'analysis' ? 'group-hover:translate-x-1' : 'rotate-180 group-hover:-translate-x-1'}`} />
+              <Cpu className="size-3.5 text-blue-400 animate-pulse" />
+              <span>Síntesis Inteligente de la Comunidad</span>
             </button>
-          )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab(activeTab === 'analysis' ? 'summary' : 'analysis')}
+            className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
+            title={activeTab === 'analysis' ? 'Ver Síntesis Inteligente / Resumen' : 'Ver Análisis de Sentimiento'}
+          >
+            <span>{activeTab === 'analysis' ? 'Ver Resumen IA' : 'Ver Análisis'}</span>
+            <ChevronRight className={`size-4 transition-transform duration-300 ${activeTab === 'analysis' ? 'group-hover:translate-x-1' : 'rotate-180 group-hover:-translate-x-1'}`} />
+          </button>
         </div>
 
         {/* ── CONTENIDO DINÁMICO (ANÁLISIS O SÍNTESIS INTELIGENTE) ── */}
@@ -275,7 +271,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               steamVotedUpPct={steam_voted_up_pct}
               recommendationLevel={recommendation_level}
               verdictConfig={cfg}
-              onToggleSummary={result?.groq_summary ? () => setActiveTab('summary') : null}
+              onToggleSummary={() => setActiveTab('summary')}
             />
 
             {/* Conceptos Destacados */}
@@ -285,12 +281,29 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             />
           </>
         ) : (
-          <div className="p-2 sm:p-5 bg-[#0a0e17]/80">
-            <GroqSummaryCard
-              groqSummary={result?.groq_summary}
-              onToggleAnalysis={() => setActiveTab('analysis')}
-              embedded
-            />
+          <div className="p-4 sm:p-6 bg-[#0a0e17]/80">
+            {result?.groq_summary ? (
+              <GroqSummaryCard
+                groqSummary={result.groq_summary}
+                onToggleAnalysis={() => setActiveTab('analysis')}
+                embedded
+              />
+            ) : (
+              <div className="text-center py-10 px-6 space-y-3 bg-[#080b11] border border-[#1b2434] rounded-2xl max-w-md mx-auto">
+                <Cpu className="size-8 text-blue-400 mx-auto animate-pulse" />
+                <h4 className="text-sm font-extrabold text-white">Síntesis IA no disponible</h4>
+                <p className="text-xs text-slate-400 leading-relaxed font-normal">
+                  La síntesis periodística no está disponible en este momento. Asegúrate de tener configurada la API Key de Groq en el servidor backend.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('analysis')}
+                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl cursor-pointer"
+                >
+                  <span>Volver a Análisis de Sentimiento</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
