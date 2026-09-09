@@ -7,7 +7,7 @@ const TopKeyWords = memo(function TopKeyWords({ topPositiveWords = [], topNegati
   }
 
   return (
-    <div className="bg-[#080b11] p-6 sm:p-8 space-y-6 border-b border-[#1e293b]">
+    <div className="bg-[#080b11] p-4 sm:p-8 space-y-4 sm:space-y-6 border-b border-[#1e293b]">
       <div className="flex items-center justify-center gap-2">
         <Tag className="size-4 text-blue-400" />
         <h3 className="text-xs font-black text-slate-300 uppercase tracking-wider text-center">

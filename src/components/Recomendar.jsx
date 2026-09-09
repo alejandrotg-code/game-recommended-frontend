@@ -123,11 +123,11 @@ export default function Recomendar() {
         </section>
 
         {/* FORMULARIO DE BÚSQUEDA */}
-        <section className="bg-[#111726] p-6 sm:p-8 max-w-3xl mx-auto rounded-3xl border border-[#1e2d4a] shadow-2xl space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2.5">
+        <section className="bg-[#111726] p-4 sm:p-8 max-w-3xl mx-auto rounded-3xl border border-[#1e2d4a] shadow-2xl space-y-5 sm:space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+            <div className="space-y-2">
               <label htmlFor="rag-query-input" className="text-xs font-black uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                <BrainCircuit className="size-4 text-blue-400" />
+                <BrainCircuit className="size-4 text-blue-400 shrink-0" />
                 <span>¿Qué experiencia o sensación buscas hoy?</span>
               </label>
               <textarea
@@ -136,7 +136,7 @@ export default function Recomendar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Ej. Busco un juego para desconectar después de un día agotador, donde pueda tener mi propia granja y plantar hortalizas..."
-                className="w-full bg-[#080b11] border border-[#1e2d4a] focus:border-blue-500 rounded-2xl p-4 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all resize-none leading-relaxed shadow-inner"
+                className="w-full bg-[#080b11] border border-[#1e2d4a] focus:border-blue-500 rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all resize-none leading-relaxed shadow-inner"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -147,8 +147,8 @@ export default function Recomendar() {
             </div>
 
             {/* SELECTOR DE CANTIDAD DE RESULTADOS */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#1e2d4a]">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 sm:pt-4 border-t border-[#1e2d4a]">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <span className="text-xs font-black text-slate-300 uppercase tracking-wider">
                   Resultados:
                 </span>
@@ -158,7 +158,7 @@ export default function Recomendar() {
                       key={num}
                       type="button"
                       onClick={() => setTopK(num)}
-                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                         topK === num
                           ? 'bg-blue-600 text-white shadow-sm'
                           : 'text-slate-400 hover:text-white hover:bg-[#182238]'
@@ -173,7 +173,7 @@ export default function Recomendar() {
               <button
                 type="submit"
                 disabled={isLoading || !query.trim()}
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:bg-[#182238] disabled:text-slate-600 text-white text-xs font-black px-6 py-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 shadow-lg shadow-blue-900/40 active:scale-95"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:bg-[#182238] disabled:text-slate-600 text-white text-xs font-black px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 shadow-lg shadow-blue-900/40 active:scale-95"
               >
                 {isLoading ? (
                   <>
@@ -190,9 +190,9 @@ export default function Recomendar() {
             </div>
 
             {/* EJEMPLOS RÁPIDOS */}
-            <div className="flex flex-wrap gap-2.5 items-center pt-3 border-t border-[#1e2d4a]/60">
+            <div className="flex flex-wrap gap-2 items-center pt-3 border-t border-[#1e2d4a]/60">
               <span className="text-[10px] text-slate-400 font-black uppercase tracking-wider mr-1 flex items-center gap-1">
-                <Compass className="size-3.5 text-blue-400" />
+                <Compass className="size-3.5 text-blue-400 shrink-0" />
                 <span>Ejemplos:</span>
               </span>
               {ejemplos.map((ej, i) => (
@@ -200,7 +200,7 @@ export default function Recomendar() {
                   key={i}
                   type="button"
                   onClick={() => handleEjemploClick(ej.text)}
-                  className="text-[11px] font-bold text-slate-200 bg-[#080b11] border border-[#1e2d4a] hover:border-blue-500 hover:text-blue-300 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer active:scale-95 shadow-sm"
+                  className="text-[11px] font-bold text-slate-200 bg-[#080b11] border border-[#1e2d4a] hover:border-blue-500 hover:text-blue-300 px-3 py-1 sm:py-1.5 rounded-xl transition-all cursor-pointer active:scale-95 shadow-sm"
                 >
                   {ej.label}
                 </button>
@@ -218,7 +218,7 @@ export default function Recomendar() {
 
         {/* MUESTRA DESTACADA EN GAME RECOMMENDED: STARDEW VALLEY */}
         {!isLoading && !result && (
-          <div className="bg-[#111726] border border-emerald-500/30 p-5 sm:p-6 max-w-3xl mx-auto rounded-3xl shadow-2xl space-y-4 text-left">
+          <div className="bg-[#111726] border border-emerald-500/30 p-4 sm:p-6 max-w-3xl mx-auto rounded-3xl shadow-2xl space-y-4 text-left">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-lg shrink-0">
@@ -232,9 +232,9 @@ export default function Recomendar() {
                     </span>
                   </h3>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 mt-0.5">
-                    <span>Análisis de la Muestra (Español)</span>
+                    <span>Análisis Muestra</span>
                     <span>•</span>
-                    <span className="text-emerald-400 font-semibold">Modelo IA (Sentimiento Semántico)</span>
+                    <span className="text-emerald-400 font-semibold">Modelo IA</span>
                   </div>
                 </div>
               </div>

@@ -64,9 +64,9 @@ const ReviewList = memo(function ReviewList({
   }, [reviewsClassified, activeTab]);
 
   return (
-    <div className="tactical-card p-6 sm:p-8 space-y-6">
+    <div className="tactical-card p-4 sm:p-8 space-y-4 sm:space-y-6">
       {/* Cabecera + Tabs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[#1e293b]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 pb-4 border-b border-[#1e293b]">
         <div className="flex items-center gap-2.5">
           <MessageSquare className="size-4 text-blue-400" />
           <h3 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
@@ -77,7 +77,7 @@ const ReviewList = memo(function ReviewList({
           </h3>
         </div>
 
-        <div className="flex w-full sm:w-auto bg-[#080b11] border border-[#1e293b] p-1.5 rounded-xl text-xs gap-1 shadow-inner">
+        <div className="flex w-full sm:w-auto bg-[#080b11] border border-[#1e293b] p-1 rounded-xl text-xs gap-1 shadow-inner overflow-x-auto">
           {[
             { key: 'all', label: 'Todas', count: reviewsClassified.length },
             { key: 'positives', label: 'Positivas', count: positiveCount },
@@ -86,7 +86,7 @@ const ReviewList = memo(function ReviewList({
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`px-3.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex-1 sm:flex-initial text-center flex items-center justify-center gap-1.5 ${
+              className={`px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg font-bold text-[11px] sm:text-xs transition-all cursor-pointer flex-1 sm:flex-initial text-center flex items-center justify-center gap-1 shrink-0 ${
                 activeTab === key
                   ? key === 'positives'
                     ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
@@ -128,28 +128,28 @@ const ReviewList = memo(function ReviewList({
                 }}
               >
                 {/* Cabecera de Reseña */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
+                <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2.5 min-w-0">
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black text-white shrink-0 shadow-sm"
                       style={{ background: avatarColor }}
                     >
                       {initials}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <span className="text-xs font-extrabold text-white block truncate">
                         {review.author}
                       </span>
                       <span className="text-[10px] text-slate-400 font-mono font-medium flex items-center gap-1.5 flex-wrap">
                         <span className="flex items-center gap-1">
-                          <Clock className="size-3 text-slate-500" />
-                          <span>{hoursPlayed} hrs jugadas</span>
+                          <Clock className="size-3 text-slate-500 shrink-0" />
+                          <span>{hoursPlayed} hrs</span>
                         </span>
                         {postedDate && (
                           <>
                             <span className="text-slate-600">·</span>
                             <span className="flex items-center gap-1 text-slate-400">
-                              <Calendar className="size-3 text-slate-500" />
+                              <Calendar className="size-3 text-slate-500 shrink-0" />
                               <span>{postedDate}</span>
                             </span>
                           </>
@@ -159,9 +159,9 @@ const ReviewList = memo(function ReviewList({
                   </div>
 
                   {/* Badges */}
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1.5 shrink-0 self-start xs:self-auto">
                     <span
-                      className={`text-[10px] font-bold px-2.5 py-1 rounded-md border flex items-center gap-1 ${
+                      className={`text-[10px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border flex items-center gap-1 ${
                         review.voted_up_steam
                           ? 'bg-blue-500/15 text-blue-300 border-blue-500/30'
                           : 'bg-[#0f1520] text-slate-400 border-[#1e293b]'
@@ -169,20 +169,20 @@ const ReviewList = memo(function ReviewList({
                     >
                       <span>Steam</span>
                       {review.voted_up_steam ? (
-                        <ThumbsUp className="size-3 text-blue-400" />
+                        <ThumbsUp className="size-3 text-blue-400 shrink-0" />
                       ) : (
-                        <ThumbsDown className="size-3 text-slate-400" />
+                        <ThumbsDown className="size-3 text-slate-400 shrink-0" />
                       )}
                     </span>
 
                     <span
-                      className={`text-[10px] font-black px-2.5 py-1 rounded-md border flex items-center gap-1 ${
+                      className={`text-[10px] font-black px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border flex items-center gap-1 ${
                         isPositive
                           ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                           : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
                       }`}
                     >
-                      <Sparkles className="size-3" />
+                      <Sparkles className="size-3 shrink-0" />
                       <span>IA: {review.sentiment_predicted}</span>
                     </span>
                   </div>
