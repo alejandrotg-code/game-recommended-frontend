@@ -99,14 +99,11 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
   const negativeCount = useMemo(() => reviewsClassified.filter((r) => r.sentiment_predicted === 'Negativo').length, [reviewsClassified]);
 
   const handleAffiliateClick = (storeName) => {
-    if (typeof window !== 'undefined') {
-      if (window.gtag) {
-        window.gtag('event', 'affiliate_click', {
-          store: storeName,
-          game: gameInfo?.name || result.app_id,
-        });
-      }
-      console.log(`[Affiliate Click] Store: ${storeName} | Game: ${gameInfo?.name || result.app_id}`);
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'affiliate_click', {
+        store: storeName,
+        game: gameInfo?.name || result?.app_id,
+      });
     }
   };
 
