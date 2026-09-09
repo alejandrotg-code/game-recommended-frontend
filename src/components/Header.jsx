@@ -48,6 +48,30 @@ export default function Header() {
   };
 
   useEffect(() => {
+    try {
+      const seen = localStorage.getItem('seen_changelog_version');
+      if (seen !== LATEST_CHANGELOG_VERSION) {
+        setHasUnreadChangelog(true);
+      } else {
+        setHasUnreadChangelog(false);
+      }
+    } catch {
+      // LocalStorage fallback
+    }
+  }, [location.pathname]);
+
+  const handleNavClick = (path, key) => {
+    if (key === 'changelog') {
+      try {
+        localStorage.setItem('seen_changelog_version', LATEST_CHANGELOG_VERSION);
+      } catch {}
+      setHasUnreadChangelog(false);
+    }
+    navigate(path);
+    setMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
