@@ -287,6 +287,10 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400" />
           </a>
         </div>
+
+        <p className="text-[10px] text-slate-500 pt-1 text-center font-normal">
+          * Los enlaces a Instant Gaming y G2A contienen parámetros de afiliación (LSSI-CE Art. 20). Al comprar mediante ellos apoya la infraestructura del proyecto sin coste extra.
+        </p>
       </div>
 
       {/* ── 4. BADGE DE GITHUB ── */}
