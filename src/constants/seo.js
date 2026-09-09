@@ -1,4 +1,4 @@
-export const SITE_URL = 'https://steam-reviews.alejandrotg.es';
+export const SITE_URL = 'https://game-recommended.alejandrotg.es';
 export const SITE_NAME = 'Game Recommended AI';
 export const SITE_HANDLE = '@alejandrotg_code';
 export const SITE_LOCALE = 'es_ES';

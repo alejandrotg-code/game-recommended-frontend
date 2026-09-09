@@ -98,6 +98,15 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
   const positiveCount = useMemo(() => reviewsClassified.filter((r) => r.sentiment_predicted === 'Positivo').length, [reviewsClassified]);
   const negativeCount = useMemo(() => reviewsClassified.filter((r) => r.sentiment_predicted === 'Negativo').length, [reviewsClassified]);
 
+  const handleAffiliateClick = (storeName) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'affiliate_click', {
+        store: storeName,
+        game: gameInfo?.name || result?.app_id,
+      });
+    }
+  };
+
   if (!result) return null;
 
   const {
@@ -229,6 +238,33 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
         negativeCount={negativeCount}
       />
 
+      {/* ── BANNER DESTACADO DE AFILIADO (Si es recomendado) ── */}
+      {['Extremadamente Recomendado', 'Recomendado'].includes(recommendation_level) && (
+        <div className="bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-[#0f1520] border border-orange-500/30 p-3.5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-lg">
+          <div className="flex items-center gap-2.5 text-center sm:text-left">
+            <span className="text-xl">🔥</span>
+            <div>
+              <div className="text-slate-100 font-extrabold text-xs sm:text-sm">
+                ¡Veredicto Positivo! ¿Decidido a jugarlo?
+              </div>
+              <div className="text-slate-400 text-[11px]">
+                Consigue tu clave digital de Steam al mejor precio en Instant Gaming
+              </div>
+            </div>
+          </div>
+          <a
+            href={instantGamingUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => handleAffiliateClick('InstantGaming-BannerCTA')}
+            className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-xl font-black text-xs shrink-0 transition-all btn-tactical shadow-md flex items-center gap-1.5 cursor-pointer"
+          >
+            <span>Ver Oferta en Instant Gaming</span>
+            <ExternalLink className="size-3.5" />
+          </a>
+        </div>
+      )}
+
       {/* ── 3. COMPARADOR DE PRECIOS ── */}
       <div className="tactical-card p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
@@ -243,13 +279,17 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href={instantGamingUrl}
             target="_blank"
             rel="noreferrer"
+            onClick={() => handleAffiliateClick('InstantGaming')}
             className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-orange-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
           >
             <div className="flex items-center gap-2">
               <span className="text-orange-400">⚡</span>
               <div>
-                <div className="text-slate-100 font-bold">Instant Gaming</div>
-                <div className="text-[10px] text-slate-500 font-normal">Claves de Steam</div>
+                <div className="text-slate-100 font-bold flex items-center gap-1">
+                  <span>Instant Gaming</span>
+                  <span className="text-[9px] bg-orange-500/20 text-orange-400 px-1 rounded font-normal">Clave PC</span>
+                </div>
+                <div className="text-[10px] text-slate-500 font-normal">Descuentos Digitales</div>
               </div>
             </div>
             <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-orange-400" />
@@ -259,13 +299,17 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href={g2aUrl}
             target="_blank"
             rel="noreferrer"
+            onClick={() => handleAffiliateClick('G2A')}
             className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-amber-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
           >
             <div className="flex items-center gap-2">
               <span className="text-amber-400">🟡</span>
               <div>
-                <div className="text-slate-100 font-bold">G2A Marketplace</div>
-                <div className="text-[10px] text-slate-500 font-normal">Ofertas Globales</div>
+                <div className="text-slate-100 font-bold flex items-center gap-1">
+                  <span>G2A Marketplace</span>
+                  <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1 rounded font-normal">Global</span>
+                </div>
+                <div className="text-[10px] text-slate-500 font-normal">Ofertas Mundiales</div>
               </div>
             </div>
             <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400" />
@@ -275,6 +319,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             href={steamUrl}
             target="_blank"
             rel="noreferrer"
+            onClick={() => handleAffiliateClick('SteamStore')}
             className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-blue-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
           >
             <div className="flex items-center gap-2">
