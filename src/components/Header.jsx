@@ -5,15 +5,10 @@ import {
   Sparkles,
   Cpu,
   History,
-  Globe,
   Menu,
   X,
   Activity,
-  CheckCircle2,
-  AlertTriangle,
-  Loader2,
 } from 'lucide-react';
-import { checkBackendHealth } from '../services/healthService';
 import { LATEST_CHANGELOG_VERSION } from '../constants/changelog';
 
 function GithubIcon({ className = "size-3.5" }) {
@@ -29,28 +24,23 @@ export default function Header() {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [backendStatus, setBackendStatus] = useState('checking');
-  const [hasUnreadChangelog, setHasUnreadChangelog] = useState(false);
-  const menuRef = useRef(null);
-
-  useEffect(() => {
+  const [hasUnreadChangelog, setHasUnreadChangelog] = useState(() => {
     try {
       const seen = localStorage.getItem('seen_changelog_version');
-      if (seen !== LATEST_CHANGELOG_VERSION) {
-        setHasUnreadChangelog(true);
-      } else {
-        setHasUnreadChangelog(false);
-      }
+      return seen !== LATEST_CHANGELOG_VERSION;
     } catch {
-      // LocalStorage fallback
+      return false;
     }
-  }, [location.pathname]);
+  });
+  const menuRef = useRef(null);
 
   const handleNavClick = (path, key) => {
     if (key === 'changelog') {
       try {
         localStorage.setItem('seen_changelog_version', LATEST_CHANGELOG_VERSION);
-      } catch {}
+      } catch (err) {
+        console.error('LocalStorage error:', err);
+      }
       setHasUnreadChangelog(false);
     }
     navigate(path);
@@ -61,17 +51,6 @@ export default function Header() {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    const runCheck = async () => {
-      if (document.hidden) return;
-      const result = await checkBackendHealth();
-      setBackendStatus(result.status);
-    };
-    runCheck();
-    const interval = setInterval(runCheck, 60_000);
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -148,28 +127,6 @@ export default function Header() {
       icon: <Activity className="size-3.5" />,
     },
   ];
-
-  const statusConfig = {
-    checking: {
-      color: 'bg-amber-400',
-      ping: false,
-      label: 'Comprobando',
-      icon: <Loader2 className="size-3 animate-spin text-amber-400" />,
-    },
-    online: {
-      color: 'bg-emerald-400',
-      ping: true,
-      label: 'Servicio en línea',
-      icon: <CheckCircle2 className="size-3 text-emerald-400" />,
-    },
-    offline: {
-      color: 'bg-rose-500',
-      ping: false,
-      label: 'Servicio fuera de línea',
-      icon: <AlertTriangle className="size-3 text-rose-400" />,
-    },
-  };
-  const st = statusConfig[backendStatus] || statusConfig.checking;
 
   return (
     <header

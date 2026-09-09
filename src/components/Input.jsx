@@ -2,13 +2,10 @@ import { useState, useEffect, useRef, memo } from 'react';
 import {
   Search,
   X,
-  Command,
-  Sparkles,
   Gamepad2,
   AlertCircle,
   ArrowRight,
   Loader2,
-  ExternalLink,
 } from 'lucide-react';
 import { searchGames } from '../services/steamService';
 

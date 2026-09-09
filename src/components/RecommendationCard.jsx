@@ -4,14 +4,7 @@ import {
   ThumbsUp,
   Scale,
   ThumbsDown,
-  Share2,
-  Copy,
-  Check,
   ExternalLink,
-  Code,
-  ShoppingBag,
-  Calendar,
-  User,
 } from 'lucide-react';
 import SentimentChart from './recommendation/SentimentChart';
 import TopKeyWords from './recommendation/TopKeyWords';
