@@ -1,13 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
-import {
-  Activity,
-  Sparkles,
-  Gamepad2,
-  AlertTriangle,
-  Loader2,
-  Search,
-} from 'lucide-react';
+import { AlertTriangle, Search } from 'lucide-react';
 import './App.css';
 import Header from './components/Header';
 import GameSearch from './components/Input';

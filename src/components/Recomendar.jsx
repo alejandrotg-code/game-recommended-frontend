@@ -4,12 +4,10 @@ import {
   BrainCircuit,
   Compass,
   Gamepad2,
-  ExternalLink,
   ChevronLeft,
   ChevronRight,
   Loader2,
   AlertCircle,
-  Tag,
 } from 'lucide-react';
 import { getRagRecommendations } from '../services/steamService';
 import { getInstantGamingUrl, getG2aUrl, getSteamStoreUrl } from '../config/affiliates';

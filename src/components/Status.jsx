@@ -43,9 +43,31 @@ export default function Status() {
   };
 
   useEffect(() => {
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 30_000);
-    return () => clearInterval(interval);
+    let isMounted = true;
+    const loadInitialStatus = async () => {
+      const start = performance.now();
+      const result = await checkBackendHealth();
+      const duration = Math.round(performance.now() - start);
+
+      if (isMounted) {
+        setStatusData({
+          status: result.status,
+          latency: duration,
+          lastChecked: new Date().toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }),
+        });
+      }
+    };
+
+    loadInitialStatus();
+    const interval = setInterval(loadInitialStatus, 30_000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const services = [

@@ -6,7 +6,6 @@ import {
   BarChart3,
   CheckCircle2,
   HelpCircle,
-  ShieldCheck,
   Zap,
 } from 'lucide-react';
 import SeoHead from './SeoHead';

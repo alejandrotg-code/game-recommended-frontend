@@ -1,5 +1,5 @@
 import { useState, memo, useMemo } from 'react';
-import { ThumbsUp, ThumbsDown, MessageSquare, Clock, User, Sparkles } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, MessageSquare, Clock, Sparkles } from 'lucide-react';
 
 const CHAR_LIMIT = 280;
 
