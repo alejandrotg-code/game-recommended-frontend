@@ -1,4 +1,18 @@
 import { useState, memo, useMemo } from 'react';
+import {
+  Trophy,
+  ThumbsUp,
+  Scale,
+  ThumbsDown,
+  Share2,
+  Copy,
+  Check,
+  ExternalLink,
+  Code,
+  ShoppingBag,
+  Calendar,
+  User,
+} from 'lucide-react';
 import SentimentChart from './recommendation/SentimentChart';
 import TopKeyWords from './recommendation/TopKeyWords';
 import ReviewList from './recommendation/ReviewList';
@@ -11,7 +25,8 @@ const getVerdictConfig = (level) => {
         bg: 'bg-emerald-500/10 border-emerald-500/30',
         text: 'text-emerald-400',
         badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-        icon: '🏆',
+        icon: <Trophy className="size-3.5 text-emerald-400" />,
+        label: 'Extremadamente Recomendado',
         barColor: '#10b981',
       };
     case 'Recomendado':
@@ -19,7 +34,8 @@ const getVerdictConfig = (level) => {
         bg: 'bg-blue-500/10 border-blue-500/30',
         text: 'text-blue-400',
         badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
-        icon: '👍',
+        icon: <ThumbsUp className="size-3.5 text-blue-400" />,
+        label: 'Recomendado',
         barColor: '#3b82f6',
       };
     case 'Mixto':
@@ -27,7 +43,8 @@ const getVerdictConfig = (level) => {
         bg: 'bg-amber-500/10 border-amber-500/30',
         text: 'text-amber-400',
         badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-        icon: '⚖️',
+        icon: <Scale className="size-3.5 text-amber-400" />,
+        label: 'Mixto',
         barColor: '#f59e0b',
       };
     default:
@@ -35,7 +52,8 @@ const getVerdictConfig = (level) => {
         bg: 'bg-rose-500/10 border-rose-500/30',
         text: 'text-rose-400',
         badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-        icon: '👎',
+        icon: <ThumbsDown className="size-3.5 text-rose-400" />,
+        label: 'No Recomendado',
         barColor: '#f43f5e',
       };
   }
@@ -48,10 +66,10 @@ const SPANISH_STOPWORDS = new Set([
 function getTopWords(reviews, sentiment, limit = 8) {
   const counts = {};
   const regex = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]+/g;
-  
+
   reviews
-    .filter(r => r.sentiment_predicted === sentiment)
-    .forEach(r => {
+    .filter((r) => r.sentiment_predicted === sentiment)
+    .forEach((r) => {
       const text = r.review_text.toLowerCase();
       let match;
       while ((match = regex.exec(text)) !== null) {
@@ -84,8 +102,8 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
   const topPositiveWords = useMemo(() => getTopWords(reviewsClassified, 'Positivo', 10), [reviewsClassified]);
   const topNegativeWords = useMemo(() => getTopWords(reviewsClassified, 'Negativo', 10), [reviewsClassified]);
 
-  const positiveCount = useMemo(() => reviewsClassified.filter(r => r.sentiment_predicted === 'Positivo').length, [reviewsClassified]);
-  const negativeCount = useMemo(() => reviewsClassified.filter(r => r.sentiment_predicted === 'Negativo').length, [reviewsClassified]);
+  const positiveCount = useMemo(() => reviewsClassified.filter((r) => r.sentiment_predicted === 'Positivo').length, [reviewsClassified]);
+  const negativeCount = useMemo(() => reviewsClassified.filter((r) => r.sentiment_predicted === 'Negativo').length, [reviewsClassified]);
 
   if (!result) return null;
 
@@ -94,7 +112,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
     recommendation_level,
     sentiment_stats,
     steam_voted_up_pct,
-    game_details = {}
+    game_details = {},
   } = result;
 
   const instantGamingUrl = getInstantGamingUrl(gameInfo?.name, result.app_id);
@@ -105,9 +123,9 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
 
   return (
     <div className="w-full space-y-5 animate-fade-up mt-2">
-      {/* ── 1. CARD PRINCIPAL ── */}
+      {/* ── 1. CARD PRINCIPAL ENCABEZADO DE JUEGO ── */}
       <div className={`tactical-card overflow-hidden border ${cfg.bg}`}>
-        {/* Banner de Portada */}
+        {/* Banner de Portada / Header Hero */}
         {gameInfo?.image ? (
           <div className="relative w-full h-36 sm:h-44 overflow-hidden border-b border-[#1b2434]">
             <img
@@ -116,6 +134,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               className="w-full h-full object-cover brightness-[0.45]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0f1520] via-[#0f1520]/50 to-transparent" />
+
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 flex items-end justify-between gap-4">
               <div className="flex items-center gap-3">
                 <img
@@ -157,8 +176,9 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               </div>
 
               <div className="text-right shrink-0 flex flex-col items-end gap-1.5">
-                <span className={`text-xs font-bold px-2.5 py-1 rounded border ${cfg.badge}`}>
-                  {cfg.icon} {recommendation_level}
+                <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 ${cfg.badge}`}>
+                  {cfg.icon}
+                  <span>{recommendation_level}</span>
                 </span>
                 <button
                   type="button"
@@ -186,7 +206,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               </div>
             </div>
             <div className="text-right">
-              <span className={`text-xs font-bold px-2.5 py-1 rounded border ${cfg.badge}`}>{cfg.icon} {recommendation_level}</span>
+              <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 ${cfg.badge}`}>{cfg.icon} <span>{recommendation_level}</span></span>
             </div>
           </div>
         )}
@@ -239,9 +259,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                 <div className="text-[10px] text-slate-500 font-normal">Claves de Steam</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-slate-500 group-hover:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-orange-400" />
           </a>
 
           <a
@@ -257,9 +275,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                 <div className="text-[10px] text-slate-500 font-normal">Ofertas Globales</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400" />
           </a>
 
           <a
@@ -275,9 +291,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                 <div className="text-[10px] text-slate-500 font-normal">Precio Oficial</div>
               </div>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400" />
           </a>
         </div>
       </div>
@@ -285,7 +299,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
       {/* ── 4. BADGE DE GITHUB ── */}
       <div className="tactical-card p-4 space-y-3">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Badge Dinámico de Veredicto</h4>
-        
+
         <div className="flex flex-col sm:flex-row gap-3 items-center">
           <div className="bg-[#080b11] border border-[#1b2434] px-3 py-2 rounded flex items-center justify-center shrink-0">
             <img

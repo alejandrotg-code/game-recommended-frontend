@@ -1,6 +1,28 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  Search,
+  Sparkles,
+  Cpu,
+  History,
+  Globe,
+  Menu,
+  X,
+  Activity,
+  CheckCircle2,
+  AlertTriangle,
+  Loader2,
+} from 'lucide-react';
 import { checkBackendHealth } from '../services/healthService';
+import { LATEST_CHANGELOG_VERSION } from '../constants/changelog';
+
+function GithubIcon({ className = "size-3.5" }) {
+  return (
+    <svg className={`${className} fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+    </svg>
+  );
+}
 
 export default function Header() {
   const navigate = useNavigate();
@@ -8,7 +30,32 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [backendStatus, setBackendStatus] = useState('checking');
+  const [hasUnreadChangelog, setHasUnreadChangelog] = useState(false);
   const menuRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      const seen = localStorage.getItem('seen_changelog_version');
+      if (seen !== LATEST_CHANGELOG_VERSION) {
+        setHasUnreadChangelog(true);
+      } else {
+        setHasUnreadChangelog(false);
+      }
+    } catch {
+      // LocalStorage fallback
+    }
+  }, [location.pathname]);
+
+  const handleNavClick = (path, key) => {
+    if (key === 'changelog') {
+      try {
+        localStorage.setItem('seen_changelog_version', LATEST_CHANGELOG_VERSION);
+      } catch {}
+      setHasUnreadChangelog(false);
+    }
+    navigate(path);
+    setMobileMenuOpen(false);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -59,158 +106,144 @@ export default function Header() {
     activePage = 'changelog';
   } else if (location.pathname === '/recomendar') {
     activePage = 'recommend';
+  } else if (location.pathname === '/estado') {
+    activePage = 'status';
   }
 
   const navItems = [
     {
       key: 'home',
       label: 'Analizar Juego',
-      shortLabel: 'Analizar',
       path: '/',
       description: 'Buscador y análisis de opiniones',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      )
+      icon: <Search className="size-3.5" />,
     },
     {
       key: 'recommend',
       label: 'Recomendar por IA',
-      shortLabel: 'Recomendador',
       path: '/recomendar',
       isBeta: true,
       description: 'Encuentra títulos mediante RAG & NLP',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-        </svg>
-      )
+      icon: <Sparkles className="size-3.5" />,
     },
     {
       key: 'how-it-works',
       label: '¿Cómo funciona?',
-      shortLabel: 'Cómo Funciona',
       path: '/como-funciona',
       description: 'Pipeline técnico y modelo ML',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      )
+      icon: <Cpu className="size-3.5" />,
     },
     {
       key: 'changelog',
       label: 'Changelog',
-      shortLabel: 'Changelog',
       path: '/changelog',
       description: 'Historial de versiones y mejoras',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
+      icon: <History className="size-3.5" />,
+    },
+    {
+      key: 'status',
+      label: 'Estado',
+      path: '/estado',
+      description: 'Estado de los servicios e infraestructura en tiempo real',
+      icon: <Activity className="size-3.5" />,
     },
   ];
 
   const statusConfig = {
-    checking: { color: 'bg-slate-500', label: 'Comprobando' },
-    online: { color: 'bg-emerald-400', label: 'Servicio en línea' },
-    offline: { color: 'bg-rose-500', label: 'Servicio fuera de línea' },
+    checking: {
+      color: 'bg-amber-400',
+      ping: false,
+      label: 'Comprobando',
+      icon: <Loader2 className="size-3 animate-spin text-amber-400" />,
+    },
+    online: {
+      color: 'bg-emerald-400',
+      ping: true,
+      label: 'Servicio en línea',
+      icon: <CheckCircle2 className="size-3 text-emerald-400" />,
+    },
+    offline: {
+      color: 'bg-rose-500',
+      ping: false,
+      label: 'Servicio fuera de línea',
+      icon: <AlertTriangle className="size-3 text-rose-400" />,
+    },
   };
-  const st = statusConfig[backendStatus];
+  const st = statusConfig[backendStatus] || statusConfig.checking;
 
   return (
     <header
       ref={menuRef}
       className={`w-full sticky top-0 z-50 transition-all duration-200 ${
         scrolled || mobileMenuOpen
-          ? 'bg-[#080b11]/90 backdrop-blur-md border-b border-[#1b2434] shadow-md'
-          : 'bg-transparent border-b border-transparent'
+          ? 'bg-[#080b11]/90 backdrop-blur-md border-b border-[#1b2434] shadow-md py-3'
+          : 'bg-transparent border-b border-transparent py-4'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-
-        {/* LOGO */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
+        {/* LOGO MARCA IZQUIERDA */}
         <button
           onClick={() => {
             navigate('/');
             setMobileMenuOpen(false);
           }}
-          className="flex items-center gap-2.5 cursor-pointer bg-transparent border-0 p-0 text-left outline-none group shrink-0"
-          aria-label="Ir al inicio"
+          className="flex items-center cursor-pointer bg-transparent border-0 p-0 text-left outline-none group shrink-0 whitespace-nowrap"
+          aria-label="Ir al inicio de Game Recommended AI"
         >
-          <div className="relative p-2 rounded-lg border border-[#1b2434] bg-[#0f1520] group-hover:border-blue-500/40 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="size-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.75 3.5m5.84 10.87a6 6 0 01-7.37 5.83m0 0a6 6 0 01-7.38-5.84v-4.8m7.38 10.64a14.98 14.98 0 00-12.12-6.16" />
-            </svg>
-            <span
-              title={st.label}
-              className={`absolute -top-0.5 -right-0.5 w-2 h-2 ${st.color} rounded-full border border-[#080b11]`}
-            />
-          </div>
-
-          <div className="flex flex-col leading-tight">
-            <span className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Steam Review AI</span>
-            <span className="text-sm sm:text-base font-extrabold tracking-tight text-slate-100 group-hover:text-white transition-colors">
-              Game Recommended
-            </span>
-          </div>
+          <span className="text-sm sm:text-base font-extrabold tracking-tight text-slate-100 group-hover:text-white transition-colors whitespace-nowrap">
+            Game Recommended <span className="text-blue-400 font-black">AI</span>
+          </span>
         </button>
 
-        {/* NAVEGACIÓN DESKTOP */}
-        <nav className="hidden md:flex items-center gap-1 bg-[#0f1520] border border-[#1b2434] rounded-lg p-1" aria-label="Navegación principal">
-          {navItems.map(({ key, label, path, isBeta }) => (
-            <button
-              key={key}
-              onClick={() => navigate(path)}
-              className={`relative px-3.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer outline-none flex items-center gap-1.5 btn-tactical ${
-                activePage === key
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-100 hover:bg-[#151d2c]'
-              }`}
-            >
-              <span>{label}</span>
-              {isBeta && (
-                <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  NUEVO
-                </span>
-              )}
-            </button>
-          ))}
+        {/* NAVEGACIÓN DESKTOP EN EL CENTRO CON ESTADO DEL SERVICIO */}
+        <nav
+          className="hidden md:flex items-center gap-1 bg-[#0f1520] border border-[#1b2434] rounded-xl p-1 shrink-0 mx-auto"
+          aria-label="Navegación principal"
+        >
+          {navItems.map(({ key, label, path, isBeta, icon }) => {
+            const isActive = activePage === key;
+            const isChangelogUnread = key === 'changelog' && hasUnreadChangelog;
+            return (
+              <button
+                key={key}
+                onClick={() => handleNavClick(path, key)}
+                className={`relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer outline-none flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
+                  isActive
+                    ? 'bg-blue-600 text-white shadow-sm font-bold'
+                    : 'text-slate-400 hover:text-slate-100 hover:bg-[#151d2c]'
+                }`}
+              >
+                <span className={`shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`}>{icon}</span>
+                <span className="whitespace-nowrap">{label}</span>
+                {isBeta && (
+                  <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap shrink-0">
+                    BETA
+                  </span>
+                )}
+                {isChangelogUnread && (
+                  <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40 whitespace-nowrap shrink-0 animate-pulse">
+                    NUEVO
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* ACCIONES DESKTOP & BOTÓN MÓVIL */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div
-            title={st.label}
-            className="hidden md:flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 border border-[#1b2434] bg-[#0f1520] px-2.5 py-1 rounded-md"
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${st.color}`} />
-            {st.label}
-          </div>
-
-          <a
-            href="https://portfolio.alejandrotg.es"
-            target="_blank"
-            rel="noreferrer"
-            className="text-xs font-semibold text-slate-400 hover:text-slate-100 transition-colors hidden md:inline-flex items-center gap-1"
-          >
-            Portfolio
-          </a>
-
+        {/* ACCIONES DESKTOP DERECHA */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          {/* Link GitHub */}
           <a
             href="https://github.com/alejandrotg-code"
             target="_blank"
             rel="noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 border border-[#1b2434] bg-[#0f1520] hover:bg-[#151d2c] px-3 py-1 rounded-md text-xs font-semibold text-slate-200 transition-all"
+            className="hidden md:inline-flex items-center gap-1.5 border border-[#1b2434] bg-[#0f1520] hover:bg-[#151d2c] px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-200 transition-all whitespace-nowrap shrink-0"
           >
-            <svg className="size-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-            </svg>
-            <span>GitHub</span>
+            <GithubIcon className="size-3.5 text-slate-300 shrink-0" />
+            <span className="whitespace-nowrap">GitHub</span>
           </a>
 
+          {/* Botón Menú Móvil */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -219,20 +252,15 @@ export default function Header() {
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="size-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="size-4 text-blue-400" />
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="size-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
+              <Menu className="size-4 text-slate-300" />
             )}
           </button>
         </div>
-
       </div>
 
-      {/* MENÚ MÓVIL */}
+      {/* MENÚ MÓVIL DESPLEGABLE */}
       {mobileMenuOpen && (
         <div className="md:hidden w-full border-t border-[#1b2434] bg-[#080b11] px-4 py-4 space-y-2 shadow-2xl animate-fade-up">
           <div className="space-y-1">
@@ -258,7 +286,7 @@ export default function Header() {
                         <span className="text-xs font-bold leading-none">{label}</span>
                         {isBeta && (
                           <span className="text-[9px] font-bold uppercase px-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                            NUEVO
+                            BETA
                           </span>
                         )}
                       </div>
@@ -271,7 +299,6 @@ export default function Header() {
           </div>
         </div>
       )}
-
     </header>
   );
 }

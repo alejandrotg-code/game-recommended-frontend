@@ -1,13 +1,47 @@
+import { useEffect } from 'react';
+import {
+  Sparkles,
+  Bug,
+  TrendingUp,
+  Zap,
+  Layout,
+  History,
+  GitCommit,
+} from 'lucide-react';
+import SeoHead from './SeoHead';
+import { getBreadcrumbJsonLd } from '../services/seo/seoService';
+import { LATEST_CHANGELOG_VERSION } from '../constants/changelog';
+
+function GithubIcon({ className = "size-4" }) {
+  return (
+    <svg className={`${className} fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+    </svg>
+  );
+}
 
 const BADGE = {
-  new: { label: 'Nuevo', bg: 'bg-emerald-500/15', text: 'text-emerald-400', border: 'border-emerald-500/30' },
-  fix: { label: 'Fix', bg: 'bg-rose-500/15', text: 'text-rose-400', border: 'border-rose-500/30' },
-  improve: { label: 'Mejora', bg: 'bg-blue-500/15', text: 'text-blue-400', border: 'border-blue-500/30' },
-  perf: { label: 'Rendimiento', bg: 'bg-amber-500/15', text: 'text-amber-400', border: 'border-amber-500/30' },
-  ui: { label: 'UI / UX', bg: 'bg-violet-500/15', text: 'text-violet-400', border: 'border-violet-500/30' },
+  new: { label: 'Nuevo', bg: 'bg-emerald-500/20', text: 'text-emerald-300', border: 'border-emerald-500/40', icon: <Sparkles className="size-3.5" /> },
+  fix: { label: 'Fix', bg: 'bg-rose-500/20', text: 'text-rose-300', border: 'border-rose-500/40', icon: <Bug className="size-3.5" /> },
+  improve: { label: 'Mejora', bg: 'bg-blue-500/20', text: 'text-blue-300', border: 'border-blue-500/40', icon: <TrendingUp className="size-3.5" /> },
+  perf: { label: 'Rendimiento', bg: 'bg-amber-500/20', text: 'text-amber-300', border: 'border-amber-500/40', icon: <Zap className="size-3.5" /> },
+  ui: { label: 'UI / UX', bg: 'bg-violet-500/20', text: 'text-violet-300', border: 'border-violet-500/40', icon: <Layout className="size-3.5" /> },
 };
 
 const ENTRIES = [
+  {
+    version: '2.1.0',
+    date: '9 de septiembre de 2026',
+    type: 'ui',
+    title: 'Optimización SEO Integral, Integración de Lucide & Sistema de Componentes Tactical',
+    items: [
+      'Arquitectura SEO portátil framework-agnostic basada en constants/seo, canonicalUrl() y meta adaptables per-route.',
+      'Soporte completo para datos estructurados JSON-LD (Schema.org WebSite, WebApplication, BreadcrumbList, FAQPage y SoftwareApplication).',
+      'Etiquetas meta dinámicas Open Graph, Twitter Cards, manifest PWA, sitemap.xml y robots.txt listos para indexación en Google.',
+      'Instalación de utilidades UI estilo shadcn (lucide-react, clsx, tailwind-merge, class-variance-authority).',
+      'Refactorización visual con estética Steam Obsidian: botones interactivos, badges tácticos y tarjetas glassmorphic.',
+    ],
+  },
   {
     version: '2.0.0',
     date: '30 de julio de 2026',
@@ -19,7 +53,7 @@ const ENTRIES = [
       'Integración con Groq Cloud API (Llama 3.1 8B) para traducción automática inteligente de consultas (ES ➔ EN) y síntesis empática en español.',
       'Integración de enlaces monetizados con códigos de afiliados para Instant Gaming (igr=game-recommended) y G2A (gname=gamerecommended).',
       'Carga optimizada de carátulas en alta definición utilizando la CDN oficial de Steam Akamai.',
-      'Limpieza completa del código obsoleto del modelo Keras en frontend y backend.'
+      'Limpieza completa del código obsoleto del modelo Keras en frontend y backend.',
     ],
   },
   {
@@ -55,7 +89,6 @@ const ENTRIES = [
   {
     version: '1.0.4',
     date: '11 de junio de 2026',
-
     type: 'improve',
     title: 'Análisis enriquecido con limitador, rutas, conceptos clave y badges',
     items: [
@@ -120,144 +153,134 @@ const ENTRIES = [
   },
 ];
 
-// ── ICONO POR TIPO ────────────────────────────────────────────────────────────
-function TypeIcon({ type }) {
-  if (type === 'new') return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-    </svg>
-  );
-  if (type === 'fix') return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-    </svg>
-  );
-  if (type === 'improve') return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-    </svg>
-  );
-  if (type === 'perf') return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-    </svg>
-  );
-  // ui
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-    </svg>
-  );
-}
-
-// ── COMPONENTE PRINCIPAL ──────────────────────────────────────────────────────
 export default function Changelog() {
+  useEffect(() => {
+    try {
+      localStorage.setItem('seen_changelog_version', LATEST_CHANGELOG_VERSION);
+    } catch {
+      // Fallback
+    }
+  }, []);
+
   const badge = (type) => BADGE[type] ?? BADGE.new;
 
+  const breadcrumbLd = getBreadcrumbJsonLd([
+    { name: 'Changelog', path: '/changelog' },
+  ]);
+
   return (
-    <section className="py-10 sm:py-14 max-w-2xl mx-auto w-full animate-fade-up">
+    <>
+      <SeoHead
+        title="Historial de Versiones y Cambios"
+        description="Historial cronológico de actualizaciones, nuevas características, mejoras visuales y optimizaciones en Game Recommended AI."
+        canonicalPath="/changelog"
+        keywords={['Changelog', 'Historial de versiones', 'Novedades Game Recommended', 'Updates Steam AI']}
+        jsonLd={breadcrumbLd}
+      />
 
-      {/* Encabezado */}
-      <div className="mb-10 sm:mb-14 text-center">
-        <div className="inline-flex items-center gap-2 bg-violet-600/10 border border-violet-500/20 text-violet-400 text-[11px] font-semibold px-3 py-1.5 rounded-full mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          Historial de versiones
+      <section className="py-8 sm:py-12 max-w-3xl mx-auto w-full animate-fade-up space-y-12">
+        {/* ENCABEZADO CON TARJETA DEDICADA */}
+        <div className="py-10 px-6 sm:px-10 rounded-3xl bg-gradient-to-b from-[#111726]/90 via-[#0f1520]/80 to-[#080b11] border border-[#1e2d4a] shadow-2xl text-center space-y-4">
+          <div className="inline-flex items-center gap-2.5 bg-[#080b11] border border-[#1e2d4a] text-violet-400 text-xs font-black px-4 py-2 rounded-full shadow-md">
+            <History className="size-4 text-violet-400" />
+            <span>Historial de versiones</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+            Changelog
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 max-w-sm mx-auto leading-relaxed">
+            Aquí se documentan todos los cambios, mejoras y correcciones del proyecto de forma cronológica.
+          </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-50 mb-3">
-          Changelog
-        </h1>
-        <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
-          Aquí se documentan todos los cambios, mejoras y correcciones del proyecto de forma cronológica.
-        </p>
-      </div>
 
-      {/* Timeline */}
-      <div className="relative">
-        {/* Línea vertical */}
-        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-violet-500/40 via-blue-500/20 to-transparent" />
+        {/* TIMELINE CON TARJETAS ESTRUCTURADAS */}
+        <div className="relative">
+          {/* Línea vertical */}
+          <div className="absolute left-[9px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-blue-500 via-violet-500/40 to-transparent" />
 
-        <ol className="space-y-8 pl-8">
-          {ENTRIES.map((entry, idx) => {
-            const b = badge(entry.type);
-            const isLatest = idx === 0;
-            return (
-              <li key={entry.version} className="relative group">
-                {/* Dot en la línea */}
-                <span
-                  className={`absolute -left-8 top-1.5 flex size-4 items-center justify-center rounded-full border transition-all duration-300
-                    ${isLatest
-                      ? 'bg-violet-500 border-violet-400 shadow-[0_0_8px_2px_rgba(139,92,246,0.5)] group-hover:shadow-[0_0_12px_4px_rgba(139,92,246,0.6)]'
-                      : 'bg-[#0f172a] border-[#1e293b] group-hover:border-slate-500'
+          <ol className="space-y-10 pl-10">
+            {ENTRIES.map((entry, idx) => {
+              const b = badge(entry.type);
+              const isLatest = idx === 0;
+              return (
+                <li key={entry.version} className="relative group">
+                  {/* Dot en la línea */}
+                  <span
+                    className={`absolute -left-[39px] top-3 flex size-5 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                      isLatest
+                        ? 'bg-blue-500 border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.8)]'
+                        : 'bg-[#080b11] border-[#1e2d4a] group-hover:border-slate-400'
                     }`}
-                >
-                  {isLatest && <span className="size-1.5 rounded-full bg-white" />}
-                </span>
+                  >
+                    {isLatest && <span className="size-2 rounded-full bg-white animate-pulse" />}
+                  </span>
 
-                {/* Tarjeta */}
-                <div className={`border rounded-2xl p-5 transition-all duration-300 group-hover:border-white/10 group-hover:bg-white/[0.03]
-                  ${isLatest
-                    ? 'border-violet-500/20 bg-violet-600/5'
-                    : 'border-[#1e293b] bg-white/[0.015]'
-                  }`}
-                >
-                  {/* Cabecera de la tarjeta */}
-                  <div className="flex items-start justify-between gap-3 flex-wrap mb-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {/* Versión */}
-                      <span className="text-xs font-mono font-bold text-slate-300 bg-white/[0.06] border border-white/10 px-2 py-0.5 rounded-md">
-                        v{entry.version}
-                      </span>
-                      {/* Badge de tipo */}
-                      <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${b.bg} ${b.text} ${b.border}`}>
-                        <TypeIcon type={entry.type} />
-                        {b.label}
-                      </span>
-                      {isLatest && (
-                        <span className="text-[10px] font-semibold text-violet-400 bg-violet-500/10 border border-violet-500/25 px-2 py-0.5 rounded-full">
-                          Más reciente
+                  {/* Tarjeta */}
+                  <div
+                    className={`bg-[#111726] border rounded-3xl p-6 sm:p-8 transition-all duration-300 group-hover:border-slate-600 shadow-2xl space-y-4 ${
+                      isLatest
+                        ? 'border-blue-500/40 shadow-blue-900/20'
+                        : 'border-[#1e2d4a]'
+                    }`}
+                  >
+                    {/* Cabecera de la tarjeta */}
+                    <div className="flex items-start justify-between gap-4 flex-wrap pb-3 border-b border-[#1e2d4a]/80">
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        {/* Versión */}
+                        <span className="text-xs font-mono font-black text-white bg-[#080b11] border border-[#1e2d4a] px-3 py-1 rounded-xl shadow-inner">
+                          v{entry.version}
                         </span>
-                      )}
+                        {/* Badge de tipo */}
+                        <span
+                          className={`inline-flex items-center gap-1.5 text-xs font-extrabold px-3 py-1 rounded-full border ${b.bg} ${b.text} ${b.border}`}
+                        >
+                          {b.icon}
+                          {b.label}
+                        </span>
+                        {isLatest && (
+                          <span className="text-[10px] font-black text-blue-300 bg-blue-500/25 border border-blue-500/40 px-2.5 py-1 rounded-full">
+                            Más reciente
+                          </span>
+                        )}
+                      </div>
+                      {/* Fecha */}
+                      <time className="text-xs text-slate-400 font-mono font-bold shrink-0">{entry.date}</time>
                     </div>
-                    {/* Fecha */}
-                    <time className="text-[11px] text-slate-600 font-medium shrink-0">{entry.date}</time>
+
+                    {/* Título de la release */}
+                    <h2 className="text-base sm:text-lg font-black text-white">{entry.title}</h2>
+
+                    {/* Lista de cambios */}
+                    <ul className="space-y-2.5 pt-1">
+                      {entry.items.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                          <GitCommit className="size-4 mt-0.5 shrink-0 text-blue-400" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
 
-                  {/* Título de la release */}
-                  <h2 className="text-sm font-bold text-slate-200 mb-2.5">{entry.title}</h2>
-
-                  {/* Lista de cambios */}
-                  <ul className="space-y-1.5">
-                    {entry.items.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-slate-400 leading-relaxed">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="size-3.5 mt-0.5 shrink-0 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
-
-      {/* Footer de la sección */}
-      <p className="text-center text-[11px] text-slate-700 mt-10">
-        ¿Encontraste un bug? Abre un issue en{' '}
-        <a
-          href="https://github.com/alejandrotg-code"
-          target="_blank"
-          rel="noreferrer"
-          className="text-slate-500 hover:text-slate-300 underline underline-offset-2 transition-colors"
-        >
-          GitHub
-        </a>
-        .
-      </p>
-    </section>
+        {/* Footer de la sección */}
+        <p className="text-center text-xs text-slate-400 font-medium mt-12">
+          ¿Encontraste un error o deseas proponer una idea? Abre un issue en{' '}
+          <a
+            href="https://github.com/alejandrotg-code"
+            target="_blank"
+            rel="noreferrer"
+            className="text-white hover:text-blue-400 underline underline-offset-2 transition-colors font-bold inline-flex items-center gap-1.5"
+          >
+            <GithubIcon className="size-4 text-white" />
+            <span>GitHub</span>
+          </a>
+          .
+        </p>
+      </section>
+    </>
   );
 }
