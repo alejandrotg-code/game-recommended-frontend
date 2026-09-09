@@ -1,0 +1,1 @@
+export const LATEST_CHANGELOG_VERSION = '2.1.0';

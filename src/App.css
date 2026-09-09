@@ -1,0 +1,95 @@
+/* ═══════════════════════════════════════════════════════
+   ANIMACIONES & MICRO-INTERACCIONES STEAM OBSIDIAN
+   ═══════════════════════════════════════════════════════ */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   UTILIDADES & COMPONENTES TÁCTICOS
+   ═══════════════════════════════════════════════════════ */
+
+.animate-fade-up {
+  animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(21, 29, 44, 0.6) 0%,
+    rgba(40, 54, 77, 0.5) 50%,
+    rgba(21, 29, 44, 0.6) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Panel Táctil Principal con Glassmorphism y Espaciado */
+.tactical-card {
+  background: rgba(15, 21, 32, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid #1e293b;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+}
+
+.tactical-card-interactive {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tactical-card-interactive:hover {
+  border-color: #3b82f6;
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.2);
+}
+
+/* Scrollbar interno */
+.custom-scrollbar::-webkit-scrollbar { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 21, 32, 0.5); border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+.custom-scrollbar { scrollbar-width: thin; scrollbar-color: #1e293b transparent; }
+
+/* Feedback al presionar botones */
+.btn-tactical {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-tactical:active {
+  transform: scale(0.97);
+}
+
+/* Soporte para accesibilidad motion-reduce */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
