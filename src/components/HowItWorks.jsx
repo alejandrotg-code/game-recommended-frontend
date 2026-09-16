@@ -15,7 +15,7 @@ import { getBreadcrumbJsonLd, getFaqJsonLd } from '../services/seo/seoService';
 const steps = [
   {
     num: '01',
-    icon: <Search className="size-5 text-blue-400" />,
+    icon: <Search className="size-5 text-accent" />,
     title: 'Búsqueda e Identificación de Juego',
     description:
       'Escribes el título del juego, introduces su AppID o pegas la URL oficial de la tienda de Steam. El cliente frontend envía la solicitud al backend FastAPI de alta velocidad.',
@@ -23,7 +23,7 @@ const steps = [
   },
   {
     num: '02',
-    icon: <CloudDownload className="size-5 text-emerald-400" />,
+    icon: <CloudDownload className="size-5 text-positive" />,
     title: 'Extracción de Reseñas en Español',
     description:
       'FastAPI consulta la API oficial de Steam recuperando las opiniones más recientes escritas específicamente en castellano para garantizar el análisis del mercado hispanohablante.',
@@ -31,7 +31,7 @@ const steps = [
   },
   {
     num: '03',
-    icon: <Filter className="size-5 text-amber-400" />,
+    icon: <Filter className="size-5 text-warn" />,
     title: 'Limpieza de Texto (NLP Pipeline)',
     description:
       'Se procesa el texto mediante expresiones regulares eliminando hashtags, emojis, enlaces web, caracteres nulos y ruido de sintaxis, normalizando todo a minúsculas.',
@@ -47,10 +47,10 @@ const steps = [
   },
   {
     num: '05',
-    icon: <BarChart3 className="size-5 text-cyan-400" />,
+    icon: <BarChart3 className="size-5 text-accent-2" />,
     title: 'Veredicto e Informe Táctico',
     description:
-      'Se calcula el ratio de aprobación ponderado y se asigna el veredicto: <strong className="text-white">Extremadamente Recomendado</strong> (≥ 80%), <strong className="text-white">Recomendado</strong> (≥ 60%), <strong className="text-white">Mixto</strong> (≥ 40%) o <strong className="text-white">No Recomendado</strong> (&lt; 40%).',
+      'Se calcula el ratio de aprobación ponderado y se asigna el veredicto: <strong className="text-ink">Extremadamente Recomendado</strong> (≥ 80%), <strong className="text-ink">Recomendado</strong> (≥ 60%), <strong className="text-ink">Mixto</strong> (≥ 40%) o <strong className="text-ink">No Recomendado</strong> (&lt; 40%).',
     tech: 'FastAPI · JSON Response',
   },
 ];
@@ -114,15 +114,25 @@ export default function HowItWorks() {
 
       <div className="w-full max-w-3xl mx-auto space-y-12 animate-fade-up py-6 sm:py-10">
         {/* ENCABEZADO CON TARJETA DEDICADA */}
-        <section className="py-10 px-6 sm:px-10 rounded-3xl bg-gradient-to-b from-[#111726]/90 via-[#0f1520]/80 to-[#080b11] border border-[#1e2d4a] shadow-2xl text-center space-y-4">
-          <div className="inline-flex items-center gap-2.5 bg-[#080b11] border border-[#1e2d4a] text-blue-400 text-xs font-black px-4 py-2 rounded-full shadow-md">
-            <Cpu className="size-4 text-blue-400" />
+        <section className="py-10 px-6 sm:px-10 rounded-3xl bg-gradient-to-b from-surface-2/80 via-surface/70 to-bg border border-line shadow-2xl text-center space-y-4">
+          <div className="inline-flex items-center gap-2.5 bg-bg border border-line text-accent text-xs font-black px-4 py-2 rounded-full shadow-md">
+            <Cpu className="size-4 text-accent" />
             <span>Arquitectura & Pipeline Técnico</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+
+          {/* Kicker */}
+          <div className="flex items-center justify-center gap-2.5">
+            <span className="h-px w-4 bg-accent" />
+            <span className="text-[10px] font-display font-semibold tracking-[0.2em] uppercase text-ink-faint">
+              Cómo funciona
+            </span>
+            <span className="h-px w-4 bg-accent" />
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl font-display font-bold text-ink tracking-tight">
             ¿Cómo Funciona el Motor de Análisis?
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed font-normal">
+          <p className="text-ink-soft text-xs sm:text-sm max-w-lg mx-auto leading-relaxed font-normal">
             Proceso paso a paso desde que solicitas la búsqueda hasta la generación del veredicto con Inteligencia Artificial.
           </p>
         </section>
@@ -132,24 +142,24 @@ export default function HowItWorks() {
           {steps.map((step, i) => (
             <div
               key={step.num}
-              className="bg-[#111726] border border-[#1e2d4a] hover:border-blue-500/50 p-6 rounded-3xl shadow-xl flex gap-5 items-start transition-all"
+              className="bg-surface border border-line hover:border-accent/50 p-6 rounded-3xl shadow-xl flex gap-5 items-start transition-all"
               style={{ animationDelay: `${i * 60}ms` }}
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#080b11] border border-[#1e2d4a] flex items-center justify-center shrink-0 shadow-inner">
+              <div className="w-12 h-12 rounded-2xl bg-bg border border-line flex items-center justify-center shrink-0 shadow-inner">
                 {step.icon}
               </div>
 
               <div className="flex-1 min-w-0 space-y-2">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <h3 className="text-sm sm:text-base font-black text-white">
+                  <h3 className="text-sm sm:text-base font-display font-bold text-ink">
                     {step.title}
                   </h3>
-                  <span className="text-xs font-mono font-bold text-slate-300 bg-[#080b11] border border-[#1e2d4a] px-3 py-1 rounded-xl shrink-0">
+                  <span className="text-xs font-mono font-bold text-ink-soft bg-bg border border-line px-3 py-1 rounded-xl shrink-0">
                     {step.tech}
                   </span>
                 </div>
                 <p
-                  className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal"
+                  className="text-xs sm:text-sm text-ink-soft leading-relaxed font-normal"
                   dangerouslySetInnerHTML={{ __html: step.description }}
                 />
               </div>
@@ -158,35 +168,35 @@ export default function HowItWorks() {
         </section>
 
         {/* NOTA VENTAJA NLP */}
-        <section className="bg-[#111726] border border-[#1e2d4a] rounded-3xl p-6 sm:p-8 text-center space-y-3 border-l-8 border-l-blue-500 shadow-2xl">
+        <section className="bg-surface border border-line rounded-3xl p-6 sm:p-8 text-center space-y-3 border-l-8 border-l-accent shadow-2xl">
           <div className="flex items-center justify-center gap-2.5">
-            <Zap className="size-5 text-blue-400" />
-            <h4 className="text-sm font-black text-white uppercase tracking-wider">
+            <Zap className="size-5 text-accent" />
+            <h4 className="text-sm font-display font-bold text-ink uppercase tracking-wider">
               La Ventaja del Análisis Semántico NLP
             </h4>
           </div>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed font-normal">
-            A diferencia del porcentaje nativo de Steam (basado en un simple clic de me gusta), nuestro modelo examina <strong className="text-white font-bold">el texto real de las opiniones escritas en español</strong> para detectar modismos, sarcasmos y desglosar los puntos fuertes y débiles.
+          <p className="text-xs sm:text-sm text-ink-soft max-w-lg mx-auto leading-relaxed font-normal">
+            A diferencia del porcentaje nativo de Steam (basado en un simple clic de me gusta), nuestro modelo examina <strong className="text-ink font-bold">el texto real de las opiniones escritas en español</strong> para detectar modismos, sarcasmos y desglosar los puntos fuertes y débiles.
           </p>
         </section>
 
         {/* SECCIÓN FAQ CON TARJETAS DEDICADAS */}
-        <section className="space-y-6 pt-4 border-t border-[#1e2d4a]">
+        <section className="space-y-6 pt-4 border-t border-line">
           <div className="flex items-center gap-2.5 justify-center">
-            <HelpCircle className="size-5 text-blue-400" />
-            <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-wider">
+            <HelpCircle className="size-5 text-accent" />
+            <h3 className="text-sm sm:text-base font-display font-bold text-ink uppercase tracking-wider">
               Preguntas Frecuentes (FAQ)
             </h3>
           </div>
 
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-[#111726] border border-[#1e2d4a] p-6 rounded-2xl space-y-2 shadow-lg">
-                <h4 className="text-xs sm:text-sm font-extrabold text-white flex items-center gap-2.5">
-                  <CheckCircle2 className="size-4 text-blue-400 shrink-0" />
+              <div key={index} className="bg-surface border border-line p-6 rounded-2xl space-y-2 shadow-lg">
+                <h4 className="text-xs sm:text-sm font-extrabold text-ink flex items-center gap-2.5">
+                  <CheckCircle2 className="size-4 text-accent shrink-0" />
                   <span>{faq.question}</span>
                 </h4>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pl-6 font-normal">
+                <p className="text-xs sm:text-sm text-ink-soft leading-relaxed pl-6 font-normal">
                   {faq.answer}
                 </p>
               </div>
@@ -195,23 +205,23 @@ export default function HowItWorks() {
         </section>
 
         {/* SECCIÓN AVISO LEGAL Y TRANSPARENCIA */}
-        <section id="aviso-legal" className="bg-[#111726] border border-[#1e2d4a] rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+        <section id="aviso-legal" className="bg-surface border border-line rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
           <div className="flex items-center gap-2.5">
-            <ShieldCheck className="size-6 text-emerald-400 shrink-0" />
-            <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-wider">
+            <ShieldCheck className="size-6 text-positive shrink-0" />
+            <h3 className="text-sm sm:text-base font-display font-bold text-ink uppercase tracking-wider">
               Aviso Legal, Transparencia & Exención de Responsabilidad
             </h3>
           </div>
 
-          <div className="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+          <div className="space-y-3 text-xs sm:text-sm text-ink-soft leading-relaxed font-normal">
             <p>
-              <strong className="text-white font-bold">1. Ausencia de Tratamiento de Datos Personales:</strong> Este sitio web opera únicamente como una herramienta de consulta pública. No solicitamos, almacenamos ni procesamos ningún dato personal de los usuarios. No existen formularios de registro, inicio de sesión ni cookies de seguimiento o analíticas de terceros.
+              <strong className="text-ink font-bold">1. Ausencia de Tratamiento de Datos Personales:</strong> Este sitio web opera únicamente como una herramienta de consulta pública. No solicitamos, almacenamos ni procesamos ningún dato personal de los usuarios. No existen formularios de registro, inicio de sesión ni cookies de seguimiento o analíticas de terceros.
             </p>
             <p>
-              <strong className="text-white font-bold">2. Enlaces de Afiliación (LSSI-CE Art. 20):</strong> Algunos enlaces salientes hacia plataformas externas (Instant Gaming y G2A) incorporan identificadores de afiliado. Si el usuario decide realizar una compra tras acceder desde esta web, este servicio puede percibir una comisión sin coste adicional para el comprador, destinada al sostenimiento de la infraestructura de servidores de Inteligencia Artificial.
+              <strong className="text-ink font-bold">2. Enlaces de Afiliación (LSSI-CE Art. 20):</strong> Algunos enlaces salientes hacia plataformas externas (Instant Gaming y G2A) incorporan identificadores de afiliado. Si el usuario decide realizar una compra tras acceder desde esta web, este servicio puede percibir una comisión sin coste adicional para el comprador, destinada al sostenimiento de la infraestructura de servidores de Inteligencia Artificial.
             </p>
             <p>
-              <strong className="text-white font-bold">3. Precios y Veredictos de IA:</strong> Las valoraciones y resúmenes son estimaciones automatizadas generadas por algoritmos NLP a partir de opiniones públicas de Steam. Los precios mostrados de tiendas de terceros son únicamente orientativos y pueden sufrir variaciones en el proceso de compra final.
+              <strong className="text-ink font-bold">3. Precios y Veredictos de IA:</strong> Las valoraciones y resúmenes son estimaciones automatizadas generadas por algoritmos NLP a partir de opiniones públicas de Steam. Los precios mostrados de tiendas de terceros son únicamente orientativos y pueden sufrir variaciones en el proceso de compra final.
             </p>
           </div>
         </section>
