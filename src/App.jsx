@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, useSearchParams, Link } from 'react-router-dom';
-import { AlertTriangle, Search, ChevronRight } from 'lucide-react';
+import { AlertTriangle, Search, ChevronRight, Wheat } from 'lucide-react';
 import './App.css';
 import Header from './components/Header';
 import GameSearch from './components/Input';
@@ -35,9 +35,9 @@ function AppContent() {
     'Buscando opiniones escritas en español...',
     'Descargando las opiniones más recientes...',
     'Limpiando el texto de ruido y caracteres nulos...',
-    'Procesando con el clasificador de Inteligencia IA...',
+    'Clasificando opiniones como positivas o negativas...',
     'Clasificando cada opinión como Positiva o Negativa...',
-    'Comparando con la valoración de la muestra...',
+    'Comparando con la aprobación de Steam...',
     'Generando el informe interactivo...',
   ];
 
@@ -133,7 +133,7 @@ function AppContent() {
     : undefined;
 
   return (
-    <div className="min-h-screen bg-[#080b11] text-slate-100 flex flex-col font-sans antialiased overflow-x-hidden selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-bg text-ink flex flex-col font-sans antialiased overflow-x-hidden selection:bg-accent selection:text-white">
       <Header />
 
       <main className="w-full max-w-5xl mx-auto px-3 sm:px-6 flex-1 flex flex-col">
@@ -151,25 +151,28 @@ function AppContent() {
                 />
 
                 {/* HERO */}
-                <div className="relative pt-6 sm:pt-14 pb-6 text-center">
+                <div className="relative pt-6 sm:pt-14 pb-6 text-center overflow-hidden">
+                  {/* Luz estática del héroe */}
+                  <div aria-hidden="true" className="hero-light" />
+
                   {/* Badge de Estado Táctico */}
-                  <div className="inline-flex items-center gap-2 bg-[#0f1520] border border-[#1b2434] text-slate-300 text-[11px] sm:text-xs font-semibold px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full mb-4 sm:mb-5 shadow-sm max-w-full">
-                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shrink-0" />
-                    <span className="tracking-wide truncate">Motor NLP & Análisis de Sentimiento para Steam</span>
+                  <div className="relative inline-flex items-center gap-2 bg-bg border border-line text-ink-soft text-[11px] sm:text-xs font-semibold px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full mb-4 sm:mb-5 shadow-sm max-w-full">
+                    <span className="w-2 h-2 bg-positive rounded-full animate-pulse shrink-0" />
+                    <span className="tracking-wide truncate">Reseñas de Steam · Leídas en español</span>
                   </div>
 
                   {/* Título Principal */}
-                  <h1 className="text-2xl xs:text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-3 sm:mb-4 leading-[1.15] text-slate-100">
-                    Decodifica la Opinión Real de la <span className="text-blue-500">Comunidad de Steam</span>
+                  <h1 className="relative text-2xl xs:text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight mb-3 sm:mb-4 leading-[1.15] text-ink">
+                    Decodifica la Opinión Real de la <span className="text-gradient" style={{ textShadow: '0 0 28px color-mix(in srgb, var(--accent) 35%, transparent)' }}>Comunidad de Steam</span>
                   </h1>
 
                   {/* Subtítulo */}
-                  <p className="text-xs sm:text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 font-normal px-1">
-                    Analizamos quirúrgicamente las opiniones más recientes en <strong className="text-slate-200">español</strong> con modelos de Inteligencia IA para determinar si un juego realmente merece tu tiempo.
+                  <p className="relative text-xs sm:text-base md:text-lg text-ink-soft max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 font-normal px-1">
+                    Leemos cientos de reseñas recientes en español y te mostramos, con datos, si un juego realmente merece tu dinero y tu tiempo.
                   </p>
 
                   {/* Buscador de Juego */}
-                  <div className="w-full max-w-2xl mx-auto relative z-[100]">
+                  <div className="relative w-full max-w-2xl mx-auto z-[100]">
                     <GameSearch
                       onGameSelect={(game) => handleGameSelect(game, limit)}
                       isLoading={isLoading}
@@ -177,9 +180,9 @@ function AppContent() {
                   </div>
 
                   {/* Selector de cantidad de reseñas */}
-                  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-5 sm:mt-6 text-xs text-slate-400 relative z-[90]">
-                    <span className="font-semibold text-slate-400 whitespace-nowrap">Muestra a analizar:</span>
-                    <div className="flex items-center gap-1 bg-[#0f1520] border border-[#1b2434] p-1 rounded-xl">
+                  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-5 sm:mt-6 text-xs text-ink-faint relative z-[90]">
+                    <span className="font-semibold text-ink-faint whitespace-nowrap">Muestra a analizar:</span>
+                    <div className="flex items-center gap-1 bg-surface border border-line p-1 rounded-xl">
                       {[10, 20, 30].map((num) => (
                         <button
                           key={num}
@@ -193,8 +196,8 @@ function AppContent() {
                           }}
                           className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                             limit === num
-                              ? 'bg-blue-600 text-white shadow-sm'
-                              : 'text-slate-400 hover:text-slate-200 hover:bg-[#151d2c]'
+                              ? 'bg-accent text-white shadow-sm'
+                              : 'text-ink-faint hover:text-ink hover:bg-surface-2'
                           }`}
                         >
                           {num} reseñas
@@ -206,10 +209,10 @@ function AppContent() {
 
                 {/* ERROR */}
                 {error && (
-                  <div className="w-full bg-rose-500/10 border border-rose-500/30 p-4 rounded-xl text-rose-400 text-sm flex gap-3 items-start my-4">
-                    <AlertTriangle className="size-5 text-rose-400 shrink-0 mt-0.5" />
+                  <div className="w-full bg-negative/10 border border-negative/30 p-4 rounded-xl text-negative text-sm flex gap-3 items-start my-4">
+                    <AlertTriangle className="size-5 text-negative shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="font-bold text-rose-300 mb-0.5">Error en el análisis</h4>
+                      <h4 className="font-bold text-negative mb-0.5">Error en el análisis</h4>
                       <p className="opacity-90 leading-relaxed text-xs sm:text-sm">{error}</p>
                     </div>
                   </div>
@@ -219,19 +222,43 @@ function AppContent() {
                 {isLoading && (
                   <div className="w-full py-12 flex flex-col items-center justify-center space-y-6">
                     <div className="relative flex items-center justify-center">
-                      <div className="w-12 h-12 border-2 border-blue-600/30 border-t-blue-500 rounded-full animate-spin" />
+                      <div className="w-12 h-12 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
                     </div>
 
                     <div className="text-center space-y-1.5 max-w-sm">
-                      <p className="text-sm font-bold text-slate-200">{loadingTexts[loadingStep]}</p>
-                      <p className="text-xs text-slate-500">Procesando datos en tiempo real desde Steam...</p>
+                      <p className="text-sm font-bold text-ink">{loadingTexts[loadingStep]}</p>
+                      <p className="text-xs text-ink-faint">Procesando datos en tiempo real desde Steam...</p>
                     </div>
 
-                    <div className="w-full max-w-xs bg-[#0f1520] border border-[#1b2434] rounded-full h-1 overflow-hidden">
+                    <div className="w-full max-w-xs bg-surface-2 border border-line rounded-full h-1 overflow-hidden">
                       <div
-                        className="h-full bg-blue-500 rounded-full transition-all duration-[1800ms] ease-linear"
+                        className="h-full bg-gradient-to-r from-accent via-accent-2 to-accent rounded-full transition-all duration-[1800ms] ease-linear"
                         style={{ width: `${((loadingStep + 1) / loadingTexts.length) * 100}%` }}
                       />
+                    </div>
+
+                    <div className="flex flex-wrap justify-center gap-1.5 max-w-md">
+                      {loadingTexts.map((text, i) => {
+                        const shortLabel = text.length > 28 ? text.slice(0, 26) + '…' : text;
+                        const isDone = i < loadingStep;
+                        const isCurrent = i === loadingStep;
+                        return (
+                          <span
+                            key={i}
+                            className={`inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full border transition-colors ${
+                              isCurrent
+                                ? 'bg-accent/15 text-accent border-accent/40'
+                                : isDone
+                                  ? 'bg-surface-2 text-ink-faint border-line line-through'
+                                  : 'bg-surface-2 text-ink-faint/70 border-line'
+                            }`}
+                            title={text}
+                          >
+                            {isDone && <span className="text-positive mr-0.5">✓</span>}
+                            {shortLabel}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -246,14 +273,14 @@ function AppContent() {
                 {/* ESTADO VACÍO INICIAL */}
                 {!isLoading && !analysisResult && !error && (
                   <div className="space-y-4 max-w-lg mx-auto w-full my-4">
-                    <div className="text-center py-6 sm:py-8 px-4 sm:px-6 border border-dashed border-[#1b2434] rounded-2xl bg-[#0f1520]/40">
-                      <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                    <div className="text-center py-6 sm:py-8 px-4 sm:px-6 border border-dashed border-line rounded-2xl bg-surface/50 transition-all hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/10 dark:hover:shadow-black/40">
+                      <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
                         <Search className="size-5" />
                       </div>
-                      <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                      <h3 className="text-xs font-display font-bold text-ink-soft uppercase tracking-wider mb-1">
                         Empieza a analizar
                       </h3>
-                      <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed mb-4">
+                      <p className="text-xs text-ink-faint max-w-xs mx-auto leading-relaxed mb-4">
                         Escribe el título de cualquier videojuego, introduce su AppID o pega la URL de la tienda
                       </p>
                       <div className="flex flex-wrap justify-center gap-2">
@@ -266,7 +293,7 @@ function AppContent() {
                             key={game.id}
                             type="button"
                             onClick={() => handleGameSelect(game)}
-                            className="text-xs font-semibold text-slate-400 border border-[#1b2434] hover:border-blue-500/40 hover:text-blue-400 bg-[#0f1520] px-3 py-1 rounded-lg transition-all cursor-pointer btn-tactical"
+                            className="text-xs font-semibold text-ink-soft border border-line hover:border-accent/40 hover:text-accent bg-surface px-3 py-1 rounded-lg transition-all cursor-pointer btn-tactical"
                           >
                             {game.name}
                           </button>
@@ -275,39 +302,39 @@ function AppContent() {
                     </div>
 
                     {/* MUESTRA DESTACADA: STARDEW VALLEY */}
-                    <div className="bg-[#0f1520] border border-emerald-500/30 p-3.5 sm:p-4 rounded-2xl text-left space-y-3 shadow-lg">
+                    <div className="bg-surface border border-positive/30 p-3.5 sm:p-4 rounded-2xl text-left space-y-3 shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/50">
                       <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xs shrink-0">
-                            🌾
+                          <div className="w-8 h-8 rounded-lg bg-positive/20 border border-positive/40 flex items-center justify-center text-positive shrink-0">
+                            <Wheat className="size-4" />
                           </div>
                           <div>
-                            <h4 className="text-xs sm:text-sm font-extrabold text-white flex flex-wrap items-center gap-1.5">
+                            <h4 className="text-xs sm:text-sm font-display font-bold text-ink flex flex-wrap items-center gap-1.5">
                               <span>Stardew Valley</span>
-                              <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-1.5 py-0.5 rounded font-mono">
+                              <span className="text-[10px] bg-bg text-ink-faint border border-line px-1.5 py-0.5 rounded font-mono">
                                 AppID: 413150
                               </span>
                             </h4>
-                            <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400 mt-0.5">
+                            <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-ink-faint mt-0.5">
                               <span>Análisis Muestra</span>
                               <span>•</span>
-                              <span className="text-emerald-400 font-semibold">Modelo IA</span>
+                              <span className="text-positive font-semibold">Modelo IA</span>
                             </div>
                           </div>
                         </div>
-                        <span className="text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded shrink-0">
+                        <span className="text-[10px] font-display font-bold bg-positive/15 text-positive border border-positive/30 px-2 py-0.5 rounded shrink-0">
                           Extremadamente Recomendado
                         </span>
                       </div>
 
-                      <div className="pt-2 border-t border-[#1b2434] flex items-center justify-between gap-2 text-xs">
-                        <span className="text-slate-400 text-[11px] font-medium">
+                      <div className="pt-2 border-t border-line flex items-center justify-between gap-2 text-xs">
+                        <span className="text-ink-faint text-[11px] font-medium">
                           Síntesis Inteligente de la Comunidad
                         </span>
                         <button
                           type="button"
                           onClick={() => handleGameSelect({ name: 'Stardew Valley', id: '413150' })}
-                          className="flex items-center gap-1.5 text-xs font-black text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical"
+                          className="flex items-center gap-1.5 text-xs font-black text-positive hover:text-positive/80 bg-positive/10 hover:bg-positive/20 border border-positive/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical"
                         >
                           <span>Ver Resumen IA</span>
                           <ChevronRight className="size-4 group-hover:translate-x-1 transition-transform" />
@@ -341,19 +368,19 @@ function AppContent() {
         </Routes>
       </main>
 
-      <footer className="w-full py-8 text-center border-t border-[#1b2434] mt-auto bg-[#080b11]/80 space-y-3">
-        <div className="flex flex-wrap justify-center items-center gap-4 text-xs text-slate-400 font-medium">
-          <Link to="/" className="hover:text-blue-400 transition-colors">Inicio</Link>
+      <footer className="w-full py-8 text-center border-t border-line mt-auto bg-bg/80 space-y-3">
+        <div className="flex flex-wrap justify-center items-center gap-4 text-xs text-ink-faint font-medium">
+          <Link to="/" className="hover:text-accent transition-colors">Inicio</Link>
           <span>·</span>
-          <Link to="/recomendar" className="hover:text-blue-400 transition-colors">Recomendar</Link>
+          <Link to="/recomendar" className="hover:text-accent transition-colors">Recomendar</Link>
           <span>·</span>
-          <Link to="/como-funciona" className="hover:text-blue-400 transition-colors">¿Cómo Funciona?</Link>
+          <Link to="/como-funciona" className="hover:text-accent transition-colors">¿Cómo Funciona?</Link>
           <span>·</span>
-          <a href="/como-funciona#aviso-legal" className="hover:text-blue-400 transition-colors">Aviso Legal & Transparencia</a>
+          <a href="/como-funciona#aviso-legal" className="hover:text-accent transition-colors">Aviso Legal & Transparencia</a>
           <span>·</span>
-          <Link to="/estado" className="hover:text-blue-400 transition-colors">Estado</Link>
+          <Link to="/estado" className="hover:text-accent transition-colors">Estado</Link>
         </div>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-ink-faint">
           Game Recommended AI © {new Date().getFullYear()} · Inteligencia para Decidir tus Juegos
         </p>
       </footer>

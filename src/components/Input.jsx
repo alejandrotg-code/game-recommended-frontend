@@ -157,15 +157,15 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
       {/* Formulario Estilo Command Palette */}
       <form
         onSubmit={handleSubmit}
-        className={`relative z-10 w-full bg-[#0f1520] border p-2 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 transition-all duration-300 shadow-xl ${
+        className={`relative z-10 w-full bg-surface border p-2 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 transition-all duration-300 shadow-xl ${
           isFocused
-            ? 'border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.25)]'
-            : 'border-[#1b2434] hover:border-slate-700'
+            ? 'border-accent glow-focus'
+            : 'border-line hover:border-line-strong'
         }`}
       >
         <div className="flex items-center flex-1 min-w-0 gap-2.5 pl-1">
           {/* Icono Lupa */}
-          <div className={`pl-2 shrink-0 transition-colors duration-200 ${isFocused ? 'text-blue-400' : 'text-slate-500'}`}>
+          <div className={`pl-2 shrink-0 transition-colors duration-200 ${isFocused ? 'text-accent' : 'text-ink-faint'}`}>
             <Search className="size-5" />
           </div>
 
@@ -213,7 +213,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
             }}
             onKeyDown={handleKeyDown}
             placeholder="Busca un juego, pega su AppID (ej: 1245620) o URL de Steam..."
-            className="flex-1 bg-transparent px-1 py-2 text-sm sm:text-base text-white placeholder-slate-500 outline-none w-full min-w-0 font-medium"
+            className="flex-1 bg-transparent px-1 py-2 text-sm sm:text-base text-ink placeholder:text-ink-faint outline-none w-full min-w-0 font-medium"
             aria-autocomplete="list"
             aria-haspopup="listbox"
             aria-expanded={showDropdown}
@@ -221,7 +221,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
 
           {/* Indicador de búsqueda spinner */}
           {isSearching && (
-            <div className="flex items-center gap-1 shrink-0 px-1 text-blue-400">
+            <div className="flex items-center gap-1 shrink-0 px-1 text-accent">
               <Loader2 className="size-4 animate-spin" />
             </div>
           )}
@@ -231,7 +231,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
             <button
               type="button"
               onClick={handleClear}
-              className="text-slate-500 hover:text-white transition-colors shrink-0 p-1.5 rounded-lg hover:bg-[#1b2434] cursor-pointer"
+              className="text-ink-faint hover:text-ink transition-colors shrink-0 p-1.5 rounded-lg hover:bg-surface-2 cursor-pointer"
               aria-label="Limpiar búsqueda"
             >
               <X className="size-4" />
@@ -241,7 +241,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
           {/* Atajo de Teclado / */}
           {!query && !isSearching && (
             <kbd
-              className="hidden sm:inline-flex items-center gap-0.5 justify-center h-6 px-2 text-[11px] font-mono font-bold text-slate-400 bg-[#151d2c] border border-[#1b2434] rounded-md pointer-events-none"
+              className="hidden sm:inline-flex items-center gap-0.5 justify-center h-6 px-2 text-[11px] font-mono font-bold text-ink-faint bg-surface-2 border border-line rounded-md pointer-events-none"
               title="Presiona '/' para buscar"
             >
               /
@@ -253,7 +253,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="bg-blue-600 hover:bg-blue-500 disabled:bg-[#151d2c] disabled:text-slate-600 disabled:cursor-not-allowed text-white text-xs font-black px-6 py-3 rounded-xl transition-all shadow-md shadow-blue-900/30 cursor-pointer shrink-0 flex items-center justify-center gap-2 active:scale-95"
+          className="bg-accent hover:bg-accent-2 disabled:bg-surface-2 disabled:text-ink-faint disabled:cursor-not-allowed text-white text-xs font-black px-6 py-3 rounded-xl transition-all shadow-md shadow-accent/20 cursor-pointer shrink-0 flex items-center justify-center gap-2 active:scale-95"
         >
           {isLoading ? (
             <>
@@ -271,8 +271,8 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
 
       {/* Mensaje de Error Inline */}
       {inputError && (
-        <div className="mt-2.5 flex items-center gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 px-3.5 py-2.5 rounded-xl animate-fade-up">
-          <AlertCircle className="size-4 shrink-0 text-amber-400" />
+        <div className="mt-2.5 flex items-center gap-2 text-xs text-warn bg-warn/10 border border-warn/30 px-3.5 py-2.5 rounded-xl animate-fade-up">
+          <AlertCircle className="size-4 shrink-0 text-warn" />
           <span>{inputError}</span>
         </div>
       )}
@@ -281,25 +281,25 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
       {showResults && (
         <div
           role="listbox"
-          className="absolute left-0 right-0 mt-2 bg-[#0f1520] border border-[#1b2434] rounded-2xl shadow-2xl z-[200] overflow-hidden animate-fade-up"
+          className="absolute left-0 right-0 mt-2 bg-surface border border-line rounded-2xl shadow-2xl z-[200] overflow-hidden animate-fade-up"
         >
-          <div className="px-4 py-2.5 border-b border-[#1b2434] flex items-center justify-between bg-[#080b11]/50">
-            <span className="text-[10px] uppercase font-black tracking-widest text-slate-400 flex items-center gap-1.5">
-              <Gamepad2 className="size-3.5 text-blue-400" />
+          <div className="px-4 py-2.5 border-b border-line flex items-center justify-between bg-bg/50">
+            <span className="text-[10px] uppercase font-black tracking-widest text-ink-faint flex items-center gap-1.5">
+              <Gamepad2 className="size-3.5 text-accent" />
               <span>Catálogo de Steam</span>
             </span>
             {suggestions.length > 0 && (
-              <span className="text-[10px] text-slate-400 font-mono">{suggestions.length} resultados</span>
+              <span className="text-[10px] text-ink-faint font-mono">{suggestions.length} resultados</span>
             )}
           </div>
 
-          <ul className="max-h-72 overflow-y-auto divide-y divide-[#1b2434]/60 custom-scrollbar">
+          <ul className="max-h-72 overflow-y-auto divide-y divide-line/60 custom-scrollbar">
             {isSearching && suggestions.length === 0 && (
               <li className="px-4 py-3 flex items-center gap-3">
-                <div className="w-14 h-8 rounded bg-[#151d2c] animate-pulse shrink-0" />
+                <div className="w-14 h-8 rounded bg-surface-2 animate-pulse shrink-0" />
                 <div className="flex-1 space-y-1.5">
-                  <div className="h-3 w-2/3 rounded bg-[#151d2c] animate-pulse" />
-                  <div className="h-2 w-1/3 rounded bg-[#151d2c] animate-pulse" />
+                  <div className="h-3 w-2/3 rounded bg-surface-2 animate-pulse" />
+                  <div className="h-2 w-1/3 rounded bg-surface-2 animate-pulse" />
                 </div>
               </li>
             )}
@@ -311,8 +311,8 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
                   onClick={() => handleSelectSuggestion(game)}
                   className={`w-full px-4 py-3 flex items-center justify-between text-left transition-all cursor-pointer group ${
                     highlightedIndex === i
-                      ? 'bg-blue-600/20 border-l-4 border-blue-500'
-                      : 'hover:bg-[#151d2c]'
+                      ? 'bg-accent/10 border-l-4 border-accent'
+                      : 'hover:bg-surface-2'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
@@ -320,32 +320,40 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
                       <img
                         src={game.image}
                         alt={game.name}
-                        className="w-16 h-9 object-cover rounded-md border border-[#1b2434] shrink-0 group-hover:scale-105 transition-transform"
+                        className="w-16 h-9 object-cover rounded-md border border-line shrink-0 group-hover:scale-105 transition-transform"
                       />
                     ) : (
-                      <div className="w-16 h-9 bg-[#151d2c] rounded-md flex items-center justify-center shrink-0 text-xs text-slate-400">
-                        <Gamepad2 className="size-4 text-slate-500" />
+                      <div className="w-16 h-9 bg-surface-2 rounded-md flex items-center justify-center shrink-0 text-xs text-ink-faint">
+                        <Gamepad2 className="size-4 text-ink-faint" />
                       </div>
                     )}
                     <div className="min-w-0">
-                      <h4 className="text-xs sm:text-sm font-extrabold text-slate-100 group-hover:text-blue-300 transition-colors truncate">
+                      <h4 className="text-xs sm:text-sm font-extrabold text-ink group-hover:text-accent transition-colors truncate">
                         {game.name}
                       </h4>
-                      <span className="text-[10px] text-slate-400 font-mono">AppID: {game.id}</span>
+                      <span className="text-[10px] text-ink-faint font-mono">AppID: {game.id}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0 pl-2">
                     {game.price && (
-                      <span className="text-[10px] font-bold text-slate-200 bg-[#080b11] border border-[#1b2434] px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-bold text-ink-soft bg-bg border border-line px-2 py-0.5 rounded shrink-0">
                         {game.price}
                       </span>
                     )}
-                    {game.metascore && game.metascore !== 'N/A' && (
-                      <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-black">
-                        Meta {game.metascore}
-                      </span>
-                    )}
+                    {game.metascore && game.metascore !== 'N/A' && (() => {
+                      const score = parseInt(game.metascore, 10);
+                      const metClasses = score >= 75
+                        ? 'bg-positive/20 text-positive border-positive/30'
+                        : score >= 50
+                          ? 'bg-warn/20 text-warn border-warn/30'
+                          : 'bg-negative/20 text-negative border-negative/30';
+                      return (
+                        <span className={`text-[10px] ${metClasses} border px-2 py-0.5 rounded font-black`}>
+                          Meta {game.metascore}
+                        </span>
+                      );
+                    })()}
                   </div>
                 </button>
               </li>
