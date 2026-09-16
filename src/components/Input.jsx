@@ -58,7 +58,15 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
     if (trimmed.length < 2) return;
 
     const isNumeric = /^\d+$/.test(trimmed);
-    const isUrl = trimmed.includes('store.steampowered.com') || trimmed.includes('app/');
+    let isUrl = false;
+    try {
+      const parsedUrl = new URL(trimmed);
+      const isSteamHost = parsedUrl.hostname === 'store.steampowered.com';
+      const isAppPath = parsedUrl.pathname.startsWith('/app/');
+      isUrl = isSteamHost && isAppPath;
+    } catch {
+      isUrl = false;
+    }
     if (isNumeric || isUrl) return;
 
     if (searchAbortRef.current) searchAbortRef.current.abort();
