@@ -180,7 +180,25 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
               setInputError('');
               const trimmed = val.trim();
               const isNumeric = /^\d+$/.test(trimmed);
-              const isUrl = trimmed.includes('store.steampowered.com') || trimmed.includes('app/');
+              const isUrl = (() => {
+                try {
+                  const parsed = new URL(trimmed);
+                  const host = parsed.hostname.toLowerCase();
+                  const isSteamStoreHost = host === 'store.steampowered.com';
+                  const isAppPath = parsed.pathname.toLowerCase().startsWith('/app/');
+                  return isSteamStoreHost && isAppPath;
+                } catch {
+                  try {
+                    const parsed = new URL(`https://${trimmed}`);
+                    const host = parsed.hostname.toLowerCase();
+                    const isSteamStoreHost = host === 'store.steampowered.com';
+                    const isAppPath = parsed.pathname.toLowerCase().startsWith('/app/');
+                    return isSteamStoreHost && isAppPath;
+                  } catch {
+                    return false;
+                  }
+                }
+              })();
               if (trimmed.length < 2 || isNumeric || isUrl) {
                 setSuggestions([]);
                 setIsSearching(false);
