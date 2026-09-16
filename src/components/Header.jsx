@@ -8,6 +8,8 @@ import {
   Menu,
   X,
   Activity,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { LATEST_CHANGELOG_VERSION } from '../constants/changelog';
 
@@ -17,6 +19,31 @@ function GithubIcon({ className = "size-3.5" }) {
       <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
     </svg>
   );
+}
+
+function useThemeToggle() {
+  const [isDark, setIsDark] = useState(() => {
+    try {
+      return document.documentElement.classList.contains('dark');
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleTheme = () => {
+    setIsDark((prev) => {
+      const next = !prev;
+      try {
+        document.documentElement.classList.toggle('dark', next);
+        localStorage.setItem('gr_theme', next ? 'dark' : 'light');
+      } catch (err) {
+        console.error('Theme toggle error:', err);
+      }
+      return next;
+    });
+  };
+
+  return { isDark, toggleTheme };
 }
 
 export default function Header() {
@@ -32,6 +59,7 @@ export default function Header() {
       return false;
     }
   });
+  const { isDark, toggleTheme } = useThemeToggle();
   const menuRef = useRef(null);
 
   const handleNavClick = (path, key) => {
@@ -133,7 +161,7 @@ export default function Header() {
       ref={menuRef}
       className={`w-full sticky top-0 z-50 transition-all duration-200 ${
         scrolled || mobileMenuOpen
-          ? 'bg-[#080b11]/90 backdrop-blur-md border-b border-[#1b2434] shadow-md py-3'
+          ? 'bg-bg/90 backdrop-blur-md border-b border-line shadow-sm py-3'
           : 'bg-transparent border-b border-transparent py-4'
       }`}
     >
@@ -147,14 +175,14 @@ export default function Header() {
           className="flex items-center cursor-pointer bg-transparent border-0 p-0 text-left outline-none group shrink-0 whitespace-nowrap"
           aria-label="Ir al inicio de Game Recommended AI"
         >
-          <span className="text-sm sm:text-base font-extrabold tracking-tight text-slate-100 group-hover:text-white transition-colors whitespace-nowrap">
-            Game Recommended <span className="text-blue-400 font-black">AI</span>
+          <span className="text-sm sm:text-base font-display font-bold tracking-tight text-ink group-hover:text-accent transition-colors whitespace-nowrap">
+            Game Recommended <span className="text-gradient font-bold">AI</span>
           </span>
         </button>
 
         {/* NAVEGACIÓN DESKTOP EN EL CENTRO CON ESTADO DEL SERVICIO */}
         <nav
-          className="hidden md:flex items-center gap-1 bg-[#0f1520] border border-[#1b2434] rounded-xl p-1 shrink-0 mx-auto"
+          className="hidden md:flex items-center gap-1 bg-surface border border-line rounded-xl p-1 shrink-0 mx-auto"
           aria-label="Navegación principal"
         >
           {navItems.map(({ key, label, path, isBeta, icon }) => {
@@ -166,19 +194,20 @@ export default function Header() {
                 onClick={() => handleNavClick(path, key)}
                 className={`relative px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer outline-none flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-sm font-bold'
-                    : 'text-slate-400 hover:text-slate-100 hover:bg-[#151d2c]'
+                    ? 'bg-accent text-white shadow-sm font-bold'
+                    : 'text-ink-faint hover:text-ink hover:bg-surface-2'
                 }`}
               >
-                <span className={`shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`}>{icon}</span>
+                <span className={`shrink-0 ${isActive ? 'text-white' : 'text-ink-faint'}`}>{icon}</span>
                 <span className="whitespace-nowrap">{label}</span>
+                {isActive && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-accent to-accent-2 rounded-full" />}
                 {isBeta && (
-                  <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap shrink-0">
+                  <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-positive/20 text-positive border border-positive/30 whitespace-nowrap shrink-0">
                     BETA
                   </span>
                 )}
                 {isChangelogUnread && (
-                  <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40 whitespace-nowrap shrink-0 animate-pulse">
+                  <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-accent/20 text-accent border border-accent/40 whitespace-nowrap shrink-0 animate-pulse">
                     NUEVO
                   </span>
                 )}
@@ -189,14 +218,24 @@ export default function Header() {
 
         {/* ACCIONES DESKTOP DERECHA */}
         <div className="flex items-center gap-2.5 shrink-0">
+          {/* Toggle de tema */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="hidden md:inline-flex items-center justify-center p-2 rounded-lg border border-line bg-surface text-ink-soft hover:text-ink hover:border-line-strong transition-all cursor-pointer shrink-0"
+            aria-label="Cambiar tema claro/oscuro"
+          >
+            {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </button>
+
           {/* Link GitHub */}
           <a
             href="https://github.com/alejandrotg-code"
             target="_blank"
             rel="noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 border border-[#1b2434] bg-[#0f1520] hover:bg-[#151d2c] px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-200 transition-all whitespace-nowrap shrink-0"
+            className="hidden md:inline-flex items-center gap-1.5 border border-line bg-surface hover:bg-surface-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-ink-soft transition-all whitespace-nowrap shrink-0"
           >
-            <GithubIcon className="size-3.5 text-slate-300 shrink-0" />
+            <GithubIcon className="size-3.5 text-ink-faint shrink-0" />
             <span className="whitespace-nowrap">GitHub</span>
           </a>
 
@@ -204,14 +243,14 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="md:hidden flex items-center justify-center p-2 rounded-lg border border-[#1b2434] bg-[#0f1520] text-slate-200 cursor-pointer"
+            className="md:hidden flex items-center justify-center p-2 rounded-lg border border-line bg-surface text-ink-soft cursor-pointer"
             aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
-              <X className="size-4 text-blue-400" />
+              <X className="size-4 text-accent" />
             ) : (
-              <Menu className="size-4 text-slate-300" />
+              <Menu className="size-4 text-ink-soft" />
             )}
           </button>
         </div>
@@ -219,7 +258,18 @@ export default function Header() {
 
       {/* MENÚ MÓVIL DESPLEGABLE */}
       {mobileMenuOpen && (
-        <div className="md:hidden w-full border-t border-[#1b2434] bg-[#080b11] px-4 py-4 space-y-2 shadow-2xl animate-fade-up">
+        <div className="md:hidden w-full border-t border-line bg-bg px-4 py-4 space-y-2 shadow-2xl animate-fade-up">
+          {/* Toggle de tema (fila completa) */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-lg border border-line bg-surface text-ink-soft hover:text-ink transition-colors cursor-pointer text-xs font-bold"
+            aria-label="Cambiar tema claro/oscuro"
+          >
+            {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            <span>{isDark ? 'Modo claro' : 'Modo oscuro'}</span>
+          </button>
+
           <div className="space-y-1">
             {navItems.map(({ key, label, path, isBeta, description, icon }) => {
               const isActive = activePage === key;
@@ -229,8 +279,8 @@ export default function Header() {
                   onClick={() => handleNavClick(path, key)}
                   className={`w-full flex items-center justify-between p-2.5 rounded-lg text-left transition-colors cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600 text-white font-bold'
-                      : 'bg-[#0f1520] text-slate-300 hover:text-white'
+                      ? 'bg-accent text-white font-bold'
+                      : 'bg-surface text-ink-soft hover:text-ink'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -239,12 +289,12 @@ export default function Header() {
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold leading-none">{label}</span>
                         {isBeta && (
-                          <span className="text-[9px] font-bold uppercase px-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          <span className="text-[9px] font-bold uppercase px-1 rounded bg-positive/20 text-positive border border-positive/30">
                             BETA
                           </span>
                         )}
                       </div>
-                      <p className="text-[10px] opacity-75 mt-0.5 font-normal">{description}</p>
+                      <p className="text-[10px] opacity-60 mt-0.5 font-normal">{description}</p>
                     </div>
                   </div>
                 </button>

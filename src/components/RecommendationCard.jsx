@@ -8,6 +8,10 @@ import {
   ChevronRight,
   BarChart3,
   Cpu,
+  Flame,
+  Zap,
+  Coins,
+  Gamepad2,
 } from 'lucide-react';
 import SentimentChart from './recommendation/SentimentChart';
 import TopKeyWords from './recommendation/TopKeyWords';
@@ -19,39 +23,39 @@ const getVerdictConfig = (level) => {
   switch (level) {
     case 'Extremadamente Recomendado':
       return {
-        bg: 'bg-emerald-500/10 border-emerald-500/30',
-        text: 'text-emerald-400',
-        badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-        icon: <Trophy className="size-3.5 text-emerald-400" />,
+        bg: 'bg-positive/10 border-positive/30',
+        text: 'text-positive',
+        badge: 'bg-positive/15 text-positive border-positive/30',
+        icon: <Trophy className="size-3.5 text-positive" />,
         label: 'Extremadamente Recomendado',
-        barColor: '#10b981',
+        barColor: 'var(--positive)',
       };
     case 'Recomendado':
       return {
-        bg: 'bg-blue-500/10 border-blue-500/30',
-        text: 'text-blue-400',
-        badge: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
-        icon: <ThumbsUp className="size-3.5 text-blue-400" />,
+        bg: 'bg-accent/10 border-accent/30',
+        text: 'text-accent',
+        badge: 'bg-accent/15 text-accent border-accent/30',
+        icon: <ThumbsUp className="size-3.5 text-accent" />,
         label: 'Recomendado',
-        barColor: '#3b82f6',
+        barColor: 'var(--accent)',
       };
     case 'Mixto':
       return {
-        bg: 'bg-amber-500/10 border-amber-500/30',
-        text: 'text-amber-400',
-        badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-        icon: <Scale className="size-3.5 text-amber-400" />,
+        bg: 'bg-warn/10 border-warn/30',
+        text: 'text-warn',
+        badge: 'bg-warn/15 text-warn border-warn/30',
+        icon: <Scale className="size-3.5 text-warn" />,
         label: 'Mixto',
-        barColor: '#f59e0b',
+        barColor: 'var(--warn)',
       };
     default:
       return {
-        bg: 'bg-rose-500/10 border-rose-500/30',
-        text: 'text-rose-400',
-        badge: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-        icon: <ThumbsDown className="size-3.5 text-rose-400" />,
+        bg: 'bg-negative/10 border-negative/30',
+        text: 'text-negative',
+        badge: 'bg-negative/15 text-negative border-negative/30',
+        icon: <ThumbsDown className="size-3.5 text-negative" />,
         label: 'No Recomendado',
-        barColor: '#f43f5e',
+        barColor: 'var(--negative)',
       };
   }
 };
@@ -134,13 +138,13 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
       <div className={`tactical-card overflow-hidden border ${cfg.bg}`}>
         {/* Banner de Portada / Header Hero */}
         {gameInfo?.image ? (
-          <div className="relative w-full min-h-[160px] sm:h-44 overflow-hidden border-b border-[#1b2434]">
+          <div className="relative w-full min-h-[160px] sm:h-44 overflow-hidden border-b border-line">
             <img
               src={gameInfo.image}
               alt={gameInfo.name || 'Juego'}
               className="w-full h-full object-cover brightness-[0.35]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0f1520] via-[#0f1520]/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/70 to-transparent" />
 
             <div className="relative sm:absolute sm:bottom-0 sm:left-0 sm:right-0 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4 z-10">
               <div className="flex items-start sm:items-center gap-3 w-full sm:w-auto">
@@ -150,32 +154,32 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                   className="w-14 h-14 sm:w-20 sm:h-12 object-cover rounded-lg border border-white/20 shadow-md shrink-0 mt-0.5 sm:mt-0"
                 />
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-base sm:text-xl font-extrabold text-white leading-tight break-words">
+                  <h2 className="text-base sm:text-xl font-display font-bold text-ink leading-tight break-words">
                     {gameInfo?.name || 'Juego Analizado'}
                   </h2>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {gameInfo?.price && (
-                      <span className="text-[10px] bg-[#080b11]/90 text-slate-200 border border-[#1b2434] px-2 py-0.5 rounded font-semibold">
+                      <span className="text-[10px] bg-bg/90 text-ink-soft border border-line px-2 py-0.5 rounded font-semibold">
                         {gameInfo.price}
                       </span>
                     )}
                     {gameInfo?.metascore && gameInfo.metascore !== 'N/A' && (
-                      <span className="text-[10px] bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-bold">
+                      <span className="text-[10px] bg-warn/15 text-warn border border-warn/30 px-2 py-0.5 rounded font-bold">
                         Metascore: {gameInfo.metascore}
                       </span>
                     )}
-                    <span className="text-[10px] bg-[#080b11]/90 text-slate-400 border border-[#1b2434] px-2 py-0.5 rounded font-mono">
+                    <span className="text-[10px] bg-bg/90 text-ink-faint border border-line px-2 py-0.5 rounded font-mono">
                       AppID: {result.app_id}
                     </span>
                   </div>
 
                   {game_details && (
-                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5 text-[10px] text-slate-400">
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5 text-[10px] text-ink-faint">
                       {game_details.developer && (
-                        <span>Dev: <strong className="text-slate-200">{game_details.developer}</strong></span>
+                        <span>Dev: <strong className="text-ink">{game_details.developer}</strong></span>
                       )}
                       {game_details.release_date && (
-                        <span>Fecha: <strong className="text-slate-200">{game_details.release_date}</strong></span>
+                        <span>Fecha: <strong className="text-ink">{game_details.release_date}</strong></span>
                       )}
                     </div>
                   )}
@@ -183,17 +187,17 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               </div>
 
               <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto shrink-0 pt-1 sm:pt-0 border-t border-white/10 sm:border-t-0 gap-2">
-                <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 ${cfg.badge}`}>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 shadow-md shadow-black/20 ring-1 ring-white/10 ${cfg.badge}`}>
                   {cfg.icon}
-                  <span>{recommendation_level}</span>
+                  <span className="font-display font-bold">{recommendation_level}</span>
                 </span>
                 <button
                   type="button"
                   onClick={handleShareLink}
-                  className="flex items-center gap-1 text-[10px] font-semibold text-slate-300 hover:text-white bg-[#080b11]/80 border border-[#1b2434] px-2.5 py-1 rounded transition-all cursor-pointer btn-tactical"
+                  className="flex items-center gap-1 text-[10px] font-semibold text-ink-soft hover:text-ink bg-bg/80 border border-line px-2.5 py-1 rounded transition-all cursor-pointer btn-tactical"
                 >
                   {copied ? (
-                    <span className="text-emerald-400 font-bold">¡Copiado!</span>
+                    <span className="text-positive font-bold">¡Copiado!</span>
                   ) : (
                     <span>Compartir</span>
                   )}
@@ -202,32 +206,32 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             </div>
           </div>
         ) : (
-          <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#1b2434] gap-3">
+          <div className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-line gap-3">
             <div>
-              <h2 className="text-lg sm:text-xl font-extrabold text-white">{gameInfo?.name || 'Juego Analizado'}</h2>
+              <h2 className="text-lg sm:text-xl font-display font-bold text-ink">{gameInfo?.name || 'Juego Analizado'}</h2>
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {gameInfo?.price && (
-                  <span className="text-[10px] bg-[#080b11] text-slate-300 border border-[#1b2434] px-2 py-0.5 rounded font-semibold">{gameInfo.price}</span>
+                  <span className="text-[10px] bg-bg text-ink-soft border border-line px-2 py-0.5 rounded font-semibold">{gameInfo.price}</span>
                 )}
-                <span className="text-[10px] bg-[#080b11] text-slate-400 border border-[#1b2434] px-2 py-0.5 rounded font-mono">AppID: {result.app_id}</span>
+                <span className="text-[10px] bg-bg text-ink-faint border border-line px-2 py-0.5 rounded font-mono">AppID: {result.app_id}</span>
               </div>
             </div>
             <div className="text-right">
-              <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 ${cfg.badge}`}>{cfg.icon} <span>{recommendation_level}</span></span>
+              <span className={`text-xs font-bold px-2.5 py-1 rounded border flex items-center gap-1 ${cfg.badge}`}>{cfg.icon} <span className="font-display font-bold">{recommendation_level}</span></span>
             </div>
           </div>
         )}
 
         {/* ── BARRA HEADER DE NAVEGACIÓN ENTRE ANÁLISIS Y SÍNTESIS INTELIGENTE CON FLECHA A LA DERECHA ── */}
-        <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3 border-b border-[#1b2434] bg-[#080b11]/70 flex-wrap gap-2">
+        <div className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3 border-b border-line bg-bg/70 flex-wrap gap-2">
           <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-0.5 scrollbar-none w-full sm:w-auto justify-start">
             <button
               type="button"
               onClick={() => setActiveTab('analysis')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'analysis'
-                  ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                  ? 'bg-accent/15 text-accent border border-accent/40 shadow-sm'
+                  : 'text-ink-faint hover:text-ink border border-transparent'
               }`}
             >
               <BarChart3 className="size-3.5 shrink-0" />
@@ -240,11 +244,11 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               onClick={() => setActiveTab('summary')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'summary'
-                  ? 'bg-blue-600/25 text-blue-300 border border-blue-500/50 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 border border-transparent'
+                  ? 'bg-accent/15 text-accent border border-accent/40 shadow-sm'
+                  : 'text-ink-faint hover:text-ink border border-transparent'
               }`}
             >
-              <Cpu className="size-3.5 text-blue-400 animate-pulse shrink-0" />
+              <Cpu className="size-3.5 text-accent shrink-0" />
               <span className="hidden sm:inline">Síntesis Inteligente de la Comunidad</span>
               <span className="sm:hidden">Síntesis IA</span>
             </button>
@@ -253,7 +257,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
           <button
             type="button"
             onClick={() => setActiveTab(activeTab === 'analysis' ? 'summary' : 'analysis')}
-            className="flex items-center gap-1.5 text-xs font-black text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 px-2.5 sm:px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
+            className="flex items-center gap-1.5 text-xs font-black text-accent hover:text-accent-2 bg-accent/10 hover:bg-accent/20 border border-accent/30 px-2.5 sm:px-3 py-1.5 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 ml-auto"
             title={activeTab === 'analysis' ? 'Ver Síntesis Inteligente / Resumen' : 'Ver Análisis de Sentimiento'}
           >
             <span>{activeTab === 'analysis' ? 'Ver Resumen IA' : 'Ver Análisis'}</span>
@@ -283,7 +287,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             />
           </>
         ) : (
-          <div className="p-4 sm:p-6 bg-[#0a0e17]/80">
+          <div className="p-4 sm:p-6 bg-bg/60">
             {result?.groq_summary ? (
               <GroqSummaryCard
                 groqSummary={result.groq_summary}
@@ -291,16 +295,16 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                 embedded
               />
             ) : (
-              <div className="text-center py-10 px-6 space-y-3 bg-[#080b11] border border-[#1b2434] rounded-2xl max-w-md mx-auto">
-                <Cpu className="size-8 text-blue-400 mx-auto animate-pulse" />
-                <h4 className="text-sm font-extrabold text-white">Síntesis IA no disponible</h4>
-                <p className="text-xs text-slate-400 leading-relaxed font-normal">
+              <div className="text-center py-10 px-6 space-y-3 bg-bg border border-line rounded-2xl max-w-md mx-auto">
+                <Cpu className="size-8 text-accent mx-auto" />
+                <h4 className="text-sm font-display font-bold text-ink">Síntesis IA no disponible</h4>
+                <p className="text-xs text-ink-soft leading-relaxed font-normal">
                   La síntesis periodística no está disponible en este momento. Asegúrate de tener configurada la API Key de Groq en el servidor backend.
                 </p>
                 <button
                   type="button"
                   onClick={() => setActiveTab('analysis')}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-xl cursor-pointer"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-accent bg-accent/10 border border-accent/30 px-3 py-1.5 rounded-xl cursor-pointer"
                 >
                   <span>Volver a Análisis de Sentimiento</span>
                 </button>
@@ -319,14 +323,14 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
 
       {/* ── BANNER DESTACADO DE AFILIADO (Si es recomendado) ── */}
       {['Extremadamente Recomendado', 'Recomendado'].includes(recommendation_level) && (
-        <div className="bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-[#0f1520] border border-orange-500/30 p-3.5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-lg">
+        <div className="bg-gradient-to-r from-warn/15 via-warn/10 to-surface border border-warn/30 p-3.5 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-lg">
           <div className="flex items-center gap-2.5 text-center sm:text-left">
-            <span className="text-xl">🔥</span>
+            <span className="text-warn shrink-0"><Flame className="size-5" /></span>
             <div>
-              <div className="text-slate-100 font-extrabold text-xs sm:text-sm">
+              <div className="text-ink font-extrabold text-xs sm:text-sm">
                 ¡Veredicto Positivo! ¿Decidido a jugarlo?
               </div>
-              <div className="text-slate-400 text-[11px]">
+              <div className="text-ink-soft text-[11px]">
                 Consigue tu clave digital de Steam al mejor precio en Instant Gaming
               </div>
             </div>
@@ -336,7 +340,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             target="_blank"
             rel="noreferrer"
             onClick={() => handleAffiliateClick('InstantGaming-BannerCTA')}
-            className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-xl font-black text-xs shrink-0 transition-all btn-tactical shadow-md flex items-center gap-1.5 cursor-pointer"
+            className="bg-warn text-white dark:text-slate-950 hover:brightness-110 px-4 py-2 rounded-xl font-black text-xs shrink-0 transition-all btn-tactical shadow-lg shadow-warn/20 flex items-center gap-1.5 cursor-pointer"
           >
             <span>Ver Oferta en Instant Gaming</span>
             <ExternalLink className="size-3.5" />
@@ -347,8 +351,8 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
       {/* ── 3. COMPARADOR DE PRECIOS ── */}
       <div className="tactical-card p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Tiendas y Precios Digitales</h4>
-          <span className="text-[10px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded font-semibold">
+          <h4 className="text-xs font-display font-bold text-ink-soft uppercase tracking-wider">Tiendas y Precios Digitales</h4>
+          <span className="text-[10px] bg-accent/10 border border-accent/20 text-accent px-2 py-0.5 rounded font-semibold">
             Enlaces Verificados
           </span>
         </div>
@@ -359,19 +363,19 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             target="_blank"
             rel="noreferrer"
             onClick={() => handleAffiliateClick('InstantGaming')}
-            className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-orange-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
+            className="flex items-center justify-between p-3 bg-bg border border-line hover:border-warn/50 rounded-lg text-xs font-bold text-ink-soft transition-all btn-tactical group"
           >
             <div className="flex items-center gap-2">
-              <span className="text-orange-400">⚡</span>
+              <span className="text-warn shrink-0"><Zap className="size-4" /></span>
               <div>
-                <div className="text-slate-100 font-bold flex items-center gap-1">
+                <div className="text-ink font-bold flex items-center gap-1">
                   <span>Instant Gaming</span>
-                  <span className="text-[9px] bg-orange-500/20 text-orange-400 px-1 rounded font-normal">Clave PC</span>
+                  <span className="text-[9px] bg-warn/20 text-warn px-1 rounded font-normal">Clave PC</span>
                 </div>
-                <div className="text-[10px] text-slate-500 font-normal">Descuentos Digitales</div>
+                <div className="text-[10px] text-ink-faint font-normal">Descuentos Digitales</div>
               </div>
             </div>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-orange-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-ink-faint group-hover:text-warn" />
           </a>
 
           <a
@@ -379,19 +383,19 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             target="_blank"
             rel="noreferrer"
             onClick={() => handleAffiliateClick('G2A')}
-            className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-amber-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
+            className="flex items-center justify-between p-3 bg-bg border border-line hover:border-warn/50 rounded-lg text-xs font-bold text-ink-soft transition-all btn-tactical group"
           >
             <div className="flex items-center gap-2">
-              <span className="text-amber-400">🟡</span>
+              <span className="text-warn shrink-0"><Coins className="size-4" /></span>
               <div>
-                <div className="text-slate-100 font-bold flex items-center gap-1">
+                <div className="text-ink font-bold flex items-center gap-1">
                   <span>G2A Marketplace</span>
-                  <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1 rounded font-normal">Global</span>
+                  <span className="text-[9px] bg-warn/20 text-warn px-1 rounded font-normal">Global</span>
                 </div>
-                <div className="text-[10px] text-slate-500 font-normal">Ofertas Mundiales</div>
+                <div className="text-[10px] text-ink-faint font-normal">Ofertas Mundiales</div>
               </div>
             </div>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-amber-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-ink-faint group-hover:text-warn" />
           </a>
 
           <a
@@ -399,30 +403,30 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
             target="_blank"
             rel="noreferrer"
             onClick={() => handleAffiliateClick('SteamStore')}
-            className="flex items-center justify-between p-3 bg-[#080b11] border border-[#1b2434] hover:border-blue-500/50 rounded-lg text-xs font-bold text-slate-200 transition-all btn-tactical group"
+            className="flex items-center justify-between p-3 bg-bg border border-line hover:border-accent/50 rounded-lg text-xs font-bold text-ink-soft transition-all btn-tactical group"
           >
             <div className="flex items-center gap-2">
-              <span className="text-blue-400">🎮</span>
+              <span className="text-accent shrink-0"><Gamepad2 className="size-4" /></span>
               <div>
-                <div className="text-slate-100 font-bold">Tienda Steam</div>
-                <div className="text-[10px] text-slate-500 font-normal">Precio Oficial</div>
+                <div className="text-ink font-bold">Tienda Steam</div>
+                <div className="text-[10px] text-ink-faint font-normal">Precio Oficial</div>
               </div>
             </div>
-            <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400" />
+            <ExternalLink className="w-3.5 h-3.5 text-ink-faint group-hover:text-accent" />
           </a>
         </div>
 
-        <p className="text-[10px] text-slate-500 pt-1 text-center font-normal">
+        <p className="text-[10px] text-ink-faint pt-1 text-center font-normal">
           * Los enlaces a Instant Gaming y G2A contienen parámetros de afiliación (LSSI-CE Art. 20). Al comprar mediante ellos apoya la infraestructura del proyecto sin coste extra.
         </p>
       </div>
 
       {/* ── 4. BADGE DE GITHUB ── */}
       <div className="tactical-card p-4 space-y-3">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Badge Dinámico de Veredicto</h4>
+        <h4 className="text-xs font-display font-bold text-ink-faint uppercase tracking-wider">Badge Dinámico de Veredicto</h4>
 
         <div className="flex flex-col sm:flex-row gap-3 items-center">
-          <div className="bg-[#080b11] border border-[#1b2434] px-3 py-2 rounded flex items-center justify-center shrink-0">
+          <div className="bg-bg border border-line px-3 py-2 rounded flex items-center justify-center shrink-0">
             <img
               src={`${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge`}
               alt="Steam IA Badge"
@@ -435,7 +439,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
               type="text"
               readOnly
               value={`[![Steam IA](${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEV || 'http://localhost:8000'}/api/games/${result.app_id}/badge)](https://store.steampowered.com/app/${result.app_id})`}
-              className="flex-1 bg-[#080b11] border border-[#1b2434] px-3 py-1.5 rounded text-xs font-mono text-slate-300 outline-none select-all"
+              className="flex-1 bg-bg border border-line px-3 py-1.5 rounded text-xs font-mono text-ink-soft outline-none select-all"
             />
             <button
               onClick={() => {
@@ -445,7 +449,7 @@ const RecommendationCard = memo(function RecommendationCard({ result, gameInfo }
                   setTimeout(() => setBadgeCopied(false), 2000);
                 });
               }}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs font-bold transition-all cursor-pointer shrink-0 btn-tactical"
+              className="bg-accent hover:bg-accent-2 text-white px-3 py-1.5 rounded text-xs font-bold transition-all cursor-pointer shrink-0 btn-tactical"
             >
               {badgeCopied ? '¡Copiado!' : 'Copiar Markdown'}
             </button>

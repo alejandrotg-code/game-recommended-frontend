@@ -21,10 +21,10 @@ function GithubIcon({ className = "size-4" }) {
 }
 
 const BADGE = {
-  new: { label: 'Nuevo', bg: 'bg-emerald-500/20', text: 'text-emerald-300', border: 'border-emerald-500/40', icon: <Sparkles className="size-3.5" /> },
-  fix: { label: 'Fix', bg: 'bg-rose-500/20', text: 'text-rose-300', border: 'border-rose-500/40', icon: <Bug className="size-3.5" /> },
-  improve: { label: 'Mejora', bg: 'bg-blue-500/20', text: 'text-blue-300', border: 'border-blue-500/40', icon: <TrendingUp className="size-3.5" /> },
-  perf: { label: 'Rendimiento', bg: 'bg-amber-500/20', text: 'text-amber-300', border: 'border-amber-500/40', icon: <Zap className="size-3.5" /> },
+  new: { label: 'Nuevo', bg: 'bg-positive/20', text: 'text-positive', border: 'border-positive/40', icon: <Sparkles className="size-3.5" /> },
+  fix: { label: 'Fix', bg: 'bg-negative/20', text: 'text-negative', border: 'border-negative/40', icon: <Bug className="size-3.5" /> },
+  improve: { label: 'Mejora', bg: 'bg-accent/20', text: 'text-accent', border: 'border-accent/40', icon: <TrendingUp className="size-3.5" /> },
+  perf: { label: 'Rendimiento', bg: 'bg-warn/20', text: 'text-warn', border: 'border-warn/40', icon: <Zap className="size-3.5" /> },
   ui: { label: 'UI / UX', bg: 'bg-violet-500/20', text: 'text-violet-300', border: 'border-violet-500/40', icon: <Layout className="size-3.5" /> },
 };
 
@@ -193,15 +193,25 @@ export default function Changelog() {
 
       <section className="py-8 sm:py-12 max-w-3xl mx-auto w-full animate-fade-up space-y-12">
         {/* ENCABEZADO CON TARJETA DEDICADA */}
-        <div className="py-10 px-6 sm:px-10 rounded-3xl bg-gradient-to-b from-[#111726]/90 via-[#0f1520]/80 to-[#080b11] border border-[#1e2d4a] shadow-2xl text-center space-y-4">
-          <div className="inline-flex items-center gap-2.5 bg-[#080b11] border border-[#1e2d4a] text-violet-400 text-xs font-black px-4 py-2 rounded-full shadow-md">
-            <History className="size-4 text-violet-400" />
+        <div className="py-10 px-6 sm:px-10 rounded-3xl bg-gradient-to-b from-surface-2/80 via-surface/70 to-bg border border-line shadow-2xl text-center space-y-4">
+          <div className="inline-flex items-center gap-2.5 bg-bg border border-line text-accent text-xs font-black px-4 py-2 rounded-full shadow-md">
+            <History className="size-4 text-accent" />
             <span>Historial de versiones</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
+
+          {/* Kicker */}
+          <div className="flex items-center justify-center gap-2.5">
+            <span className="h-px w-4 bg-accent" />
+            <span className="text-[10px] font-display font-semibold tracking-[0.2em] uppercase text-ink-faint">
+              Changelog
+            </span>
+            <span className="h-px w-4 bg-accent" />
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-tight text-ink">
             Changelog
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-sm mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-ink-faint max-w-sm mx-auto leading-relaxed">
             Aquí se documentan todos los cambios, mejoras y correcciones del proyecto de forma cronológica.
           </p>
         </div>
@@ -209,7 +219,7 @@ export default function Changelog() {
         {/* TIMELINE CON TARJETAS ESTRUCTURADAS */}
         <div className="relative">
           {/* Línea vertical */}
-          <div className="absolute left-[9px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-blue-500 via-violet-500/40 to-transparent" />
+          <div className="absolute left-[9px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-accent via-accent/40 to-transparent" />
 
           <ol className="space-y-10 pl-10">
             {ENTRIES.map((entry, idx) => {
@@ -221,8 +231,8 @@ export default function Changelog() {
                   <span
                     className={`absolute -left-[39px] top-3 flex size-5 items-center justify-center rounded-full border-2 transition-all duration-300 ${
                       isLatest
-                        ? 'bg-blue-500 border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.8)]'
-                        : 'bg-[#080b11] border-[#1e2d4a] group-hover:border-slate-400'
+                        ? 'bg-accent border-accent shadow-lg shadow-accent/40'
+                        : 'bg-bg border-line-strong group-hover:border-accent'
                     }`}
                   >
                     {isLatest && <span className="size-2 rounded-full bg-white animate-pulse" />}
@@ -230,17 +240,17 @@ export default function Changelog() {
 
                   {/* Tarjeta */}
                   <div
-                    className={`bg-[#111726] border rounded-3xl p-6 sm:p-8 transition-all duration-300 group-hover:border-slate-600 shadow-2xl space-y-4 ${
+                    className={`bg-surface border rounded-3xl p-6 sm:p-8 transition-all duration-300 group-hover:border-line-strong shadow-2xl space-y-4 ${
                       isLatest
-                        ? 'border-blue-500/40 shadow-blue-900/20'
-                        : 'border-[#1e2d4a]'
+                        ? 'border-accent/40 shadow-accent/10'
+                        : 'border-line'
                     }`}
                   >
                     {/* Cabecera de la tarjeta */}
-                    <div className="flex items-start justify-between gap-4 flex-wrap pb-3 border-b border-[#1e2d4a]/80">
+                    <div className="flex items-start justify-between gap-4 flex-wrap pb-3 border-b border-line/80">
                       <div className="flex items-center gap-2.5 flex-wrap">
                         {/* Versión */}
-                        <span className="text-xs font-mono font-black text-white bg-[#080b11] border border-[#1e2d4a] px-3 py-1 rounded-xl shadow-inner">
+                        <span className="text-xs font-mono font-black text-ink bg-bg border border-line px-3 py-1 rounded-xl shadow-inner">
                           v{entry.version}
                         </span>
                         {/* Badge de tipo */}
@@ -251,23 +261,23 @@ export default function Changelog() {
                           {b.label}
                         </span>
                         {isLatest && (
-                          <span className="text-[10px] font-black text-blue-300 bg-blue-500/25 border border-blue-500/40 px-2.5 py-1 rounded-full">
+                          <span className="text-[10px] font-black text-accent bg-accent/25 border border-accent/40 px-2.5 py-1 rounded-full">
                             Más reciente
                           </span>
                         )}
                       </div>
                       {/* Fecha */}
-                      <time className="text-xs text-slate-400 font-mono font-bold shrink-0">{entry.date}</time>
+                      <time className="text-xs text-ink-faint font-mono font-bold shrink-0">{entry.date}</time>
                     </div>
 
                     {/* Título de la release */}
-                    <h2 className="text-base sm:text-lg font-black text-white">{entry.title}</h2>
+                    <h2 className="text-base sm:text-lg font-display font-bold text-ink">{entry.title}</h2>
 
                     {/* Lista de cambios */}
                     <ul className="space-y-2.5 pt-1">
                       {entry.items.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                          <GitCommit className="size-4 mt-0.5 shrink-0 text-blue-400" />
+                        <li key={i} className="flex items-start gap-3 text-xs sm:text-sm text-ink-soft leading-relaxed font-normal">
+                          <GitCommit className="size-4 mt-0.5 shrink-0 text-accent" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -280,15 +290,15 @@ export default function Changelog() {
         </div>
 
         {/* Footer de la sección */}
-        <p className="text-center text-xs text-slate-400 font-medium mt-12">
+        <p className="text-center text-xs text-ink-faint font-medium mt-12">
           ¿Encontraste un error o deseas proponer una idea? Abre un issue en{' '}
           <a
             href="https://github.com/alejandrotg-code"
             target="_blank"
             rel="noreferrer"
-            className="text-white hover:text-blue-400 underline underline-offset-2 transition-colors font-bold inline-flex items-center gap-1.5"
+            className="text-ink hover:text-accent underline underline-offset-2 transition-colors font-bold inline-flex items-center gap-1.5"
           >
-            <GithubIcon className="size-4 text-white" />
+            <GithubIcon className="size-4 text-ink" />
             <span>GitHub</span>
           </a>
           .

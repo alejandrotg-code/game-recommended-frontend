@@ -22,14 +22,14 @@ function ExpandableReview({ text }) {
 
   return (
     <div className="pt-1">
-      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic pl-3 border-l-2 border-[#1e293b] group-hover:border-blue-500/50 transition-colors">
+      <p className="text-xs sm:text-sm text-ink-soft leading-relaxed italic pl-3 border-l-2 border-line group-hover:border-accent/50 transition-colors">
         "{displayed}"
       </p>
       {isLong && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
-          className="mt-2 text-[11px] font-extrabold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+          className="mt-2 text-[11px] font-extrabold text-accent hover:text-accent-2 transition-colors cursor-pointer"
         >
           {expanded ? 'Ver menos ↑' : 'Ver más ↓'}
         </button>
@@ -66,18 +66,18 @@ const ReviewList = memo(function ReviewList({
   return (
     <div className="tactical-card p-4 sm:p-8 space-y-4 sm:space-y-6">
       {/* Cabecera + Tabs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 pb-4 border-b border-[#1e293b]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 pb-4 border-b border-line">
         <div className="flex items-center gap-2.5">
-          <MessageSquare className="size-4 text-blue-400" />
-          <h3 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+          <MessageSquare className="size-4 text-accent" />
+          <h3 className="text-xs font-display font-bold text-ink-soft uppercase tracking-wider flex items-center gap-2">
             <span>Muestra de Reseñas Clasificadas</span>
-            <span className="text-[10px] font-mono px-2.5 py-0.5 bg-[#080b11] border border-[#1e293b] text-slate-300 rounded-md font-bold">
+            <span className="text-[10px] font-mono px-2.5 py-0.5 bg-bg border border-line text-ink-soft rounded-md font-bold">
               {filteredReviews.length}
             </span>
           </h3>
         </div>
 
-        <div className="flex w-full sm:w-auto bg-[#080b11] border border-[#1e293b] p-1 rounded-xl text-xs gap-1 shadow-inner overflow-x-auto">
+        <div className="flex w-full sm:w-auto bg-bg border border-line p-1 rounded-xl text-xs gap-1 shadow-inner overflow-x-auto">
           {[
             { key: 'all', label: 'Todas', count: reviewsClassified.length },
             { key: 'positives', label: 'Positivas', count: positiveCount },
@@ -89,11 +89,11 @@ const ReviewList = memo(function ReviewList({
               className={`px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg font-bold text-[11px] sm:text-xs transition-all cursor-pointer flex-1 sm:flex-initial text-center flex items-center justify-center gap-1 shrink-0 ${
                 activeTab === key
                   ? key === 'positives'
-                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                    ? 'bg-positive/20 text-positive border border-positive/40 shadow-sm'
                     : key === 'negatives'
-                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
-                    : 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white hover:bg-[#151d2c]'
+                    ? 'bg-negative/20 text-negative border border-negative/40 shadow-sm'
+                    : 'bg-accent text-white shadow-sm'
+                  : 'text-ink-faint hover:text-ink hover:bg-surface-2'
               }`}
             >
               <span>{label}</span>
@@ -106,7 +106,7 @@ const ReviewList = memo(function ReviewList({
       {/* Lista de Reseñas */}
       <div className="space-y-4 max-h-[520px] overflow-y-auto pr-2 custom-scrollbar">
         {filteredReviews.length === 0 ? (
-          <div className="text-center py-12 bg-[#080b11] rounded-2xl border border-[#1e293b] text-slate-400 text-xs font-medium">
+          <div className="text-center py-12 bg-bg rounded-2xl border border-line text-ink-faint text-xs font-medium">
             No hay reseñas en esta categoría.
           </div>
         ) : (
@@ -121,10 +121,10 @@ const ReviewList = memo(function ReviewList({
             return (
               <div
                 key={review.recommendation_id || index}
-                className="review-item bg-[#080b11] border border-[#1e293b] rounded-xl p-4 sm:p-5 transition-all duration-200 relative overflow-hidden group hover:border-slate-700 shadow-md space-y-3"
+                className="review-item bg-bg border border-line rounded-xl p-4 sm:p-5 transition-all duration-200 relative overflow-hidden group hover:border-line-strong shadow-md space-y-3"
                 style={{
                   borderLeftWidth: '4px',
-                  borderLeftColor: isPositive ? '#10b981' : '#f43f5e',
+                  borderLeftColor: isPositive ? 'var(--positive)' : 'var(--negative)',
                 }}
               >
                 {/* Cabecera de Reseña */}
@@ -137,19 +137,19 @@ const ReviewList = memo(function ReviewList({
                       {initials}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <span className="text-xs font-extrabold text-white block truncate">
+                      <span className="text-xs font-extrabold text-ink block truncate">
                         {review.author}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono font-medium flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[10px] text-ink-faint font-mono font-medium flex items-center gap-1.5 flex-wrap">
                         <span className="flex items-center gap-1">
-                          <Clock className="size-3 text-slate-500 shrink-0" />
+                          <Clock className="size-3 text-ink-faint shrink-0" />
                           <span>{hoursPlayed} hrs</span>
                         </span>
                         {postedDate && (
                           <>
-                            <span className="text-slate-600">·</span>
-                            <span className="flex items-center gap-1 text-slate-400">
-                              <Calendar className="size-3 text-slate-500 shrink-0" />
+                            <span className="text-ink-faint/60">·</span>
+                            <span className="flex items-center gap-1 text-ink-faint">
+                              <Calendar className="size-3 text-ink-faint shrink-0" />
                               <span>{postedDate}</span>
                             </span>
                           </>
@@ -163,23 +163,23 @@ const ReviewList = memo(function ReviewList({
                     <span
                       className={`text-[10px] font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border flex items-center gap-1 ${
                         review.voted_up_steam
-                          ? 'bg-blue-500/15 text-blue-300 border-blue-500/30'
-                          : 'bg-[#0f1520] text-slate-400 border-[#1e293b]'
+                          ? 'bg-accent/15 text-accent border-accent/30'
+                          : 'bg-surface-2 text-ink-faint border-line'
                       }`}
                     >
                       <span>Steam</span>
                       {review.voted_up_steam ? (
-                        <ThumbsUp className="size-3 text-blue-400 shrink-0" />
+                        <ThumbsUp className="size-3 text-accent shrink-0" />
                       ) : (
-                        <ThumbsDown className="size-3 text-slate-400 shrink-0" />
+                        <ThumbsDown className="size-3 text-ink-faint shrink-0" />
                       )}
                     </span>
 
                     <span
                       className={`text-[10px] font-black px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md border flex items-center gap-1 ${
                         isPositive
-                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                          : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                          ? 'bg-positive/15 text-positive border-positive/30'
+                          : 'bg-negative/15 text-negative border-negative/30'
                       }`}
                     >
                       <Sparkles className="size-3 shrink-0" />
