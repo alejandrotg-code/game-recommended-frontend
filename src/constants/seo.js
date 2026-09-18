@@ -1,6 +1,6 @@
 export const SITE_URL = 'https://game-recommended.alejandrotg.es';
 export const SITE_NAME = 'Game Recommended AI';
-export const SITE_HANDLE = '@alejandrotg_code';
+export const SITE_HANDLE = '@aletgdev';
 export const SITE_LOCALE = 'es_ES';
 
 export const SITE_TITLE_DEFAULT = 'Game Recommended AI — Análisis de Sentimiento y Reseñas de Steam';
@@ -25,7 +25,7 @@ export const SITE_KEYWORDS = [
 
 export const AUTHOR_NAME = 'Alejandro TG';
 export const AUTHOR_URL = 'https://portfolio.alejandrotg.es';
-export const AUTHOR_GITHUB = 'https://github.com/alejandrotg-code';
+export const AUTHOR_GITHUB = 'https://github.com/aletgdev';
 
 export const OG_IMAGE_PATH = '/og-image.png';
 export const OG_IMAGE_WIDTH = 1200;

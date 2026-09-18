@@ -230,7 +230,7 @@ export default function Header() {
 
           {/* Link GitHub */}
           <a
-            href="https://github.com/alejandrotg-code"
+            href="https://github.com/aletgdev"
             target="_blank"
             rel="noreferrer"
             className="hidden md:inline-flex items-center gap-1.5 border border-line bg-surface hover:bg-surface-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-ink-soft transition-all whitespace-nowrap shrink-0"

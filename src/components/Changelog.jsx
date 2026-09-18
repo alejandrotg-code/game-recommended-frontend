@@ -293,7 +293,7 @@ export default function Changelog() {
         <p className="text-center text-xs text-ink-faint font-medium mt-12">
           ¿Encontraste un error o deseas proponer una idea? Abre un issue en{' '}
           <a
-            href="https://github.com/alejandrotg-code"
+            href="https://github.com/aletgdev"
             target="_blank"
             rel="noreferrer"
             className="text-ink hover:text-accent underline underline-offset-2 transition-colors font-bold inline-flex items-center gap-1.5"
