@@ -16,9 +16,9 @@ describe('Header Component', () => {
 
     // Verificar que los enlaces de navegación principales estén presentes (responsive desktop + mobile)
     expect(screen.getAllByText(/Analizar/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Recomendar/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Recomendad/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Cómo funciona/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Changelog/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Novedad|Changelog/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Estado/i).length).toBeGreaterThan(0);
   });
 });

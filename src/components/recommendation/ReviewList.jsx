@@ -69,9 +69,9 @@ const ReviewList = memo(function ReviewList({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 pb-4 border-b border-line">
         <div className="flex items-center gap-2.5">
           <MessageSquare className="size-4.5 text-accent" />
-          <h3 className="text-xs sm:text-sm font-display font-bold text-ink uppercase tracking-wider flex items-center gap-2">
-            <span>Muestra de Reseñas Clasificadas</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 bg-surface-2 border border-line text-ink-soft rounded-md font-bold">
+          <h3 className="text-sm font-display font-semibold text-ink flex items-center gap-2">
+            <span>Reseñas leídas por la IA</span>
+            <span className="text-xs px-2 py-0.5 bg-surface-2 border border-line text-ink-soft rounded-md">
               {filteredReviews.length}
             </span>
           </h3>

@@ -121,38 +121,38 @@ export default function Header() {
   const navItems = [
     {
       key: 'home',
-      label: 'Analizar Juego',
+      label: 'Analizar',
       path: '/',
-      description: 'Buscador y análisis de opiniones de Steam',
+      description: 'Busca y analiza opiniones de Steam',
       icon: <Search className="size-4 shrink-0" />,
     },
     {
       key: 'recommend',
-      label: 'Recomendar por IA',
+      label: 'Recomendador',
       path: '/recomendar',
       isBeta: true,
-      description: 'Búsqueda semántica con Groq & RAG',
+      description: 'Describe lo que te apetece y encuentra juegos',
       icon: <Sparkles className="size-4 shrink-0" />,
     },
     {
       key: 'how-it-works',
-      label: '¿Cómo funciona?',
+      label: 'Cómo funciona',
       path: '/como-funciona',
-      description: 'Pipeline NLP y arquitectura de ML',
+      description: 'Cómo leemos y clasificamos reseñas',
       icon: <Cpu className="size-4 shrink-0" />,
     },
     {
       key: 'changelog',
-      label: 'Changelog',
+      label: 'Novedades',
       path: '/changelog',
-      description: 'Historial de versiones y mejoras continuas',
+      description: 'Qué ha cambiado últimamente',
       icon: <History className="size-4 shrink-0" />,
     },
     {
       key: 'status',
       label: 'Estado',
       path: '/estado',
-      description: 'Monitoreo de latencia y salud en vivo',
+      description: 'Si el servicio responde bien',
       icon: <Activity className="size-4 shrink-0" />,
     },
   ];
@@ -179,9 +179,9 @@ export default function Header() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent to-accent-2 flex items-center justify-center text-white shadow-md shadow-accent/25 group-hover:scale-105 transition-transform">
             <Gamepad2 className="size-4" />
           </div>
-          <span className="text-sm sm:text-base font-display font-extrabold tracking-tight text-ink group-hover:text-accent transition-colors flex items-center gap-1">
+          <span className="text-sm sm:text-base font-display font-extrabold tracking-tight text-ink group-hover:text-accent transition-colors flex items-center gap-1.5">
             <span>Game Recommended</span>
-            <span className="text-gradient font-black">AI</span>
+            <span className="text-xs font-semibold bg-accent/10 text-accent border border-accent/25 px-1.5 py-0.5 rounded-md">IA</span>
           </span>
         </button>
 
@@ -207,15 +207,15 @@ export default function Header() {
                 <span className={isActive ? 'text-white' : 'text-ink-faint'}>{icon}</span>
                 <span>{label}</span>
                 {isBeta && (
-                  <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-positive/20 text-positive border border-positive/30'
+                  <span className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-md ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-positive/10 text-positive border border-positive/25'
                   }`}>
-                    BETA
+                    Beta
                   </span>
                 )}
                 {isChangelogUnread && (
-                  <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-accent/20 text-accent border border-accent/40 animate-pulse">
-                    NUEVO
+                  <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-accent/10 text-accent border border-accent/25 animate-pulse">
+                    Nuevo
                   </span>
                 )}
               </button>

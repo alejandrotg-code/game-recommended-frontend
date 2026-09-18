@@ -25,48 +25,55 @@
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
-/* ── Semantic Design Tokens (WCAG AA Compliant) ───────────────────── */
+/* ── Semantic Design Tokens (WCAG AA Compliant) ─────────────────────
+   Identidad: laboratorio nocturno de Steam en español.
+   Base abisal + niebla Steam (#C7D5E0) + señal Steam (#66C0F4) solo para
+   interacción. Verde/rojo reservados a veredictos, nunca decoración. */
 
 :root {
-  --bg: #f8fafc;
+  --bg: #f6f8fb;
   --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --surface-3: #e2e8f0;
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
-  --ink: #090d16;
-  --ink-soft: #334155;
-  --ink-faint: #64748b;
-  --accent: #2563eb;
-  --accent-2: #0284c7;
-  --accent-glow: rgba(37, 99, 235, 0.22);
-  --positive: #059669;
-  --positive-glow: rgba(5, 150, 105, 0.22);
-  --negative: #e11d48;
-  --negative-glow: rgba(225, 29, 72, 0.22);
-  --warn: #d97706;
-  --warn-glow: rgba(217, 119, 6, 0.22);
+  --surface-2: #eef2f7;
+  --surface-3: #e0e8f2;
+  --line: #dfe7f1;
+  --line-strong: #bccadd;
+  --ink: #0b1220;
+  --ink-soft: #3d4c63;
+  --ink-faint: #6b7a93;
+  --accent: #1d5fd1;
+  --accent-2: #0277b6;
+  --accent-glow: rgba(29, 95, 209, 0.18);
+  --positive: #067647;
+  --positive-glow: rgba(6, 118, 71, 0.18);
+  --negative: #c81e4a;
+  --negative-glow: rgba(200, 30, 74, 0.18);
+  --warn: #b45309;
+  --warn-glow: rgba(180, 83, 9, 0.18);
+
+  --radius-panel: 20px;
+  --radius-nested: 14px;
+  --measure: 68ch;
 }
 
 .dark {
-  --bg: #06080d;
-  --surface: #0c1017;
-  --surface-2: #121824;
-  --surface-3: #192233;
-  --line: #1c2738;
-  --line-strong: #2a3b54;
-  --ink: #f8fafc;
-  --ink-soft: #cbd5e1;
-  --ink-faint: #94a3b8;
-  --accent: #3b82f6;
-  --accent-2: #06b6d4;
-  --accent-glow: rgba(59, 130, 246, 0.35);
-  --positive: #10b981;
-  --positive-glow: rgba(16, 185, 129, 0.35);
-  --negative: #f43f5e;
-  --negative-glow: rgba(244, 63, 94, 0.35);
-  --warn: #f59e0b;
-  --warn-glow: rgba(245, 158, 11, 0.35);
+  --bg: #070b14;
+  --surface: #0e1626;
+  --surface-2: #131e32;
+  --surface-3: #1a2942;
+  --line: #1e2c44;
+  --line-strong: #2c3e5c;
+  --ink: #edf2f7;
+  --ink-soft: #c7d5e0;
+  --ink-faint: #8f9bb0;
+  --accent: #4f9cf0;
+  --accent-2: #66c0f4;
+  --accent-glow: rgba(102, 192, 244, 0.22);
+  --positive: #34d399;
+  --positive-glow: rgba(52, 211, 153, 0.22);
+  --negative: #fb7185;
+  --negative-glow: rgba(251, 113, 133, 0.22);
+  --warn: #fbbf24;
+  --warn-glow: rgba(251, 191, 36, 0.22);
 }
 
 /* ── Base Layer ─────────────────────────────────────────────────── */
@@ -120,6 +127,34 @@ p {
   text-wrap: pretty;
 }
 
+/* Medida de lectura: evita líneas >68ch en cuerpo */
+.measure {
+  max-width: var(--measure);
+}
+
+/* Titular editorial: tinta sólida + subrayado señal, sin acentuar una palabra */
+.headline-mark {
+  background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 32%, transparent) 62%);
+  padding-inline: 0.08em;
+}
+
+/* Etiqueta tranquila en sentence case (sustituye al eyebrow en mayúsculas) */
+.label-calm {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--ink-soft);
+}
+
+/* Mono solo para dato real de código, nunca para etiquetas UI */
+.code-datum {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 /* Optimización de rendimiento para renderizado de listas de reseñas */
 .review-item {
   content-visibility: auto;
@@ -162,14 +197,14 @@ p {
 /* ── Identidad Visual & Gradients ───────────────────────────────── */
 
 .text-gradient {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 50%, #0d9488 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 60%, var(--positive) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .dark .text-gradient {
-  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #2dd4bf 100%);
+  background: linear-gradient(135deg, #93c5fd 0%, var(--accent-2) 55%, #5eead4 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

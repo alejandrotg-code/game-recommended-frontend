@@ -213,11 +213,12 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
               setIsFocused(true);
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Busca un juego, introduce su AppID (ej: 1245620) o pega URL..."
+            placeholder="Escribe un juego, un AppID o pega la URL de Steam…"
             className="flex-1 bg-transparent px-1 py-2 text-sm sm:text-base text-ink placeholder:text-ink-faint outline-none w-full min-w-0 font-medium"
             aria-autocomplete="list"
             aria-haspopup="listbox"
             aria-expanded={showDropdown}
+            aria-label="Buscar juego en Steam"
           />
 
           {/* Indicador de búsqueda spinner */}
@@ -254,7 +255,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="bg-accent hover:bg-accent-2 disabled:bg-surface-2 disabled:text-ink-faint disabled:border-line disabled:cursor-not-allowed text-white text-xs font-black px-5 sm:px-6 py-3 min-h-[44px] rounded-xl transition-all shadow-md shadow-accent/25 cursor-pointer shrink-0 flex items-center justify-center gap-2 active:scale-95"
+          className="bg-accent hover:brightness-110 disabled:bg-surface-2 disabled:text-ink-faint disabled:border-line disabled:cursor-not-allowed text-white text-sm font-semibold px-5 sm:px-6 py-3 min-h-[44px] rounded-xl transition-all shadow-md shadow-accent/25 cursor-pointer shrink-0 flex items-center justify-center gap-2 active:scale-95"
         >
           {isLoading ? (
             <>
@@ -285,20 +286,14 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
           className="absolute left-0 right-0 mt-2 bg-surface border border-line rounded-2xl shadow-2xl z-[200] overflow-hidden animate-fade-up backdrop-blur-xl"
         >
           <div className="px-4 py-2.5 border-b border-line flex items-center justify-between bg-surface-2/80">
-            <span className="text-[10px] uppercase font-black tracking-widest text-ink-faint flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-ink-soft flex items-center gap-1.5">
               <Gamepad2 className="size-3.5 text-accent" />
-              <span>Resultados del Catálogo</span>
+              <span>Coincidencias en Steam</span>
             </span>
             <div className="flex items-center gap-3">
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] text-ink-faint font-mono">
-                <span>Navegar con</span>
-                <kbd className="px-1 py-0.2 bg-surface border border-line rounded text-[9px]">↑</kbd>
-                <kbd className="px-1 py-0.2 bg-surface border border-line rounded text-[9px]">↓</kbd>
-                <kbd className="px-1 py-0.2 bg-surface border border-line rounded text-[9px]">↵</kbd>
-              </span>
               {suggestions.length > 0 && (
-                <span className="text-[10px] text-ink-faint font-mono font-bold bg-surface border border-line px-2 py-0.5 rounded">
-                  {suggestions.length} juegos
+                <span className="text-xs text-ink-faint bg-surface border border-line px-2 py-0.5 rounded-md">
+                  {suggestions.length} resultados
                 </span>
               )}
             </div>
@@ -339,10 +334,10 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
                       </div>
                     )}
                     <div className="min-w-0">
-                      <h4 className="text-xs sm:text-sm font-extrabold text-ink group-hover:text-accent transition-colors truncate">
+                      <h4 className="text-sm font-semibold text-ink group-hover:text-accent transition-colors truncate">
                         {game.name}
                       </h4>
-                      <span className="text-[10px] text-ink-faint font-mono">AppID: {game.id}</span>
+                      <span className="code-datum text-ink-faint">{game.id}</span>
                     </div>
                   </div>
 

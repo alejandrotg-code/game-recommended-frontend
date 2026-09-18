@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════════════ */
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -47,8 +47,16 @@
    ═══════════════════════════════════════════════════════ */
 
 .animate-fade-up {
-  animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Entrada orquestada única del hero: sube una vez, el resto responde a acciones */
+.hero-enter {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-enter > *:nth-child(2) { animation-delay: 0.06s; }
+.hero-enter > *:nth-child(3) { animation-delay: 0.12s; }
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease forwards;
@@ -73,23 +81,31 @@
   animation: radarSweep 3s linear infinite;
 }
 
-/* Panel Táctil Principal con Profundidad y Contraste */
+/* Panel principal con profundidad y contraste */
 .tactical-card {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 1.25rem;
-  box-shadow: 
-    0 1px 3px rgba(15, 23, 42, 0.05),
-    0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-panel);
+  box-shadow:
+    0 1px 2px rgba(11, 18, 32, 0.05),
+    0 16px 40px -24px rgba(11, 18, 32, 0.18);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dark .tactical-card {
-  background: var(--surface);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), var(--surface));
   border-color: var(--line);
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.5),
-    0 12px 36px -12px rgba(0, 0, 0, 0.7);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 24px 48px -24px rgba(0, 0, 0, 0.7);
+}
+
+/* Nivel anidado: callado, radio menor, sin sombra protagonista */
+.tactical-nested {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-nested);
+  box-shadow: none;
 }
 
 .tactical-card-interactive {
@@ -127,17 +143,17 @@
   transform: scale(0.97);
 }
 
-/* Badges & Chips Tácticos */
+/* Badges & Chips: sentence case, sin tracking agresivo ni mayúsculas */
 .tactical-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.025em;
-  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
   border-width: 1px;
 }
 

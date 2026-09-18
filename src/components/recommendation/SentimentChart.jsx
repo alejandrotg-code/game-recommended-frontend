@@ -38,8 +38,8 @@ const SentimentChart = memo(function SentimentChart({
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <BarChart3 className="size-4 text-accent shrink-0" />
-            <h3 className="text-xs font-display font-bold text-ink-soft uppercase tracking-wider">
-              <span>Métricas de Aprobación Semántica</span>
+            <h3 className="text-sm font-display font-semibold text-ink">
+              <span>Cómo se reparte la opinión</span>
             </h3>
           </div>
 
@@ -57,13 +57,13 @@ const SentimentChart = memo(function SentimentChart({
         </div>
 
         {/* Clasificación automática NLP */}
-        <div className="space-y-2.5 bg-surface-2 p-4 rounded-2xl border border-line shadow-sm">
-          <div className="flex items-center justify-between text-xs font-bold">
+        <div className="tactical-nested space-y-2.5 p-4">
+          <div className="flex items-center justify-between text-sm font-medium">
             <span className="text-ink-soft flex items-center gap-1.5">
               <Sparkles className="size-3.5 text-accent" />
-              <span>Clasificador Machine Learning</span>
+              <span>Lo que dice la IA</span>
             </span>
-            <span className="font-mono font-black text-positive">
+            <span className="font-semibold text-positive">
               {sentimentStats.positives_pct}% positivo
             </span>
           </div>
@@ -90,10 +90,10 @@ const SentimentChart = memo(function SentimentChart({
         </div>
 
         {/* Aprobación Muestra Steam */}
-        <div className="space-y-2.5 bg-surface-2 p-4 rounded-2xl border border-line shadow-sm">
-          <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-ink-soft">Aprobación de la Muestra en Steam</span>
-            <span className="font-mono font-black text-accent">{steamVotedUpPct}% votos positivos</span>
+        <div className="tactical-nested space-y-2.5 p-4">
+          <div className="flex items-center justify-between text-sm font-medium">
+            <span className="text-ink-soft">Voto directo en Steam</span>
+            <span className="font-semibold text-accent">{steamVotedUpPct}% a favor</span>
           </div>
           <div className="w-full h-3 bg-surface rounded-full overflow-hidden border border-line p-0.5 shadow-inner">
             <div
