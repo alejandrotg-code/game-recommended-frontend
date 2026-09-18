@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Tag, ThumbsUp, ThumbsDown, MessageSquareQuote } from 'lucide-react';
+import { Tag, ThumbsUp, ThumbsDown } from 'lucide-react';
 
 const TopKeyWords = memo(function TopKeyWords({ topPositiveWords = [], topNegativeWords = [] }) {
   if (topPositiveWords.length === 0 && topNegativeWords.length === 0) {

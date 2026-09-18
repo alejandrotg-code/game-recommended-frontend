@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  Activity,
   CheckCircle2,
   AlertTriangle,
   Loader2,

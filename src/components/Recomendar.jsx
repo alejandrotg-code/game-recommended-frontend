@@ -17,7 +17,6 @@ import {
   ChevronRight,
   Loader2,
   AlertCircle,
-  ExternalLink,
   ShieldCheck,
 } from 'lucide-react';
 import { getRagRecommendations } from '../services/steamService';

@@ -8,7 +8,6 @@ import {
   HelpCircle,
   Zap,
   ShieldCheck,
-  ArrowDown,
 } from 'lucide-react';
 import SeoHead from './SeoHead';
 import { getBreadcrumbJsonLd, getFaqJsonLd } from '../services/seo/seoService';
@@ -133,7 +132,7 @@ export default function HowItWorks() {
 
         {/* TIMELINE DE PASOS TÉCNICOS */}
         <section className="space-y-4 relative">
-          {steps.map((step, i) => (
+          {steps.map((step) => (
             <div
               key={step.num}
               className="tactical-card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-5 items-start transition-all hover:border-accent/50 shadow-md group"

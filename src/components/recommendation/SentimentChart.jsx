@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { BarChart3, PieChart as PieChartIcon, ChevronRight, ShieldAlert, Sparkles, Check, X } from 'lucide-react';
+import { BarChart3, PieChart as PieChartIcon, ChevronRight, Sparkles } from 'lucide-react';
 
 const DonutTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
