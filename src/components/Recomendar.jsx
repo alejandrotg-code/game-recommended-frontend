@@ -17,6 +17,8 @@ import {
   ChevronRight,
   Loader2,
   AlertCircle,
+  ExternalLink,
+  ShieldCheck,
 } from 'lucide-react';
 import { getRagRecommendations } from '../services/steamService';
 import { getInstantGamingUrl, getG2aUrl, getSteamStoreUrl } from '../config/affiliates';
@@ -35,7 +37,7 @@ export default function Recomendar() {
   const resultsTopRef = useRef(null);
 
   const ejemplos = [
-    { text: 'Un juego relajante para tener mi propia granja y plantar hortalizas', label: 'Granja / Relajante', Icon: Wheat },
+    { text: 'Un juego relajante para tener mi propia granja y plantar hortalizas', label: 'Granja / Relax', Icon: Wheat },
     { text: 'Un RPG de fantasía con combates por turnos y una historia profunda', label: 'RPG / Fantasía', Icon: Swords },
     { text: 'Un shooter cooperativo espacial con mucha acción para jugar con amigos', label: 'Acción / Co-op', Icon: Rocket },
     { text: 'Un juego de puzles y misterio con una gran banda sonora atmosférica', label: 'Puzles / Misterio', Icon: Puzzle },
@@ -46,7 +48,7 @@ export default function Recomendar() {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!query.trim() || query.trim().length < 3) {
-      setError('Escribe al menos 3 caracteres para describir lo que buscas.');
+      setError('Escribe al menos 3 caracteres para describir la experiencia que buscas.');
       return;
     }
 
@@ -115,45 +117,38 @@ export default function Recomendar() {
       />
 
       <div className="py-8 sm:py-12 animate-fade-in space-y-10">
-        {/* HEADER SECCIÓN */}
-        <section className="hero-light py-10 px-6 sm:px-10 rounded-3xl text-center space-y-4">
-          <div className="inline-flex items-center gap-2.5 bg-bg border border-line text-accent text-xs font-black px-4 py-2 rounded-full shadow-md">
+        {/* HERO SECTION */}
+        <section className="relative py-10 px-6 sm:px-10 rounded-3xl text-center space-y-4 overflow-hidden border border-line bg-surface/50 shadow-lg">
+          <div aria-hidden="true" className="hero-light" />
+
+          <div className="relative inline-flex items-center gap-2 bg-surface border border-line text-accent text-xs font-bold px-3.5 py-1.5 rounded-full shadow-sm">
             <Sparkles className="size-4 text-accent animate-pulse" />
-            <span>Búsqueda Semántica por Lenguaje Natural & IA</span>
+            <span>Búsqueda Semántica por Lenguaje Natural & Groq LLM</span>
           </div>
 
-          {/* Kicker */}
-          <div className="flex items-center justify-center gap-2.5">
-            <span className="h-px w-4 bg-accent" />
-            <span className="text-[10px] font-display font-semibold tracking-[0.2em] uppercase text-ink-faint">
-              Recomendador por IA
-            </span>
-            <span className="h-px w-4 bg-accent" />
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-tight text-ink">
-            Recomendador de Videojuegos por IA
+          <h1 className="relative text-3xl sm:text-5xl font-display font-black tracking-tight text-ink">
+            Recomendador de Juegos por <span className="text-gradient">IA</span>
           </h1>
-          <p className="text-xs sm:text-sm text-ink-faint max-w-xl mx-auto leading-relaxed font-normal">
-            Describe con tus propias palabras qué deseas jugar. La IA traducirá tu petición al catálogo de Steam y razonará por qué encaja contigo.
+          <p className="relative text-sm sm:text-base text-ink-soft max-w-xl mx-auto leading-relaxed font-normal">
+            Describe qué sensación o ambientación buscas hoy. Nuestra IA vectorizará tu consulta sobre el catálogo de Steam y argumentará cada recomendación.
           </p>
         </section>
 
-        {/* FORMULARIO DE BÚSQUEDA */}
-        <section className="bg-surface p-4 sm:p-8 max-w-3xl mx-auto rounded-3xl border border-line shadow-2xl space-y-5 sm:space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            <div className="space-y-2">
-              <label htmlFor="rag-query-input" className="text-xs font-black uppercase tracking-wider text-ink flex items-center gap-2">
+        {/* FORMULARIO DE BÚSQUEDA TÁCTICA */}
+        <section className="tactical-card p-5 sm:p-8 max-w-3xl mx-auto space-y-5 sm:space-y-6 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2.5">
+              <label htmlFor="rag-query-input" className="text-xs font-display font-bold uppercase tracking-wider text-ink flex items-center gap-2">
                 <BrainCircuit className="size-4 text-accent shrink-0" />
-                <span>¿Qué experiencia o sensación buscas hoy?</span>
+                <span>¿Qué experiencia o género deseas jugar?</span>
               </label>
               <textarea
                 id="rag-query-input"
                 rows="3"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Ej. Busco un juego para desconectar después de un día agotador, donde pueda tener mi propia granja y plantar hortalizas..."
-                className="w-full bg-bg border border-line focus:border-accent rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm text-ink placeholder-ink-faint outline-none transition-all resize-none leading-relaxed shadow-inner glow-focus"
+                placeholder="Ej: Busco un juego para desconectar tras el trabajo, donde pueda construir una granja pacífica o explorar cuevas misteriosas..."
+                className="w-full bg-surface-2 border border-line focus:border-accent rounded-2xl p-4 text-sm text-ink placeholder-ink-faint outline-none transition-all resize-none leading-relaxed shadow-inner glow-focus"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -163,22 +158,22 @@ export default function Recomendar() {
               />
             </div>
 
-            {/* SELECTOR DE CANTIDAD DE RESULTADOS */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 sm:pt-4 border-t border-line">
-              <div className="flex items-center gap-2 sm:gap-3">
-                <span className="text-xs font-black text-ink-soft uppercase tracking-wider">
+            {/* SELECTOR DE CANTIDAD DE RESULTADOS & BOTÓN BUSCAR */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-line">
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-bold text-ink-soft uppercase tracking-wider">
                   Resultados:
                 </span>
-                <div className="flex items-center gap-1 bg-bg p-1 rounded-xl border border-line">
+                <div className="flex items-center gap-1 bg-surface-2 p-1 rounded-xl border border-line">
                   {[4, 10, 20].map((num) => (
                     <button
                       key={num}
                       type="button"
                       onClick={() => setTopK(num)}
-                      className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                         topK === num
                           ? 'bg-accent text-white shadow-sm'
-                          : 'text-ink-faint hover:text-ink hover:bg-surface-2'
+                          : 'text-ink-soft hover:text-ink hover:bg-surface'
                       }`}
                     >
                       {num} juegos
@@ -190,12 +185,12 @@ export default function Recomendar() {
               <button
                 type="submit"
                 disabled={isLoading || !query.trim()}
-                className="w-full sm:w-auto bg-accent hover:bg-accent-2 disabled:bg-surface-2 disabled:text-ink-faint text-white text-xs font-black px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 shadow-lg active:scale-95"
+                className="w-full sm:w-auto bg-accent hover:bg-accent-2 disabled:bg-surface-2 disabled:text-ink-faint disabled:border-line disabled:cursor-not-allowed text-white text-xs font-black px-6 py-3 min-h-[44px] rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 shadow-lg shadow-accent/25 active:scale-95"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="size-4 animate-spin" />
-                    <span>Buscando juegos...</span>
+                    <Loader2 className="size-4 animate-spin text-white" />
+                    <span>Buscando en Steam...</span>
                   </>
                 ) : (
                   <>
@@ -206,20 +201,20 @@ export default function Recomendar() {
               </button>
             </div>
 
-            {/* EJEMPLOS RÁPIDOS */}
+            {/* PRESETS DE EJEMPLO */}
             <div className="flex flex-wrap gap-2 items-center pt-3 border-t border-line/60">
-              <span className="text-[10px] text-ink-faint font-black uppercase tracking-wider mr-1 flex items-center gap-1">
+              <span className="text-[10px] text-ink-faint font-bold uppercase tracking-wider mr-1 flex items-center gap-1">
                 <Compass className="size-3.5 text-accent shrink-0" />
-                <span>Ejemplos:</span>
+                <span>Ideas Rápidas:</span>
               </span>
               {ejemplos.map((ej, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => handleEjemploClick(ej.text)}
-                  className="text-[11px] font-bold text-ink bg-bg border border-line hover:border-accent hover:text-accent px-3 py-1 sm:py-1.5 rounded-xl transition-all cursor-pointer active:scale-95 shadow-sm flex items-center gap-1.5"
+                  className="text-xs font-bold text-ink-soft hover:text-ink bg-surface-2 border border-line hover:border-accent hover:bg-surface px-3 py-1.5 rounded-xl transition-all cursor-pointer active:scale-95 shadow-sm flex items-center gap-1.5"
                 >
-                  <ej.Icon className="size-3.5 shrink-0" />
+                  <ej.Icon className="size-3.5 text-accent shrink-0" />
                   <span>{ej.label}</span>
                 </button>
               ))}
@@ -229,51 +224,54 @@ export default function Recomendar() {
           {error && (
             <div className="bg-negative/10 border border-negative/30 p-4 rounded-2xl text-negative text-xs flex gap-3 items-start shadow-md">
               <AlertCircle className="size-5 shrink-0 text-negative mt-0.5" />
-              <p className="opacity-90 leading-relaxed font-medium">{error}</p>
+              <p className="opacity-90 leading-relaxed font-semibold">{error}</p>
             </div>
           )}
         </section>
 
         {/* MUESTRA DESTACADA: STARDEW VALLEY */}
         {!isLoading && !result && (
-          <div className="bg-surface border border-positive/30 p-4 sm:p-6 max-w-3xl mx-auto rounded-3xl shadow-2xl space-y-4 text-left">
+          <div className="tactical-card border-positive/30 p-5 sm:p-6 max-w-3xl mx-auto rounded-3xl shadow-xl space-y-4 text-left bg-gradient-to-r from-positive/5 via-surface to-surface">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-positive/20 border border-positive/40 flex items-center justify-center shrink-0">
-                  <Wheat className="size-5 text-positive" />
+                <div className="w-10 h-10 rounded-xl bg-positive/20 border border-positive/40 flex items-center justify-center shrink-0 text-positive">
+                  <Wheat className="size-5" />
                 </div>
                 <div>
                   <h3 className="text-sm sm:text-base font-display font-extrabold text-ink flex items-center gap-2 flex-wrap">
                     <span>Stardew Valley</span>
-                    <span className="text-[10px] bg-bg text-ink-faint border border-line px-2 py-0.5 rounded font-mono">
+                    <span className="text-[10px] bg-surface-2 text-ink-faint border border-line px-2 py-0.5 rounded font-mono font-bold">
                       AppID: 413150
                     </span>
                   </h3>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-ink-faint mt-0.5">
-                    <span>Análisis Muestra</span>
-                    <span>•</span>
-                    <span className="text-positive font-semibold">Modelo IA</span>
+                    <span>Dossier de Ejemplo</span>
+                    <span>·</span>
+                    <span className="text-positive font-bold flex items-center gap-1">
+                      <ShieldCheck className="size-3" />
+                      <span>Verificado por IA</span>
+                    </span>
                   </div>
                 </div>
               </div>
-              <span className="text-xs font-bold bg-positive/15 text-positive border border-positive/30 px-3 py-1 rounded-xl shrink-0 self-start sm:self-center">
+              <span className="text-xs font-display font-bold bg-positive/15 text-positive border border-positive/30 px-3 py-1 rounded-xl shrink-0 self-start sm:self-center">
                 Extremadamente Recomendado
               </span>
             </div>
 
             <div className="pt-3 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div className="space-y-0.5">
-                <span className="text-ink font-extrabold block">
+                <span className="text-ink font-bold block font-display">
                   Síntesis Inteligente de la Comunidad
                 </span>
-                <span className="text-ink-faint text-[11px] font-normal">
-                  Resumen ejecutivo de reseñas reales en español generado por IA
+                <span className="text-ink-soft text-xs font-normal">
+                  Resumen ejecutivo y pros/contras extraídos de reseñas reales en español
                 </span>
               </div>
 
               <Link
                 to="/?game=413150&name=Stardew+Valley"
-                className="flex items-center justify-center gap-2 text-xs font-black text-positive hover:text-positive bg-positive/10 hover:bg-positive/20 border border-positive/30 px-4 py-2.5 rounded-2xl transition-all cursor-pointer group btn-tactical shrink-0 shadow-md"
+                className="flex items-center justify-center gap-1.5 text-xs font-bold text-positive hover:text-white bg-positive/15 hover:bg-positive border border-positive/30 px-4 py-2 rounded-xl transition-all cursor-pointer group btn-tactical shrink-0 shadow-sm"
               >
                 <span>Ver Análisis y Resumen</span>
                 <ChevronRight className="size-4 group-hover:translate-x-1 transition-transform" />
@@ -282,12 +280,15 @@ export default function Recomendar() {
           </div>
         )}
 
-        {/* CARGANDO */}
+        {/* ESTADO DE CARGA */}
         {isLoading && (
-          <div className="py-16 bg-surface border border-line rounded-3xl shadow-2xl flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
-            <Loader2 className="size-10 text-accent animate-spin" />
-            <p className="text-sm font-display font-bold text-ink">Consultando catálogo de Steam & Groq IA...</p>
-            <p className="text-xs text-ink-faint">Búsqueda semántica vectorizada sobre descripciones de juegos</p>
+          <div className="py-16 tactical-card shadow-2xl flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto animate-fade-up">
+            <div className="relative flex items-center justify-center w-16 h-16">
+              <div className="absolute inset-0 rounded-full border-2 border-accent/20 animate-ping opacity-50" />
+              <Loader2 className="size-8 text-accent animate-spin" />
+            </div>
+            <p className="text-sm font-display font-bold text-ink">Vectorizando consulta y explorando Steam...</p>
+            <p className="text-xs text-ink-faint">Búsqueda semántica RAG acelerada por Groq Cloud AI</p>
           </div>
         )}
 
@@ -296,8 +297,8 @@ export default function Recomendar() {
           <div ref={resultsTopRef} className="space-y-8 max-w-4xl mx-auto animate-fade-up">
             {/* RESUMEN DE IA */}
             {result.summary && (
-              <div className="bg-surface border border-line rounded-3xl p-6 sm:p-8 space-y-3 border-l-8 border-l-accent shadow-2xl">
-                <span className="text-xs font-black uppercase tracking-wider text-accent flex items-center gap-2">
+              <div className="tactical-card p-5 sm:p-7 space-y-2.5 border-l-4 border-l-accent shadow-xl bg-surface-2/40">
+                <span className="text-xs font-display font-bold uppercase tracking-wider text-accent flex items-center gap-2">
                   <BrainCircuit className="size-4 text-accent" />
                   <span>Diagnóstico del Recomendador IA</span>
                 </span>
@@ -308,11 +309,11 @@ export default function Recomendar() {
             )}
 
             {/* JUEGOS RECOMENDADOS */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between pb-3 border-b border-line">
+            <div className="space-y-5">
+              <div className="flex items-center justify-between pb-3 border-b border-line flex-wrap gap-2">
                 <h3 className="text-xs sm:text-sm font-display font-bold text-ink uppercase tracking-wider flex items-center gap-2">
                   <Gamepad2 className="size-4 text-accent" />
-                  <span>Selección IA ({totalItems} Títulos)</span>
+                  <span>Selección IA ({totalItems} Títulos Encontrados)</span>
                 </h3>
                 {totalPages > 1 && (
                   <span className="text-xs text-ink-faint font-mono font-medium">
@@ -321,7 +322,7 @@ export default function Recomendar() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {paginatedGames.map((game) => {
                   const steamUrl = getSteamStoreUrl(game.app_id);
                   const instantGamingUrl = getInstantGamingUrl(game.name, game.app_id);
@@ -330,23 +331,23 @@ export default function Recomendar() {
                   return (
                     <div
                       key={game.app_id}
-                      className="bg-surface border border-line hover:border-accent/60 rounded-3xl p-6 flex flex-col justify-between space-y-5 transition-all shadow-xl group"
+                      className="tactical-card p-5 sm:p-6 flex flex-col justify-between space-y-4 group hover:border-accent/60 shadow-lg"
                     >
-                      <div className="flex gap-4 items-start">
+                      <div className="flex gap-3.5 items-start">
                         {game.header_image ? (
                           <img
                             src={game.header_image}
                             alt={game.name}
-                            className="w-28 h-16 object-cover rounded-xl border border-line shrink-0 group-hover:scale-105 transition-transform"
+                            className="w-28 h-16 object-cover rounded-xl border border-line shrink-0 group-hover:scale-105 transition-transform shadow-sm"
                           />
                         ) : (
-                          <div className="w-28 h-16 bg-bg rounded-xl shrink-0 flex items-center justify-center text-ink-faint text-xs font-bold border border-line">
-                            Steam Game
+                          <div className="w-28 h-16 bg-surface-2 rounded-xl shrink-0 flex items-center justify-center text-ink-faint text-xs font-bold border border-line">
+                            <Gamepad2 className="size-5" />
                           </div>
                         )}
 
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-base font-display font-bold text-ink truncate group-hover:text-accent transition-colors">
+                          <h4 className="text-sm sm:text-base font-display font-bold text-ink truncate group-hover:text-accent transition-colors">
                             {game.name}
                           </h4>
                           <span className="text-xs font-bold text-positive block mt-0.5">
@@ -360,8 +361,8 @@ export default function Recomendar() {
                         </div>
                       </div>
 
-                      <div className="bg-bg border border-line rounded-2xl p-4 space-y-1.5 shadow-inner">
-                        <span className="text-[10px] font-black text-accent uppercase tracking-wider block">
+                      <div className="bg-surface-2 border border-line rounded-xl p-3.5 space-y-1 shadow-inner">
+                        <span className="text-[10px] font-display font-bold text-accent uppercase tracking-wider block">
                           Por qué encaja:
                         </span>
                         <p className="text-xs text-ink-soft leading-relaxed font-normal">
@@ -369,41 +370,44 @@ export default function Recomendar() {
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-line flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                      <div className="pt-3 border-t border-line flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
                         <Link
                           to={`/?game=${game.app_id}&name=${encodeURIComponent(game.name)}`}
-                          className="text-xs font-black text-accent hover:text-accent-2 bg-accent/10 hover:bg-accent/20 border border-accent/30 px-3 py-1.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 group btn-tactical"
+                          className="text-xs font-bold text-accent hover:text-white hover:bg-accent bg-accent/10 border border-accent/30 px-3 py-1.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 group btn-tactical"
                         >
-                          <span>Síntesis Inteligente</span>
+                          <span>Síntesis IA</span>
                           <ChevronRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
                         </Link>
 
-                        <div className="flex items-center gap-2 justify-end">
+                        <div className="flex items-center gap-1.5 justify-end">
                           <a
                             href={instantGamingUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-[11px] font-bold text-warn bg-bg border border-line hover:border-warn/60 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1"
+                            className="text-[11px] font-bold text-warn bg-surface-2 border border-line hover:border-warn/60 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
+                            title="Comprar en Instant Gaming"
                           >
-                            <Zap className="size-3.5 shrink-0" />
+                            <Zap className="size-3 shrink-0" />
                             <span>Instant</span>
                           </a>
                           <a
                             href={g2aUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-[11px] font-bold text-accent-2 bg-bg border border-line hover:border-accent-2/60 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1"
+                            className="text-[11px] font-bold text-accent-2 bg-surface-2 border border-line hover:border-accent-2/60 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
+                            title="Comprar en G2A"
                           >
-                            <Coins className="size-3.5 shrink-0" />
+                            <Coins className="size-3 shrink-0" />
                             <span>G2A</span>
                           </a>
                           <a
                             href={steamUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-[11px] font-bold text-accent bg-bg border border-line hover:border-accent/60 px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1"
+                            className="text-[11px] font-bold text-accent bg-surface-2 border border-line hover:border-accent/60 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
+                            title="Ver en Steam"
                           >
-                            <Gamepad2 className="size-3.5 shrink-0" />
+                            <Gamepad2 className="size-3 shrink-0" />
                             <span>Steam</span>
                           </a>
                         </div>
@@ -413,7 +417,7 @@ export default function Recomendar() {
                 })}
               </div>
 
-              {/* PAGINACIÓN */}
+              {/* PAGINACIÓN TÁCTICA */}
               {totalPages > 1 && (
                 <div className="flex items-center justify-between pt-6 border-t border-line">
                   <p className="text-xs text-ink-faint font-mono">
@@ -425,7 +429,7 @@ export default function Recomendar() {
                       type="button"
                       disabled={currentPage === 1}
                       onClick={() => handlePageChange(currentPage - 1)}
-                      className="px-4 py-2 rounded-xl border border-line bg-surface text-xs font-bold text-ink hover:text-accent disabled:opacity-40 transition-colors cursor-pointer flex items-center gap-1.5 shadow-md"
+                      className="px-3.5 py-1.5 rounded-xl border border-line bg-surface text-xs font-bold text-ink hover:text-accent disabled:opacity-40 transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
                     >
                       <ChevronLeft className="size-4" />
                       <span>Anterior</span>
@@ -435,7 +439,7 @@ export default function Recomendar() {
                       type="button"
                       disabled={currentPage === totalPages}
                       onClick={() => handlePageChange(currentPage + 1)}
-                      className="px-4 py-2 rounded-xl border border-line bg-surface text-xs font-bold text-ink hover:text-accent disabled:opacity-40 transition-colors cursor-pointer flex items-center gap-1.5 shadow-md"
+                      className="px-3.5 py-1.5 rounded-xl border border-line bg-surface text-xs font-bold text-ink hover:text-accent disabled:opacity-40 transition-colors cursor-pointer flex items-center gap-1 shadow-sm"
                     >
                       <span>Siguiente</span>
                       <ChevronRight className="size-4" />

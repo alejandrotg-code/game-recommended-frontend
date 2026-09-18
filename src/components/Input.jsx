@@ -6,6 +6,7 @@ import {
   AlertCircle,
   ArrowRight,
   Loader2,
+  CornerDownLeft,
 } from 'lucide-react';
 import { searchGames } from '../services/steamService';
 
@@ -86,7 +87,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
 
   // ── Envío del formulario ─────────────────────────────────────────────────
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!query.trim() || isLoading) return;
 
     const urlPattern = /store\.steampowered\.com\/app\/(\d+)/;
@@ -154,18 +155,18 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
 
   return (
     <div ref={containerRef} className="w-full relative">
-      {/* Formulario Estilo Command Palette */}
+      {/* Formulario Estilo Command Palette / HUD */}
       <form
         onSubmit={handleSubmit}
-        className={`relative z-10 w-full bg-surface border p-2 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 transition-all duration-300 shadow-xl ${
+        className={`relative z-10 w-full bg-surface border p-2 sm:p-2.5 rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center gap-2 transition-all duration-300 shadow-xl ${
           isFocused
-            ? 'border-accent glow-focus'
+            ? 'border-accent glow-focus shadow-accent/15'
             : 'border-line hover:border-line-strong'
         }`}
       >
-        <div className="flex items-center flex-1 min-w-0 gap-2.5 pl-1">
+        <div className="flex items-center flex-1 min-w-0 gap-2.5 pl-1.5">
           {/* Icono Lupa */}
-          <div className={`pl-2 shrink-0 transition-colors duration-200 ${isFocused ? 'text-accent' : 'text-ink-faint'}`}>
+          <div className={`shrink-0 transition-colors duration-200 ${isFocused ? 'text-accent' : 'text-ink-faint'}`}>
             <Search className="size-5" />
           </div>
 
@@ -212,7 +213,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
               setIsFocused(true);
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Busca un juego, pega su AppID (ej: 1245620) o URL de Steam..."
+            placeholder="Busca un juego, introduce su AppID (ej: 1245620) o pega URL..."
             className="flex-1 bg-transparent px-1 py-2 text-sm sm:text-base text-ink placeholder:text-ink-faint outline-none w-full min-w-0 font-medium"
             aria-autocomplete="list"
             aria-haspopup="listbox"
@@ -242,7 +243,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
           {!query && !isSearching && (
             <kbd
               className="hidden sm:inline-flex items-center gap-0.5 justify-center h-6 px-2 text-[11px] font-mono font-bold text-ink-faint bg-surface-2 border border-line rounded-md pointer-events-none"
-              title="Presiona '/' para buscar"
+              title="Presiona '/' para enfocar el buscador"
             >
               /
             </kbd>
@@ -253,7 +254,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
         <button
           type="submit"
           disabled={isLoading || !query.trim()}
-          className="bg-accent hover:bg-accent-2 disabled:bg-surface-2 disabled:text-ink-faint disabled:cursor-not-allowed text-white text-xs font-black px-6 py-3 rounded-xl transition-all shadow-md shadow-accent/20 cursor-pointer shrink-0 flex items-center justify-center gap-2 active:scale-95"
+          className="bg-accent hover:bg-accent-2 disabled:bg-surface-2 disabled:text-ink-faint disabled:border-line disabled:cursor-not-allowed text-white text-xs font-black px-5 sm:px-6 py-3 min-h-[44px] rounded-xl transition-all shadow-md shadow-accent/25 cursor-pointer shrink-0 flex items-center justify-center gap-2 active:scale-95"
         >
           {isLoading ? (
             <>
@@ -262,7 +263,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
             </>
           ) : (
             <>
-              <span>Analizar Juego</span>
+              <span>Analizar</span>
               <ArrowRight className="size-4" />
             </>
           )}
@@ -271,9 +272,9 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
 
       {/* Mensaje de Error Inline */}
       {inputError && (
-        <div className="mt-2.5 flex items-center gap-2 text-xs text-warn bg-warn/10 border border-warn/30 px-3.5 py-2.5 rounded-xl animate-fade-up">
+        <div className="mt-2.5 flex items-center gap-2 text-xs text-warn bg-warn/10 border border-warn/30 px-4 py-2.5 rounded-xl animate-fade-up">
           <AlertCircle className="size-4 shrink-0 text-warn" />
-          <span>{inputError}</span>
+          <span className="font-medium">{inputError}</span>
         </div>
       )}
 
@@ -281,25 +282,35 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
       {showResults && (
         <div
           role="listbox"
-          className="absolute left-0 right-0 mt-2 bg-surface border border-line rounded-2xl shadow-2xl z-[200] overflow-hidden animate-fade-up"
+          className="absolute left-0 right-0 mt-2 bg-surface border border-line rounded-2xl shadow-2xl z-[200] overflow-hidden animate-fade-up backdrop-blur-xl"
         >
-          <div className="px-4 py-2.5 border-b border-line flex items-center justify-between bg-bg/50">
+          <div className="px-4 py-2.5 border-b border-line flex items-center justify-between bg-surface-2/80">
             <span className="text-[10px] uppercase font-black tracking-widest text-ink-faint flex items-center gap-1.5">
               <Gamepad2 className="size-3.5 text-accent" />
-              <span>Catálogo de Steam</span>
+              <span>Resultados del Catálogo</span>
             </span>
-            {suggestions.length > 0 && (
-              <span className="text-[10px] text-ink-faint font-mono">{suggestions.length} resultados</span>
-            )}
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] text-ink-faint font-mono">
+                <span>Navegar con</span>
+                <kbd className="px-1 py-0.2 bg-surface border border-line rounded text-[9px]">↑</kbd>
+                <kbd className="px-1 py-0.2 bg-surface border border-line rounded text-[9px]">↓</kbd>
+                <kbd className="px-1 py-0.2 bg-surface border border-line rounded text-[9px]">↵</kbd>
+              </span>
+              {suggestions.length > 0 && (
+                <span className="text-[10px] text-ink-faint font-mono font-bold bg-surface border border-line px-2 py-0.5 rounded">
+                  {suggestions.length} juegos
+                </span>
+              )}
+            </div>
           </div>
 
-          <ul className="max-h-72 overflow-y-auto divide-y divide-line/60 custom-scrollbar">
+          <ul className="max-h-80 overflow-y-auto divide-y divide-line/60 custom-scrollbar">
             {isSearching && suggestions.length === 0 && (
-              <li className="px-4 py-3 flex items-center gap-3">
-                <div className="w-14 h-8 rounded bg-surface-2 animate-pulse shrink-0" />
-                <div className="flex-1 space-y-1.5">
+              <li className="px-4 py-4 flex items-center gap-3">
+                <div className="w-16 h-10 rounded-lg bg-surface-2 animate-pulse shrink-0" />
+                <div className="flex-1 space-y-2">
                   <div className="h-3 w-2/3 rounded bg-surface-2 animate-pulse" />
-                  <div className="h-2 w-1/3 rounded bg-surface-2 animate-pulse" />
+                  <div className="h-2.5 w-1/3 rounded bg-surface-2 animate-pulse" />
                 </div>
               </li>
             )}
@@ -311,7 +322,7 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
                   onClick={() => handleSelectSuggestion(game)}
                   className={`w-full px-4 py-3 flex items-center justify-between text-left transition-all cursor-pointer group ${
                     highlightedIndex === i
-                      ? 'bg-accent/10 border-l-4 border-accent'
+                      ? 'bg-accent/15 border-l-4 border-accent'
                       : 'hover:bg-surface-2'
                   }`}
                 >
@@ -320,11 +331,11 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
                       <img
                         src={game.image}
                         alt={game.name}
-                        className="w-16 h-9 object-cover rounded-md border border-line shrink-0 group-hover:scale-105 transition-transform"
+                        className="w-16 h-10 object-cover rounded-lg border border-line shrink-0 group-hover:scale-105 transition-transform shadow-sm"
                       />
                     ) : (
-                      <div className="w-16 h-9 bg-surface-2 rounded-md flex items-center justify-center shrink-0 text-xs text-ink-faint">
-                        <Gamepad2 className="size-4 text-ink-faint" />
+                      <div className="w-16 h-10 bg-surface-2 rounded-lg flex items-center justify-center shrink-0 text-ink-faint border border-line">
+                        <Gamepad2 className="size-5" />
                       </div>
                     )}
                     <div className="min-w-0">
@@ -335,25 +346,26 @@ const GameSearch = memo(function GameSearch({ onGameSelect, isLoading }) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0 pl-2">
+                  <div className="flex items-center gap-2 shrink-0 pl-3">
                     {game.price && (
-                      <span className="text-[10px] font-bold text-ink-soft bg-bg border border-line px-2 py-0.5 rounded shrink-0">
+                      <span className="text-[10px] font-bold text-ink-soft bg-surface border border-line px-2 py-0.5 rounded-md shrink-0">
                         {game.price}
                       </span>
                     )}
                     {game.metascore && game.metascore !== 'N/A' && (() => {
                       const score = parseInt(game.metascore, 10);
                       const metClasses = score >= 75
-                        ? 'bg-positive/20 text-positive border-positive/30'
+                        ? 'bg-positive/15 text-positive border-positive/30'
                         : score >= 50
-                          ? 'bg-warn/20 text-warn border-warn/30'
-                          : 'bg-negative/20 text-negative border-negative/30';
+                          ? 'bg-warn/15 text-warn border-warn/30'
+                          : 'bg-negative/15 text-negative border-negative/30';
                       return (
-                        <span className={`text-[10px] ${metClasses} border px-2 py-0.5 rounded font-black`}>
+                        <span className={`text-[10px] ${metClasses} border px-2 py-0.5 rounded-md font-black`}>
                           Meta {game.metascore}
                         </span>
                       );
                     })()}
+                    <CornerDownLeft className="size-3.5 text-ink-faint opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block" />
                   </div>
                 </button>
               </li>

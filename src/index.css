@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* Theme variant: `.dark` class on <html> */
@@ -8,6 +8,7 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-ink: var(--ink);
@@ -21,52 +22,66 @@
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Chakra Petch', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
-/* ── Semantic tokens ─────────────────────────────────────────────── */
+/* ── Semantic Design Tokens (WCAG AA Compliant) ───────────────────── */
 
 :root {
-  --bg: #f5f6f8;
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --surface-2: #eef1f5;
+  --surface-2: #f1f5f9;
+  --surface-3: #e2e8f0;
   --line: #e2e8f0;
   --line-strong: #cbd5e1;
-  --ink: #0f172a;
-  --ink-soft: #475569;
-  --ink-faint: #94a3b8;
+  --ink: #090d16;
+  --ink-soft: #334155;
+  --ink-faint: #64748b;
   --accent: #2563eb;
-  --accent-2: #0891b2;
+  --accent-2: #0284c7;
+  --accent-glow: rgba(37, 99, 235, 0.22);
   --positive: #059669;
+  --positive-glow: rgba(5, 150, 105, 0.22);
   --negative: #e11d48;
+  --negative-glow: rgba(225, 29, 72, 0.22);
   --warn: #d97706;
+  --warn-glow: rgba(217, 119, 6, 0.22);
 }
 
 .dark {
-  --bg: #07090f;
-  --surface: #0d1119;
-  --surface-2: #131a26;
-  --line: #1e2836;
-  --line-strong: #2a3748;
-  --ink: #eef2f7;
-  --ink-soft: #94a3b8;
-  --ink-faint: #64748b;
-  --accent: #5b8cff;
-  --accent-2: #22d3ee;
-  --positive: #34d399;
-  --negative: #fb7185;
-  --warn: #fbbf24;
+  --bg: #06080d;
+  --surface: #0c1017;
+  --surface-2: #121824;
+  --surface-3: #192233;
+  --line: #1c2738;
+  --line-strong: #2a3b54;
+  --ink: #f8fafc;
+  --ink-soft: #cbd5e1;
+  --ink-faint: #94a3b8;
+  --accent: #3b82f6;
+  --accent-2: #06b6d4;
+  --accent-glow: rgba(59, 130, 246, 0.35);
+  --positive: #10b981;
+  --positive-glow: rgba(16, 185, 129, 0.35);
+  --negative: #f43f5e;
+  --negative-glow: rgba(244, 63, 94, 0.35);
+  --warn: #f59e0b;
+  --warn-glow: rgba(245, 158, 11, 0.35);
 }
 
-/* ── Base ────────────────────────────────────────────────────────── */
+/* ── Base Layer ─────────────────────────────────────────────────── */
 
 html {
   background-color: var(--bg);
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--bg);
-  background-image: radial-gradient(circle, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background-image: 
+    radial-gradient(circle, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to right, rgba(15, 23, 42, 0.015) 1px, transparent 1px);
+  background-size: 32px 32px, 96px 96px;
   color: var(--ink);
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -75,26 +90,28 @@ body {
 }
 
 .dark body {
-  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+  background-image: 
+    radial-gradient(circle, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to right, rgba(59, 130, 246, 0.02) 1px, transparent 1px);
 }
 
-/* Grano sutil (film grain) sobre toda la interfaz */
+/* Grano cinemático sutil */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .dark body::before {
-  opacity: 0.04;
+  opacity: 0.035;
 }
 
 /* Tipografía jerarquizada y balanceada */
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
   letter-spacing: -0.02em;
 }
@@ -115,10 +132,10 @@ p {
   outline-offset: 2px;
 }
 
-/* Scrollbar táctil minimalista */
+/* Scrollbars minimalistas tácticos */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -142,42 +159,82 @@ p {
   display: none;
 }
 
-/* Texto degradado azul-cyan (identidad de marca) */
+/* ── Identidad Visual & Gradients ───────────────────────────────── */
+
 .text-gradient {
-  background: linear-gradient(90deg, #2563eb, #0891b2);
+  background: linear-gradient(135deg, #2563eb 0%, #0284c7 50%, #0d9488 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .dark .text-gradient {
-  background: linear-gradient(90deg, #5b8cff, #22d3ee);
+  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 50%, #2dd4bf 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Luz de héroe estática (sin animación) */
+.text-gradient-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Luz de héroe ambiental con doble foco cyberpunk */
 .hero-light {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 860px;
-  max-width: 92vw;
-  height: 460px;
+  width: 900px;
+  max-width: 95vw;
+  height: 480px;
   border-radius: 9999px;
-  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 8%, transparent) 0%, transparent 70%);
-  filter: blur(90px);
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--accent) 12%, transparent) 0%,
+    color-mix(in srgb, var(--accent-2) 6%, transparent) 40%,
+    transparent 70%
+  );
+  filter: blur(80px);
   pointer-events: none;
   z-index: 0;
 }
 
 .dark .hero-light {
-  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 13%, transparent) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
+    color-mix(in srgb, var(--accent-2) 10%, transparent) 40%,
+    transparent 70%
+  );
 }
 
-/* Glow de foco para el buscador */
+/* Resplandor focal para buscador y comandos */
 .glow-focus {
-  box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 32px -4px var(--accent-glow);
+}
+
+/* Estilo HUD Táctico */
+.hud-border {
+  position: relative;
+}
+
+.hud-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--line-strong), transparent 60%, var(--line));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.dark .hud-border::before {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), transparent 60%, rgba(255, 255, 255, 0.05));
 }

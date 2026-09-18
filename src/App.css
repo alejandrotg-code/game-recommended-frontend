@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════════════ */
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -13,7 +13,7 @@
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.98); }
+  from { opacity: 0; transform: scale(0.97); }
   to   { opacity: 1; transform: scale(1); }
 }
 
@@ -22,20 +22,40 @@
   100% { background-position: 200% center; }
 }
 
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes radarSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    UTILIDADES & COMPONENTES TÁCTICOS
    ═══════════════════════════════════════════════════════ */
 
 .animate-fade-up {
-  animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.35s ease forwards;
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-shimmer {
@@ -49,25 +69,46 @@
   animation: shimmer 1.6s linear infinite;
 }
 
-/* Panel Táctil Principal */
+.animate-radar {
+  animation: radarSweep 3s linear infinite;
+}
+
+/* Panel Táctil Principal con Profundidad y Contraste */
 .tactical-card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.12);
+  box-shadow: 
+    0 1px 3px rgba(15, 23, 42, 0.05),
+    0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dark .tactical-card {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  background: var(--surface);
+  border-color: var(--line);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.5),
+    0 12px 36px -12px rgba(0, 0, 0, 0.7);
 }
 
 .tactical-card-interactive {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .tactical-card-interactive:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
+  box-shadow: 
+    0 4px 12px rgba(15, 23, 42, 0.08),
+    0 16px 40px -12px var(--accent-glow);
+}
+
+.dark .tactical-card-interactive:hover {
+  border-color: var(--accent);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    0 20px 48px -12px var(--accent-glow);
 }
 
 /* Scrollbar interno */
@@ -77,16 +118,30 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 .custom-scrollbar { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
 
-/* Feedback al presionar botones */
+/* Feedback al presionar botones tácticos */
 .btn-tactical {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-tactical:active {
   transform: scale(0.97);
 }
 
-/* Soporte para accesibilidad motion-reduce */
+/* Badges & Chips Tácticos */
+.tactical-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  border-width: 1px;
+}
+
+/* Soporte estricto para accesibilidad: prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
